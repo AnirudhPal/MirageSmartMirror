@@ -5,10 +5,10 @@ from PyQt5.QtGui import QFont, QPalette, QColor, QPainter, QPolygon
 from PyQt5.QtCore import *
 
 class Groom(QWidget):
-    def __init__ (self, screenWindow):
+    def __init__ (self):
         super().__init__()
         # self.qt = QWidget()
-        self.qt = screenWindow
+        # self.qt = screenWindow
         self.init_ui()
 
     def init_ui(self):
@@ -17,9 +17,9 @@ class Groom(QWidget):
         # self.qt.resize(800, 800)
 
         # Set background black
-        self.darkPalette = QPalette()
-        self.darkPalette.setColor(QPalette.Background, Qt.black)
-        self.qt.setPalette(self.darkPalette)
+        # self.darkPalette = QPalette()
+        # self.darkPalette.setColor(QPalette.Background, Qt.black)
+        # self.qt.setPalette(self.darkPalette)
 
         effect = QGraphicsDropShadowEffect()
         effect.setOffset(0, 0)
@@ -27,19 +27,19 @@ class Groom(QWidget):
         effect.setColor(QColor(255,255,255))
 
 
-        frame = QFrame()
-        frame.setFrameShape(QFrame.Box)
-        frame.setLineWidth(15)
-        frame.setMidLineWidth(5)
-        frame.setFrameShadow(QFrame.Raised)
-        frame.setGraphicsEffect(effect)
+        self.frame = QFrame()
+        self.frame.setFrameShape(QFrame.Box)
+        self.frame.setLineWidth(15)
+        self.frame.setMidLineWidth(5)
+        self.frame.setFrameShadow(QFrame.Raised)
+        self.frame.setGraphicsEffect(effect)
 
         # self.qt.vbox = QVBoxLayout()
-        self.qt.vbox = self.qt.layout()
-        self.qt.vbox.addWidget(frame)
-        self.qt.vbox.setContentsMargins(0,0,0,0)
-
-        self.qt.setLayout(self.qt.vbox)
+        # self.qt.vbox = self.qt.layout()
+        # self.qt.vbox.addWidget(self.frame)
+        # self.qt.vbox.setContentsMargins(0,0,0,0)
+        #
+        # self.qt.setLayout(self.qt.vbox)
 
 
 
@@ -64,11 +64,11 @@ class Groom(QWidget):
 
 
         # self.qt.setLayout(self.qt.vbox)
-        self.qt.setWindowTitle('Grooming mode')
+        # self.qt.setWindowTitle('Grooming mode')
 
         # self.qt.b.clicked.connect(self.btn_click)
 
-        self.qt.showFullScreen()
+        # self.qt.showFullScreen()
 
     # def btn_click(self):
     #     datetime = QDateTime.currentDateTime()
