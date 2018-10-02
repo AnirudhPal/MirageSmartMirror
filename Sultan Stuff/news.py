@@ -25,4 +25,4 @@ url = ('https://newsapi.org/v2/top-headlines?'
        'apiKey=33ff7834a7ee40928e7bb90746c8b6e5')
 response = requests.get(url)
 data = response.json()
-print(data)
+print(data['articles'])

@@ -27,15 +27,15 @@ class Weather(QWidget):
         # print(g.latlng)
         # latitude = 40.423874100000006
         # longitude = -86.9094914
-        geolocator = Nominatim(user_agent="MirageSmartMirror")
-        location = geolocator.geocode("250 Sheetz Street West Lafayette Indiana")
-        # print((location.latitude, location.longitude))
-
-        baseurl = "https://query.yahooapis.com/v1/public/yql?"
-        yql_query = "select * from weather.forecast where woeid in (SELECT woeid FROM geo.places WHERE text=\"(%f,%f)\")" %(location.latitude, location.longitude)
-        yql_url = baseurl + urllib.parse.urlencode({'q':yql_query}) + "&format=json"
-        result = urllib.request.urlopen(yql_url).read()
-        self.data = json.loads(result)
+        # geolocator = Nominatim(user_agent="MirageSmartMirror")
+        # location = geolocator.geocode("250 Sheetz Street West Lafayette Indiana")
+        # # print((location.latitude, location.longitude))
+        #
+        # baseurl = "https://query.yahooapis.com/v1/public/yql?"
+        # yql_query = "select * from weather.forecast where woeid in (SELECT woeid FROM geo.places WHERE text=\"(%f,%f)\")" %(location.latitude, location.longitude)
+        # yql_url = baseurl + urllib.parse.urlencode({'q':yql_query}) + "&format=json"
+        # result = urllib.request.urlopen(yql_url).read()
+        # self.data = json.loads(result)
         # print(self.data['query']['results'])
 
         datetime = QDateTime.currentDateTime()
@@ -77,17 +77,21 @@ class Weather(QWidget):
         self.location = QLabel()
         self.location.setAlignment(Qt.AlignLeft)
         self.location.setFont(font)
-        self.location.setText("<font color='white'>" + self.data['query']['results']['channel']['item']['title'] + "</font")
+        # self.location.setText("<font color='white'>" + self.data['query']['results']['channel']['item']['title'] + "</font")
 
         self.condition = QLabel()
         self.condition.setAlignment(Qt.AlignLeft)
         self.condition.setFont(font)
-        self.condition.setText("<font color='white'>" + self.data['query']['results']['channel']['item']['condition']['text'] + "</font")
+        # self.condition.setText("<font color='white'>" + self.data['query']['results']['channel']['item']['condition']['text'] + "</font")
 
         self.temp = QLabel()
         self.temp.setAlignment(Qt.AlignLeft)
         self.temp.setFont(font)
-        self.temp.setText("<font color='white'>" + self.data['query']['results']['channel']['item']['condition']['temp'] + "u'\N{DEGREE SIGN}'" + "</font")
+        # self.temp.setText("<font color='white'>" + self.data['query']['results']['channel']['item']['condition']['temp'] + "u'\N{DEGREE SIGN}'" + "</font")
+
+        self.location.setText("<font color='white'>" + "West Lafayette" + "</font")
+        self.condition.setText("<font color='white'>" + "Cloudy" + "</font")
+        self.temp.setText("<font color='white'>" + "72" + u'\N{DEGREE SIGN}' + "</font")
 
         # self.icon = QLabel()
         # self.icon.setAlignment(Qt.AlignLeft)
@@ -149,9 +153,12 @@ class Weather(QWidget):
     def update_time(self):
         datetime = QDateTime.currentDateTime()
         if self.weatherBox != None:
-            self.location.setText("<font color='white'>" + self.data['query']['results']['channel']['location']['city'] + "</font")
-            self.condition.setText("<font color='white'>" + self.data['query']['results']['channel']['item']['condition']['text'] + "</font")
-            self.temp.setText("<font color='white'>" + self.data['query']['results']['channel']['item']['condition']['temp'] + u'\N{DEGREE SIGN}' + "</font")
+            self.location.setText("<font color='white'>" + "West Lafayette" + "</font")
+            self.condition.setText("<font color='white'>" + "Cloudy" + "</font")
+            self.temp.setText("<font color='white'>" + "72" + u'\N{DEGREE SIGN}' + "</font")
+            # self.location.setText("<font color='white'>" + self.data['query']['results']['channel']['location']['city'] + "</font")
+            # self.condition.setText("<font color='white'>" + self.data['query']['results']['channel']['item']['condition']['text'] + "</font")
+            # self.temp.setText("<font color='white'>" + self.data['query']['results']['channel']['item']['condition']['temp'] + u'\N{DEGREE SIGN}' + "</font")
 
     def clearLayout(self, layout):
         while layout.count():

@@ -1,6 +1,6 @@
 import sys
 import time
-import cv2
+# import cv2
 # from pygeocoder import Geocoder
 from geopy.geocoders import Nominatim
 import urllib.parse, urllib.request, json
