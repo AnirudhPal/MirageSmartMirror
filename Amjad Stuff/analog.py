@@ -28,7 +28,7 @@ class AnalogClock(QWidget):
         QPoint(1, -85)
     ])
 
-    hourColor = QColor(0, 0, 0)
+    hourColor = QColor(255,250,250)
     minuteColor = QColor(192, 192, 192)
     secondColor = QColor(255, 0, 0)
 
@@ -92,11 +92,11 @@ class AnalogClock(QWidget):
         painter.restore()
 
 
-if __name__ == '__main__':
-
-    import sys
-
-    app = QApplication(sys.argv)
-    clock = AnalogClock()
-    clock.showFullScreen()
-    sys.exit(app.exec_())
+# if __name__ == '__main__':
+#
+#     import sys
+#
+#     app = QApplication(sys.argv)
+#     clock = AnalogClock()
+#     clock.showFullScreen()
+#     sys.exit(app.exec_())

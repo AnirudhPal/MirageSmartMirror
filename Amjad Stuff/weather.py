@@ -1,6 +1,6 @@
 import sys
 import time
-import cv2
+# import cv2
 # from pygeocoder import Geocoder
 from geopy.geocoders import Nominatim
 import urllib.parse, urllib.request, json
@@ -70,9 +70,9 @@ class Weather(QWidget):
         self.weatherBox = QVBoxLayout()
         # self.timeWeatherBox = QHBoxLayout()
         # self.weatherBox.setAlignment(Qt.AlignRight)
-        image = cv2.imread("cloudy.png")
-        image = cv2.resize(image, (50, 50), interpolation=cv2.INTER_CUBIC)
-        image = QImage(image, image.shape[1], image.shape[0], image.strides[0], QImage.Format_RGB888)
+        # image = cv2.imread("cloudy.png")
+        # image = cv2.resize(image, (50, 50), interpolation=cv2.INTER_CUBIC)
+        # image = QImage(image, image.shape[1], image.shape[0], image.strides[0], QImage.Format_RGB888)
 
         self.location = QLabel()
         self.location.setAlignment(Qt.AlignLeft)
@@ -89,15 +89,15 @@ class Weather(QWidget):
         self.temp.setFont(font)
         self.temp.setText("<font color='white'>" + self.data['query']['results']['channel']['item']['condition']['temp'] + "u'\N{DEGREE SIGN}'" + "</font")
 
-        self.icon = QLabel()
-        self.icon.setAlignment(Qt.AlignLeft)
-        self.icon.setPixmap(QPixmap.fromImage(image))
+        # self.icon = QLabel()
+        # self.icon.setAlignment(Qt.AlignLeft)
+        # self.icon.setPixmap(QPixmap.fromImage(image))
 
 
 
         self.weatherBox.addWidget(self.location)
         self.weatherBox.addWidget(self.condition)
-        self.weatherBox.addWidget(self.icon)
+        # self.weatherBox.addWidget(self.icon)
         self.weatherBox.addWidget(self.temp)
 
         self.weatherBox.setAlignment(Qt.AlignLeft)
