@@ -3,8 +3,9 @@ import time
 import groom
 import DateTime
 import weather
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout, QHBoxLayout, QPushButton, QGraphicsDropShadowEffect, QSpacerItem, QGridLayout
-from PyQt5.QtGui import QFont, QPalette, QColor, QPainter, QPolygon
+import feeds
+from PyQt5.QtWidgets import *#QApplication, QWidget, QLabel, QFormLayout, QVBoxLayout, QHBoxLayout, QPushButton, QGraphicsDropShadowEffect, QSpacerItem, QGridLayout, QFormLayout
+from PyQt5.QtGui import *#QFont, QPalette, QColor, QPainter, QPolygon
 from PyQt5.QtCore import *
 
 
@@ -12,6 +13,10 @@ from PyQt5.QtCore import *
 <div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
 is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
 '''
+
+
+font = QFont('Helvetica', 24)
+font.setWeight(1)
 
 class Window(QWidget):
     def __init__ (self):
@@ -60,6 +65,7 @@ class Window(QWidget):
         self.TimeWeatherBox = QHBoxLayout()
         self.welcomeBox = QHBoxLayout()
         self.appListBox = QHBoxLayout()
+        self.appBox = QHBoxLayout()
 
         ###
         self.weather = weather.Weather()
@@ -76,6 +82,10 @@ class Window(QWidget):
         self.welcomeLabel.setAlignment(Qt.AlignCenter)
         self.welcomeLabel.setFixedHeight(100)
         self.welcomeBox.addWidget(self.welcomeLabel)
+
+        ###
+        self.feed = feeds.Feeds()
+        self.appBox.addWidget(self.feed)
 
         ###
         self.appList = []
@@ -99,19 +109,16 @@ class Window(QWidget):
 
 
 
-
-
-
-
         self.qt.digitaltime = QHBoxLayout()
         self.qt.analogclock = QHBoxLayout()
-        self.qt.space = QVBoxLayout()
+
+
 
         # self.qt.welcomebox = QHBoxLayout()
 
         self.qt.digitaltime.addWidget(self.qt.time)
         self.qt.analogclock.addWidget(self.analog)
-        self.qt.space.addWidget(self.qt.l)
+        # self.qt.feedBox.addWidget(self.qt.l)
 
         self.qt.h_box = QHBoxLayout()
         # self.qt.h_box.addStretch()
@@ -163,7 +170,7 @@ class Window(QWidget):
         self.qt.v_box.addWidget(self.qt.lsb)
         self.qt.v_box.addLayout(self.TimeWeatherBox)
         # self.qt.v_box.addSpacing(400)
-        self.qt.v_box.addLayout(self.qt.space)
+        self.qt.v_box.addLayout(self.appBox)
         self.qt.v_box.addLayout(self.welcomeBox)
         self.qt.v_box.addLayout(self.appListBox)
 
@@ -193,26 +200,34 @@ class Window(QWidget):
         # self.qt.v_box.addLayout(self.appListBox)
 
     def news_headlines(self):
-        self.clearLayout(self.qt.space)
+        self.clearLayout(self.feed.feedForm)
+        self.clearLayout(self.welcomeBox)
         self.calendar.setEnabled(True)
-        for i in range(6):
-            temp1 = QLabel("<font color='white'>" + "News Headline" + str(i+1) + "</font")
-            temp1.setAlignment(Qt.AlignCenter)
-            self.qt.space.addWidget(temp1)
-            self.qt.space.setAlignment(Qt.AlignCenter)
-            self.clearLayout(self.welcomeBox)
         self.news.setEnabled(False)
 
-    def calendar_events(self):
-        self.news.setEnabled(True)
-        self.clearLayout(self.qt.space)
+        self.feed.title.setFont(font)
+        self.feed.title.setText("<font color='white'>" + "News Headlines" + "</font")
+
         for i in range(6):
-            temp1 = QLabel("<font color='white'>" + "Calendar Event" + str(i+1) + "</font")
-            temp1.setAlignment(Qt.AlignCenter)
-            self.qt.space.addWidget(temp1)
-            self.qt.space.setAlignment(Qt.AlignCenter)
-            self.clearLayout(self.welcomeBox)
+            temp1 = QLabel("<font color='white'>" + "News Headline " + str(i+1) + "</font")
+            temp1.setAlignment(Qt.AlignLeft)
+            self.feed.feedForm.addRow(temp1)
+
+
+
+    def calendar_events(self):
+        self.clearLayout(self.feed.feedForm)
+        self.clearLayout(self.welcomeBox)
         self.calendar.setEnabled(False)
+        self.news.setEnabled(True)
+
+        self.feed.title.setFont(font)
+        self.feed.title.setText("<font color='white'>" + "Calendar Events" + "</font")
+
+        for i in range(6):
+            temp1 = QLabel("<font color='white'>" + "Calendar Events " + str(i+1) + "</font")
+            temp1.setAlignment(Qt.AlignLeft)
+            self.feed.feedForm.addRow(temp1)
 
 
     def init_timer(self):
