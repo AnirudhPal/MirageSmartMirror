@@ -3,13 +3,13 @@ import json
 import os
 import subprocess
 from threading import Timer
-import requests
+# import requests
 
 SCOPE='https://www.googleapis.com/auth/calendar.readonly'
 CLIENT_ID='238441387160-vg5u4bb2td0vugjb7i39umeat5s6dtm0.apps.googleusercontent.com'
 CLIENT_SECRET='6xgHHdJrMfISGFtU3KKkryid'
-DEVICE_AUTH_PATH='/home/pi/Desktop/GoogleAuth/device_authorization.json'
-USER_AUTH_PATH='/home/pi/Desktop/GoogleAuth/user_authorization.json'
+DEVICE_AUTH_PATH='/home/pi/MirageSmartMirror/Andrew\ Stuff/GoogleAuth/device_authorization.json'
+USER_AUTH_PATH='/home/pi/MirageSmartMirror/Andrew\ Stuff/GoogleAuth/user_authorization.json'
 
 userDidAuthorize = False
 rt = None
@@ -56,7 +56,7 @@ def requestUserAuth():
 			if x == "access_token":
 				rt.stop()
 				userDidAuthorize = True
-                		print("User did authorize, access token: " + jsonObj[x])
+				print("User did authorize, access token: " + jsonObj[x])
 				return
 
 def getPollingInterval():
