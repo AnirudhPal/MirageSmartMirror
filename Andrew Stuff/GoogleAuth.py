@@ -35,6 +35,7 @@ def getDeviceCode():
 	return jsonObj["device_code"]
 
 def requestUserAuth():
+	global rt
 	global userDidAuthorize
 	if userDidAuthorize == True:
 		return
@@ -57,8 +58,8 @@ def requestUserAuth():
 		for x in jsonObj:
 			print(x + ": " + str(jsonObj[x]))
 			if x == "access_token":
-				rt.stop()
 				userDidAuthorize = True
+				rt.stop()
 				print("User did authorize, access token: " + jsonObj[x])
 				return
 
@@ -74,6 +75,7 @@ def getPollingExpiration():
 
 def pollForUserAuth():
 	global userDidAuthorize
+	global rt
 	interval = getPollingInterval()
 	expiration = getPollingExpiration()
 	rt = RepeatedTimer(interval+1, requestUserAuth)
