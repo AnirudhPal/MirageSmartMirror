@@ -11,7 +11,8 @@ CLIENT_SECRET='6xgHHdJrMfISGFtU3KKkryid'
 DEVICE_AUTH_PATH='/home/pi/Desktop/GoogleAuth/device_authorization.json'
 USER_AUTH_PATH='/home/pi/Desktop/GoogleAuth/user_authorization.json'
 
-global userDidAuthorize = False
+global userDidAuthorize
+userDidAuthorize = False
 rt = None
 uCode = ""
 def getDeviceAuthorization():
