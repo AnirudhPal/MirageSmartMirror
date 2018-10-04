@@ -3,7 +3,7 @@ import json
 import os
 import subprocess
 from threading import Timer
-import requests
+#import requests
 
 SCOPE='https://www.googleapis.com/auth/calendar.readonly'
 CLIENT_ID='238441387160-vg5u4bb2td0vugjb7i39umeat5s6dtm0.apps.googleusercontent.com'
