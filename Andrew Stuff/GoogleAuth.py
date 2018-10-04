@@ -35,12 +35,11 @@ def getDeviceCode():
 	return jsonObj["device_code"]
 
 def requestUserAuth():
-    if userDidAuthorize:
-        return
-
+	if userDidAuthorize:
+		return
 	test = getDeviceCode()
-    #r = requests.post("https://www.googleapis.com/oauth2/v4/token",  data={'client_id':CLIENT_ID, 'client_secret':CLIENT_SECRET, 'code':test, 'grant_type':'http://oauth.net/grant_type/device/1.0'})
-    #print(r.json())
+	#r = requests.post("https://www.googleapis.com/oauth2/v4/token",  data={'client_id':CLIENT_ID, 'client_secret':CLIENT_SECRET, 'code':test, 'grant_type':'http://oauth.net/grant_type/device/1.0'})
+	#print(r.json())
 	res = subprocess.run(["curl",
 				"-s",
 				"-d",
@@ -50,16 +49,16 @@ def requestUserAuth():
 				"https://www.googleapis.com/oauth2/v4/token",
 				"-o",
 				USER_AUTH_PATH])
-                #print(res.args)
+				#print(res.args)
 	if res.returncode == 0:
 		fp = open(USER_AUTH_PATH)
 		jsonObj = json.load(fp)
 		for x in jsonObj:
-			print(x + ": " + str(jsonObj[x])
+			print(x + ": " + str(jsonObj[x]))
 			if x == "access_token":
 				rt.stop()
 				userDidAuthorize = True
-                print("User did authorize, access token: " + jsonObj[x])
+				print("User did authorize, access token: " + jsonObj[x])
 				return
 
 def getPollingInterval():
@@ -85,31 +84,31 @@ def pollForUserAuth():
 		return False
 
 class RepeatedTimer(object):
-    def __init__(self, interval, function, *args, **kwargs):
-        self._timer     = None
-        self.interval   = interval
-        self.function   = function
-        self.args       = args
-        self.kwargs     = kwargs
-        self.is_running = False
-        self.elapsedTime = 0
-        self.start()
+	def __init__(self, interval, function, *args, **kwargs):
+		self._timer	 = None
+		self.interval   = interval
+		self.function   = function
+		self.args	   = args
+		self.kwargs	 = kwargs
+		self.is_running = False
+		self.elapsedTime = 0
+		self.start()
 
-    def _run(self):
-        self.elapsedTime += self.interval
-        self.is_running = False
-        self.start()
-        self.function(*self.args, **self.kwargs)
+	def _run(self):
+		self.elapsedTime += self.interval
+		self.is_running = False
+		self.start()
+		self.function(*self.args, **self.kwargs)
 
-    def start(self):
-        if not self.is_running:
-            self._timer = Timer(self.interval, self._run)
-            self._timer.start()
-            self.is_running = True
+	def start(self):
+		if not self.is_running:
+			self._timer = Timer(self.interval, self._run)
+			self._timer.start()
+			self.is_running = True
 
-    def stop(self):
-        self._timer.cancel()
-        self.is_running = False
+	def stop(self):
+		self._timer.cancel()
+		self.is_running = False
 
 if __name__== "__main__":
 	res = getDeviceAuthorization()
