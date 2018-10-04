@@ -6,6 +6,7 @@ import weather
 import feeds
 import analog
 import maps
+import googleCalendar
 # for news
 from newsapi import NewsApiClient
 import requests
@@ -64,6 +65,7 @@ class Window(QWidget):
         # self.qt.showFullScreen()
         self.analog = analog.AnalogClock()
         self.rt = maps.Maps()
+        self.calendarEvents = googleCalendar.Calendar()
 
         self.qt.resize(800, 800)
 
@@ -132,13 +134,9 @@ class Window(QWidget):
         self.appList.append(self.news)
         self.appList.append(self.calendar)
         self.appList.append(self.routes)
+        self.appList.append(self.qt.gmb)
 
 
-        # grid = QGridLayout()
-        # for i in range(3):
-        #     grid.addWidget(self.appList[i],0,i)
-        #     # self.appListBox.addWidget(app)
-        # self.appListBox.addLayout(grid)
         for app in self.appList:
             self.appListBox.addWidget(app)
 
@@ -160,7 +158,7 @@ class Window(QWidget):
         self.qt.h_box = QHBoxLayout()
         # self.qt.h_box.addStretch()
         self.qt.h_box.addWidget(self.qt.msb)
-        self.qt.h_box.addWidget(self.qt.gmb)
+        # self.qt.h_box.addWidget(self.qt.gmb)
         # self.qt.h_box.addStretch()
 
         self.qt.v_box = QVBoxLayout()
@@ -294,10 +292,22 @@ class Window(QWidget):
         self.feed.title.setFont(font)
         self.feed.title.setText("<font color='white'>" + "Calendar Events" + "</font")
 
-        for i in range(6):
-            temp1 = QLabel("<font color='white'>" + "Calendar Event " + str(i+1) + "</font")
-            temp1.setAlignment(Qt.AlignLeft)
-            self.feed.feedForm.addRow(temp1)
+        if self.calendarEvents.events == None:
+            self.feed.title.setText("<font color='white'>" + "No upcoming events!" + "</font")
+        else:
+            for i in range(6):
+                event = self.calendarEvents.events[i]
+                temp1 = QLabel("<font color='white'>" + event['summary'] + "</font")
+                temp1.setFont(news_headline_font)
+                 # + news_data['articles'][i]['source']['name']
+                temp2 = QLabel("<font color='white'>" + event['start'] + "</font")
+                temp2.setFont(news_source_font)
+                temp3 = QLabel()
+                temp3.setFont(news_space_font)
+                # news_data['articles'][i]['source']['name']
+                temp1.setAlignment(Qt.AlignLeft)
+                self.feed.feedForm.addRow(temp2, temp1)
+                self.feed.feedForm.addRow(temp3)
 
 
     def init_timer(self):
@@ -332,102 +342,8 @@ class Window(QWidget):
                 # self.fade()
             elif child.layout() is not None:
                 self.clearLayout(child.layout())
-    # def clearLayout(self, layout):
-        # for i in reversed(range(layout.count())):
-        #     widget = layout.itemAt(i).widget()
-        #     if widget != None:
-        #         widget.deleteLater()
 
 
-
-
-
-
-
-# class AnalogClock(QWidget):
-#     hourHand = QPolygon([
-#         QPoint(2, -2),
-#         QPoint(-2, -2),
-#         QPoint(-2, -55),
-#         QPoint(2, -55)
-#     ])
-#
-#     minuteHand = QPolygon([
-#         QPoint(2, -2),
-#         QPoint(-2, -2),
-#         QPoint(-2, -80),
-#         QPoint(2, -80)
-#     ])
-#
-#     secondHand = QPolygon([
-#         QPoint(1, -1),
-#         QPoint(-1, -1),
-#         QPoint(-1, -85),
-#         QPoint(1, -85)
-#     ])
-#
-#     hourColor = QColor(255,250,250)
-#     minuteColor = QColor(245, 245, 245)
-#     secondColor = QColor(255, 0, 0)
-#
-#     def __init__(self, parent=None):
-#         super(AnalogClock, self).__init__(parent)
-#
-#         timer = QTimer(self)
-#         timer.timeout.connect(self.update)
-#         timer.start(1000)
-#
-#         self.setWindowTitle("Analog Clock")
-#         self.resize(200, 200)
-#
-#     def paintEvent(self, event):
-#         side = min(self.width(), self.height())
-#         time = QTime.currentTime()
-#
-#         painter = QPainter(self)
-#         painter.setRenderHint(QPainter.Antialiasing)
-#         painter.translate(self.width() / 2, self.height() / 2)
-#         painter.scale(side / 200.0, side / 200.0)
-#
-#         # Hour hand
-#         painter.setPen(Qt.NoPen)
-#         painter.setBrush(AnalogClock.hourColor)
-#
-#         painter.save()
-#         painter.rotate(30.0 * ((time.hour() + time.minute() / 60.0)))
-#         painter.drawConvexPolygon(AnalogClock.hourHand)
-#         painter.restore()
-#
-#         painter.setPen(AnalogClock.hourColor)
-#
-#         for i in range(12):
-#             painter.drawLine(88, 0, 96, 0)
-#             painter.rotate(30.0)
-#
-#         # Minute hand
-#         painter.setPen(Qt.NoPen)
-#         painter.setBrush(AnalogClock.minuteColor)
-#
-#         painter.save()
-#         painter.rotate(6.0 * (time.minute() + time.second() / 60.0))
-#         painter.drawConvexPolygon(AnalogClock.minuteHand)
-#         painter.restore()
-#
-#         painter.setPen(AnalogClock.minuteColor)
-#
-#         for j in range(60):
-#             if (j % 5) != 0:
-#                 painter.drawLine(92, 0, 96, 0)
-#             painter.rotate(6.0)
-#
-#         # Second hand
-#         painter.setPen(Qt.NoPen)
-#         painter.setBrush(AnalogClock.secondColor)
-#
-#         painter.save()
-#         painter.rotate(6.0 * time.second())
-#         painter.drawConvexPolygon(AnalogClock.secondHand)
-#         painter.restore()
 
 app = QApplication(sys.argv)
 a_window = Window()

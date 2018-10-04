@@ -15,19 +15,6 @@ class Maps(QWidget):
         self.init_ui()
 
     def init_ui(self):
-        # self.qt.showFullScreen()
-
-        # self.qt.resize(800, 800)
-        # send_url = 'http://freegeoip.net/json'
-        # r = requests.get(send_url)
-        # j = json.loads(r.text)
-        # lat = j['latitude']
-        # lon = j['longitude']
-
-        # g = Geocoder.google('Mountain View, CA')
-        # print(g.latlng)
-        # latitude = 40.423874100000006
-        # longitude = -86.9094914
         geolocator = Nominatim(user_agent="MirageSmartMirror")
         origin = geolocator.geocode("250 Sheetz Street, West Lafayette, Indiana")
         destination1 = geolocator.geocode("305 Swindon Way, West Lafayette, Indiana")
@@ -82,108 +69,10 @@ class Maps(QWidget):
 
 
 
-        datetime = QDateTime.currentDateTime()
+        # datetime = QDateTime.currentDateTime()
 
-        # Set background black
-        # self.darkPalette = QPalette()
-        # self.darkPalette.setColor(QPalette.Background, Qt.black)
-        # self.qt.setPalette(self.darkPalette)
-
-        # effect = QGraphicsDropShadowEffect()
-        # effect2 = QGraphicsDropShadowEffect()
-        # effect.setOffset(1, 1)
-        # effect2.setOffset(1, 1)
-        # effect.setBlurRadius(30)
-        # effect.setColor(QColor(255,255,255))
-        # effect2.setBlurRadius(20)
-        # effect2.setColor(QColor(255,255,255))
-        # self.qt.setGraphicsEffect(effect)
-
-        #
-        # self.qt.b = QPushButton('Update time')
-        # self.qt.l = QLabel()
-        # self.qt.time = QLabel("<font color='white'>" + datetime.toString() + "</font")
-        # self.qt.time.setFont(font)
-        # self.analog.setGraphicsEffect(effect)
-        # self.qt.time.setGraphicsEffect(effect2)
-
-        # self.mapBox = QVBoxLayout()
-        # self.mapBox = QVBoxLayout()
-        # self.timemapBox = QHBoxLayout()
-        # self.mapBox.setAlignment(Qt.AlignRight)
-        # image = cv2.imread("cloudy.png")
-        # image = cv2.resize(image, (50, 50), interpolation=cv2.INTER_CUBIC)
-        # image = QImage(image, image.shape[1], image.shape[0], image.strides[0], QImage.Format_RGB888)
-
-        # self.dest1 = QLabel()
-        # self.dest1.setAlignment(Qt.AlignLeft)
-        # self.dest1.setFont(font)
-        # # self.dest1.setText("<font color='white'>" + self.data['query']['results']['channel']['item']['title'] + "</font")
-        #
-        # self.dest2 = QLabel()
-        # self.dest2.setAlignment(Qt.AlignLeft)
-        # self.dest2.setFont(font)
-        # # self.dest2.setText("<font color='white'>" + self.data['query']['results']['channel']['item']['dest2']['text'] + "</font")
-        #
-        # self.dest3 = QLabel()
-        # self.dest3.setAlignment(Qt.AlignLeft)
-        # self.dest3.setFont(font)
-        # # self.dest3.setText("<font color='white'>" + self.data['query']['results']['channel']['item']['dest2']['dest3'] + "u'\N{DEGREE SIGN}'" + "</font")
-        #
-        # self.dest1.setText("<font color='white'>" + "West Lafayette" + "</font")
-        # self.dest2.setText("<font color='white'>" + "Cloudy" + "</font")
-        # self.dest3.setText("<font color='white'>" + "72" + u'\N{DEGREE SIGN}' + "</font")
-
-        # self.icon = QLabel()
-        # self.icon.setAlignment(Qt.AlignLeft)
-        # self.icon.setPixmap(QPixmap.fromImage(image))
-
-
-
-        # self.mapBox.addWidget(self.dest1)
-        # self.mapBox.addWidget(self.dest2)
-        # # self.mapBox.addWidget(self.icon)
-        # self.mapBox.addWidget(self.dest3)
-        #
-        # self.mapBox.setAlignment(Qt.AlignLeft)
-        #
-        # self.setLayout(self.mapBox)
-
-        # self.timemapBox.addLayout(self.mapBox)
-
-        # self.mapBox.setFixedHeight(300)
-
-        # oldLayout.addLayout(self.timemapBox)
-
-
-
-
-
-
-        # self.qt.setLayout(oldLayout)
-        # self.qt.setWindowTitle('Main screen')
-
-        # self.qt.digitaltime.setAlignment(Qt.AlignCenter)
-
-        # self.qt.b.clicked.connect(self.btn_click)
 
         # self.init_timer()
-
-
-        # self.qt.showFullScreen()
-
-        # self.clearLayout(self.qt.analogclock)
-
-    # def btn_click(self):
-        # datetime = QDateTime.currentDateTime()
-        # self.qt.time.setText("<font color='white'>" + datetime.toString() + "</font")
-        # self.clearLayout(self.qt.analogclock)
-        # self.clearLayout(self.qt.digitaltime)
-        # self.clearLayout(self.qt.h_box)
-        # self.timer.stop()
-        # self.clearLayout(self.qt.v_box)
-        # self.qt.v_box.deleteLater()
-        # self.gr = groom.Groom(self.qt)
 
 
     def init_timer(self):
