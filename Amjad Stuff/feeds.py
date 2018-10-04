@@ -50,8 +50,9 @@ class Feeds(QWidget):
 
         # Feed box in the center (for news, calendar...)
         self.feedForm = QFormLayout()
-        self.feedForm.setVerticalSpacing(20)
+        self.feedForm.setVerticalSpacing(10)
         self.feedForm.setAlignment(Qt.AlignCenter)
+        self.feedForm.setRowWrapPolicy(QFormLayout.WrapAllRows)
 
         self.feedVBox.addLayout(self.titleBox)
         self.feedVBox.addSpacing(10)

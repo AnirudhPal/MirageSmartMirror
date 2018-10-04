@@ -3,11 +3,10 @@ import time
 # import cv2
 # from pygeocoder import Geocoder
 from geopy.geocoders import Nominatim
-import urllib.parse, urllib.request, json, requests
+import urllib.parse, urllib.request, json
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout, QHBoxLayout, QPushButton, QGraphicsDropShadowEffect
 from PyQt5.QtGui import QFont, QPalette, QColor, QPainter, QPolygon, QImage, QPixmap
 from PyQt5.QtCore import *
-
 
 class Weather(QWidget):
     def __init__ (self):
@@ -33,31 +32,19 @@ class Weather(QWidget):
         destination = geolocator.geocode("305 Swindon Way, West Lafayette, Indiana")
 
         # print((origin.latitude, origin.longitude))
+        #
+        # baseurl = "https://query.yahooapis.com/v1/public/yql?"
+        # yql_query = "select * from weather.forecast where woeid in (SELECT woeid FROM geo.places WHERE text=\"(%f,%f)\")" %(origin.latitude, origin.longitude)
+        # yql_url = baseurl + urllib.parse.urlencode({'q':yql_query}) + "&format=json"
+        # result = urllib.request.urlopen(yql_url).read()
+        # self.data = json.loads(result)
+        # print(self.data['query']['results'])
 
-
-
-
-        maps_key = "&key=AIzaSyDKTb75-vuAvnWxO2Wfm_1DWlyr4BadgJc"
-        weather_key = "50f9b96898249aa1a036886103f78788"
-
-        maps_url1 = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial"
-        maps_origin1 = "&origins=%f,%f" %(origin.latitude, origin.longitude)
-        maps_destination1 = "&destinations=%f,%f" %(destination.latitude, destination.longitude)
-        maps_request = maps_url1 + maps_origin1 + maps_destination1 + maps_key
-        # https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=40.424399,-86.925882&destinations=40.422035,-86.901596&key=AIzaSyDKTb75-vuAvnWxO2Wfm_1DWlyr4BadgJc
-
-        maps_get1 = requests.get(maps_request)
-        maps_json1 = maps_get1.json()
-
-        weather_url = "https://api.darksky.net/forecast/" + weather_key
-        # 0123456789abcdef9876543210fedcba/42.3601,-71.0589
-        weather_request = weather_url + "/%f,%f" %(origin.latitude, origin.longitude)
-
-        weather_get = requests.get(weather_request)
-        weather_json = weather_get.json()
-        # print(weather_json['timezone'])
-
-
+        # maps_key = "&key=AIzaSyDKTb75-vuAvnWxO2Wfm_1DWlyr4BadgJc"
+        # maps_url1 = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial"
+        # maps_origin1 = "&origins=%f,%f" %(origin.latitude, origin.longitude)
+        # maps_destination1 = "&destinations=%f,%f" %(destination.latitude, destination.longitude)
+        # maps_request = maps_url1 + maps_origin1 + maps_destination1 + maps_key
 
         datetime = QDateTime.currentDateTime()
 

@@ -5,6 +5,12 @@ import DateTime
 import weather
 import feeds
 import analog
+import maps
+# for news
+from newsapi import NewsApiClient
+import requests
+import json
+#
 from PyQt5.QtWidgets import *#QApplication, QWidget, QLabel, QFormLayout, QVBoxLayout, QHBoxLayout, QPushButton, QGraphicsDropShadowEffect, QSpacerItem, QGridLayout, QFormLayout
 from PyQt5.QtGui import *#QFont, QPalette, QColor, QPainter, QPolygon
 from PyQt5.QtCore import *
@@ -15,8 +21,36 @@ from PyQt5.QtCore import *
 is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
 '''
 
+# Init
+newsapi = NewsApiClient(api_key='33ff7834a7ee40928e7bb90746c8b6e5')
+
+# /v2/top-headlines
+top_headlines = newsapi.get_top_headlines(
+                                        language='en',
+                                          country='us')
+
+# /v2/everything
+#all_articles = newsapi.get_everything(language='en',
+                                      # sort_by='relevancy')
+
+# /v2/sources
+news_sources = newsapi.get_sources()
+# print(all_articles)
+# print(top_headlines)
+
+news_url = ('https://newsapi.org/v2/top-headlines?'
+       'country=us&'
+       'apiKey=33ff7834a7ee40928e7bb90746c8b6e5')
+news_response = requests.get(news_url)
+news_data = news_response.json()
+# for i in range(10):
+#     print(news_data['articles'][i]['title'])
+
 
 font = QFont('Helvetica', 24)
+news_source_font = QFont('Helvetica', 11, italic = True)
+news_headline_font = QFont('Helvetica', 13)
+news_space_font = QFont('Helvetica', 4)
 font.setWeight(1)
 
 class Window(QWidget):
@@ -29,6 +63,7 @@ class Window(QWidget):
     def init_ui(self):
         # self.qt.showFullScreen()
         self.analog = analog.AnalogClock()
+        self.rt = maps.Maps()
 
         self.qt.resize(800, 800)
 
@@ -86,16 +121,17 @@ class Window(QWidget):
 
         ###
         self.feed = feeds.Feeds()
+        self.feed.setFixedWidth(800)
         self.appBox.addWidget(self.feed)
 
         ###
         self.appList = []
         self.news = QPushButton('News')
         self.calendar = QPushButton('Calendar')
-        self.notifications = QPushButton('Notifications')
+        self.routes = QPushButton('Routes')
         self.appList.append(self.news)
         self.appList.append(self.calendar)
-        self.appList.append(self.notifications)
+        self.appList.append(self.routes)
 
 
         # grid = QGridLayout()
@@ -149,6 +185,7 @@ class Window(QWidget):
         self.qt.lsb.clicked.connect(self.lsd)
         self.news.clicked.connect(self.news_headlines)
         self.calendar.clicked.connect(self.calendar_events)
+        self.routes.clicked.connect(self.routes_info)
 
         self.init_timer()
 
@@ -206,28 +243,59 @@ class Window(QWidget):
         self.clearLayout(self.welcomeBox)
         self.calendar.setEnabled(True)
         self.news.setEnabled(False)
+        self.routes.setEnabled(True)
 
         self.feed.title.setFont(font)
         self.feed.title.setText("<font color='white'>" + "News Headlines" + "</font")
 
         for i in range(6):
-            temp1 = QLabel("<font color='white'>" + "News Headline " + str(i+1) + "</font")
+            temp1 = QLabel("<font color='white'>" + news_data['articles'][i]['title'] + "." + "</font")
+            temp1.setFont(news_headline_font)
+             # + news_data['articles'][i]['source']['name']
+            temp2 = QLabel("<font color='white'>" + news_data['articles'][i]['source']['name'] + "</font")
+            temp2.setFont(news_source_font)
+            temp3 = QLabel()
+            temp3.setFont(news_space_font)
+            # news_data['articles'][i]['source']['name']
             temp1.setAlignment(Qt.AlignLeft)
-            self.feed.feedForm.addRow(temp1)
+            self.feed.feedForm.addRow(temp2, temp1)
+            self.feed.feedForm.addRow(temp3)
 
+    def routes_info(self):
+        self.clearLayout(self.feed.feedForm)
+        self.clearLayout(self.welcomeBox)
+        self.routes.setEnabled(False)
+        self.calendar.setEnabled(True)
+        self.news.setEnabled(True)
 
+        self.feed.title.setFont(font)
+        self.feed.title.setText("<font color='white'>" + "Routes Info" + "</font")
+
+        for route in self.rt.routes:
+            temp1 = QLabel("<font color='white'>" + route[1] + "</font")
+            temp1.setFont(news_source_font)
+             # + news_data['articles'][i]['source']['name']
+            temp2 = QLabel("<font color='white'>" + route[0] + "</font")
+            temp2.setFont(news_headline_font)
+            temp3 = QLabel()
+            temp3.setFont(news_space_font)
+            # news_data['articles'][i]['source']['name']
+            temp1.setAlignment(Qt.AlignLeft)
+            self.feed.feedForm.addRow(temp2, temp1)
+            self.feed.feedForm.addRow(temp3)
 
     def calendar_events(self):
         self.clearLayout(self.feed.feedForm)
         self.clearLayout(self.welcomeBox)
         self.calendar.setEnabled(False)
         self.news.setEnabled(True)
+        self.routes.setEnabled(True)
 
         self.feed.title.setFont(font)
         self.feed.title.setText("<font color='white'>" + "Calendar Events" + "</font")
 
         for i in range(6):
-            temp1 = QLabel("<font color='white'>" + "Calendar Events " + str(i+1) + "</font")
+            temp1 = QLabel("<font color='white'>" + "Calendar Event " + str(i+1) + "</font")
             temp1.setAlignment(Qt.AlignLeft)
             self.feed.feedForm.addRow(temp1)
 
