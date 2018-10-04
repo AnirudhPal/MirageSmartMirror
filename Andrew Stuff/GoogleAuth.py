@@ -56,7 +56,7 @@ def requestUserAuth():
 			if x == "access_token":
 				rt.stop()
 				userDidAuthorize = True
-                print("User did authorize, access token: " + jsonObj[x])
+                		print("User did authorize, access token: " + jsonObj[x])
 				return
 
 def getPollingInterval():
