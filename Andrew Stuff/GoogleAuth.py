@@ -12,7 +12,7 @@ DEVICE_AUTH_PATH='/home/pi/Desktop/GoogleAuth/device_authorization.json'
 USER_AUTH_PATH='/home/pi/Desktop/GoogleAuth/user_authorization.json'
 
 global userDidAuthorize
-userDidAuthorize = False
+# userDidAuthorize = False
 rt = None
 uCode = ""
 def getDeviceAuthorization():
@@ -112,6 +112,7 @@ class RepeatedTimer(object):
 		self.is_running = False
 
 if __name__== "__main__":
+	userDidAuthorize = False
 	res = getDeviceAuthorization()
 	if res == True:
 		print("Device Successfully requested Authorization")
