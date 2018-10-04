@@ -11,8 +11,7 @@ CLIENT_SECRET='6xgHHdJrMfISGFtU3KKkryid'
 DEVICE_AUTH_PATH='/home/pi/Desktop/GoogleAuth/device_authorization.json'
 USER_AUTH_PATH='/home/pi/Desktop/GoogleAuth/user_authorization.json'
 
-global userDidAuthorize
-# userDidAuthorize = False
+userDidAuthorize = False
 rt = None
 uCode = ""
 def getDeviceAuthorization():
@@ -36,6 +35,7 @@ def getDeviceCode():
 	return jsonObj["device_code"]
 
 def requestUserAuth():
+	global userDidAuthorize
 	if userDidAuthorize == True:
 		return
 	test = getDeviceCode()
@@ -73,6 +73,7 @@ def getPollingExpiration():
 	return (int(jsonObj["expires_in"]))
 
 def pollForUserAuth():
+	global userDidAuthorize
 	interval = getPollingInterval()
 	expiration = getPollingExpiration()
 	rt = RepeatedTimer(interval+1, requestUserAuth)
@@ -112,7 +113,6 @@ class RepeatedTimer(object):
 		self.is_running = False
 
 if __name__== "__main__":
-	userDidAuthorize = False
 	res = getDeviceAuthorization()
 	if res == True:
 		print("Device Successfully requested Authorization")
