@@ -37,7 +37,7 @@ def getDeviceCode():
 def requestUserAuth():
     if userDidAuthorize:
         return
-    
+
 	test = getDeviceCode()
     #r = requests.post("https://www.googleapis.com/oauth2/v4/token",  data={'client_id':CLIENT_ID, 'client_secret':CLIENT_SECRET, 'code':test, 'grant_type':'http://oauth.net/grant_type/device/1.0'})
     #print(r.json())
