@@ -3,13 +3,13 @@ import json
 import os
 import subprocess
 from threading import Timer
-# import requests
+import requests
 
 SCOPE='https://www.googleapis.com/auth/calendar.readonly'
 CLIENT_ID='238441387160-vg5u4bb2td0vugjb7i39umeat5s6dtm0.apps.googleusercontent.com'
 CLIENT_SECRET='6xgHHdJrMfISGFtU3KKkryid'
-DEVICE_AUTH_PATH='/home/pi/MirageSmartMirror/Andrew\ Stuff/GoogleAuth/device_authorization.json'
-USER_AUTH_PATH='/home/pi/MirageSmartMirror/Andrew\ Stuff/GoogleAuth/user_authorization.json'
+DEVICE_AUTH_PATH='/home/pi/Desktop/GoogleAuth/device_authorization.json'
+USER_AUTH_PATH='/home/pi/Desktop/GoogleAuth/user_authorization.json'
 
 userDidAuthorize = False
 rt = None
@@ -35,6 +35,9 @@ def getDeviceCode():
 	return jsonObj["device_code"]
 
 def requestUserAuth():
+    if userDidAuthorize:
+        return
+    
 	test = getDeviceCode()
     #r = requests.post("https://www.googleapis.com/oauth2/v4/token",  data={'client_id':CLIENT_ID, 'client_secret':CLIENT_SECRET, 'code':test, 'grant_type':'http://oauth.net/grant_type/device/1.0'})
     #print(r.json())
@@ -52,11 +55,11 @@ def requestUserAuth():
 		fp = open(USER_AUTH_PATH)
 		jsonObj = json.load(fp)
 		for x in jsonObj:
-			print(x + ": " + jsonObj[x])
+			print(x + ": " + str(jsonObj[x])
 			if x == "access_token":
 				rt.stop()
 				userDidAuthorize = True
-				print("User did authorize, access token: " + jsonObj[x])
+                print("User did authorize, access token: " + jsonObj[x])
 				return
 
 def getPollingInterval():
