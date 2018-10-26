@@ -80,7 +80,7 @@ def numberOfFaces():
 
     # Find all the faces and face encodings in the current frame of video
     numberOfFaces = len(face_recognition.face_locations(rgb_small_frame))
-
+    cv2.imshow('Video', frame)
     video_capture.release()
     cv2.destroyAllWindows()
 
