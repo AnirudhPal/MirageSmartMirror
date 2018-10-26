@@ -50,9 +50,12 @@ class Calendar(QWidget):
             self.events = None
             print('No upcoming events found.')
         for event in events:
+            # print(event)
             summary = event['summary']
-            start = self.fix_event_time(event['start']['dateTime'])
-            end = self.fix_event_time(event['end']['dateTime'])
+            key1 = list(event['start'].keys())[0]
+            # print(event['start'].keys()[0])
+            start = self.fix_event_time(event['start'][key1])
+            end = self.fix_event_time(event['end'][key1])
             dict = {'summary':summary, 'start':start, 'end':end}
             # print(dict)
             self.events.append(dict)
