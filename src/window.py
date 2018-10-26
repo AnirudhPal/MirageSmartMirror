@@ -385,8 +385,7 @@ while True:
                 #change ui to lock screen
 
             #please one person in front
-    if proximity > 600:
-        print("no one is here")
+    elif proximity > 600:
         ExpariationTimerCount=ExpariationTimerCount+1
 
     if ExpariationTimerCount >= 10:
