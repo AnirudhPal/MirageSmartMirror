@@ -1,5 +1,8 @@
 import sys
 import time
+import ssl
+import geopy.geocoders
+
 # import cv2
 # from pygeocoder import Geocoder
 from geopy.geocoders import Nominatim
@@ -15,7 +18,11 @@ class Maps(QWidget):
         self.init_ui()
 
     def init_ui(self):
-        geolocator = Nominatim(user_agent="MirageSmartMirror")
+        ctx = ssl.create_default_context()
+        ctx.check_hostname = False
+        ctx.verify_mode = ssl.CERT_NONE
+        geopy.geocoders.options.default_ssl_context = ctx
+        geolocator = Nominatim(scheme="https",user_agent="MirageSmartMirror")
         origin = geolocator.geocode("250 Sheetz Street, West Lafayette, Indiana")
         destination1 = geolocator.geocode("305 Swindon Way, West Lafayette, Indiana")
         destination2 = geolocator.geocode("222 West Wood St, West Lafayette, Indiana")

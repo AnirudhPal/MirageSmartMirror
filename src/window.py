@@ -8,6 +8,7 @@ import analog
 import maps
 import googleCalendar
 import time
+import threading
 # for news
 from newsapi import NewsApiClient
 import requests
@@ -189,10 +190,15 @@ class Window(QWidget):
         self.routes.clicked.connect(self.routes_info)
 
         self.init_timer()
+        self.init_controller()
+        self.loggedIn = False
+        self.ExpirationTimerCount = 0
+        self.numberOfDetectedFaces = 0
+        self.faceFrame = 0
+        self.proximity = 300
 
 
         self.qt.showFullScreen()
-
         # self.clearLayout(self.qt.analogclock)
 
     def msd(self):
@@ -206,6 +212,8 @@ class Window(QWidget):
         # self.qt.v_box.deleteLater()
         # self.gr = groom.Groom(self.qt)
         self.qt.setWindowTitle('Main screen')
+        self.qt.lsb = QPushButton('Lock screen')
+        self.qt.lsb.clicked.connect(self.lsd)
         self.qt.v_box.addWidget(self.qt.lsb)
         self.qt.v_box.addLayout(self.TimeWeatherBox)
         # self.qt.v_box.addSpacing(400)
@@ -213,6 +221,7 @@ class Window(QWidget):
         self.qt.v_box.addLayout(self.welcomeBox)
         self.qt.v_box.addSpacing(200)
         self.qt.v_box.addLayout(self.appListBox)
+        self.proximity = 300
 
     def gmd(self):
         self.timer.stop()
@@ -223,6 +232,7 @@ class Window(QWidget):
         self.qt.v_box.addWidget(self.qt.lsb)
         self.qt.v_box.addWidget(groom.Groom().frame)
         self.qt.v_box.setContentsMargins(0,0,0,0)
+        self.proximity = 1000
         # self.qt.v_box.addSpacing(400)
         # self.qt.v_box.addLayout(self.welcomeBox)
         # self.qt.v_box.addLayout(self.appListBox)
@@ -318,6 +328,11 @@ class Window(QWidget):
         self.timer.timeout.connect(self.update_time)
         self.timer.start(1000)
 
+    def init_controller(self):
+        self.cTimer = QTimer()
+        self.cTimer.timeout.connect(self.controller)
+        self.cTimer.start(5000)
+
     def update_time(self):
         datetime = QDateTime.currentDateTime()
         if self.qt.digitaltime != None:
@@ -346,48 +361,92 @@ class Window(QWidget):
             elif child.layout() is not None:
                 self.clearLayout(child.layout())
 
+    def controller(self):
+        # import ipdb; ipdb.set_trace()
+
+        if self.loggedIn is False:
+            self.numberOfDetectedFaces,self.faceFrame = numberOfFaces()
+        # sensor.self.proximity()
+        # self.proximity = 300
+        if self.proximity > 200:
+
+            if self.numberOfDetectedFaces == 1 and not self.loggedIn:
+                print("one face Detected")
+                print(recognize(self.faceFrame)) #login
+                self.msd()
+                self.loggedIn = True
+
+                #if unknown ask if user wants to setup a new profile
+                    #setup profile Protocal
+
+                #if recognize retuned a name login
+                    #loggedIn = True
+                    #diSplAY
+            elif self.numberOfDetectedFaces == 1 and self.loggedIn:
+                print("one face and you are logged in")
+                #if another user, start timer (5 sec) and switch to new profile
+
+            elif self.numberOfDetectedFaces > 1:
+                print("one person only")
+            else :
+                print("no one is here")
+                self.ExpirationTimerCount=self.ExpirationTimerCount+1
+
+                    #change ui to lock screen
+
+                #please one person in front
+        if self.proximity > 600:
+            self.ExpirationTimerCount=self.ExpirationTimerCount+1
+            self.msd()
+
+        if self.ExpirationTimerCount >= 10:
+            self.loggedIn = False
 
 
-app = QApplication(sys.argv)
+window_app = QApplication(sys.argv)
 # a_window = Window()
-loggedIn = False
-ExpariationTimerCount = 0
+Display = Window()
+# t = threading.Thread(target = lambda: Display.controller())
+# t.daemon = True
+# t.start()
+sys.exit(window_app.exec_())
 
 #create proximity sensor
 
-while True:
-    time.sleep(3)
-    numberOfDetectedFaces,faceFrame = numberOfFaces()
-    # sensor.proximity()
-    proximity = 300
-    if proximity > 200:
-
-        if numberOfDetectedFaces == 1 and not loggedIn:
-            print("one face Detected")
-            print(recognize(faceFrame)) #login
-            Window()
-            #if unknown ask if user wants to setup a new profile
-                #setup profile Protocal
-
-            #if recognize retuned a name login
-                #loggedIn = True
-                #diSplAY
-        elif numberOfDetectedFaces == 1 and loggedIn:
-            print("one face and you are logged in")
-            #if another user, start timer (5 sec) and switch to new profile
-
-        elif numberOfDetectedFaces > 1:
-            print("one person only")
-        else :
-            print("no one is here")
-            ExpariationTimerCount=ExpariationTimerCount+1
-
-                #change ui to lock screen
-
-            #please one person in front
-    elif proximity > 600:
-        ExpariationTimerCount=ExpariationTimerCount+1
-
-    if ExpariationTimerCount >= 10:
-        loggedIn = False
-sys.exit(app.exec_())
+# while True:
+#     time.sleep(3)
+#     numberOfDetectedFaces,faceFrame = numberOfFaces()
+#     # sensor.proximity()
+#     proximity = 300
+#     if proximity > 200:
+#
+#         if numberOfDetectedFaces == 1 and not loggedIn:
+#             print("one face Detected")
+#             print(recognize(faceFrame)) #login
+#             # Display.msd()
+#             # loggedIn = True
+#
+#             #if unknown ask if user wants to setup a new profile
+#                 #setup profile Protocal
+#
+#             #if recognize retuned a name login
+#                 #loggedIn = True
+#                 #diSplAY
+#         elif numberOfDetectedFaces == 1 and loggedIn:
+#             print("one face and you are logged in")
+#             #if another user, start timer (5 sec) and switch to new profile
+#
+#         elif numberOfDetectedFaces > 1:
+#             print("one person only")
+#         else :
+#             print("no one is here")
+#             ExpirationTimerCount=ExpirationTimerCount+1
+#
+#                 #change ui to lock screen
+#
+#             #please one person in front
+#     elif proximity > 600:
+#         ExpirationTimerCount=ExpirationTimerCount+1
+#
+#     if ExpirationTimerCount >= 10:
+#         loggedIn = False
