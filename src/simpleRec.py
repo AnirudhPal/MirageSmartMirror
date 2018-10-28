@@ -1,6 +1,7 @@
 import face_recognition
 import cv2
 import pickle
+import time
 
 
 # This is a demo of running face recognition on live video from your webcam. It's a little more complicated than the
@@ -63,6 +64,7 @@ def recognize(rgb_small_frame):
 def numberOfFaces():
 # Get a reference to webcam #0 (the default one)
     video_capture = cv2.VideoCapture(0)
+    time.sleep(0.5)
 
     # import ipdb; ipdb.set_trace() # BREAKPOINT
     process_this_frame = True
@@ -80,7 +82,7 @@ def numberOfFaces():
 
     # Find all the faces and face encodings in the current frame of video
     numberOfFaces = len(face_recognition.face_locations(rgb_small_frame))
-    cv2.imshow('Video', frame)
+    # cv2.imshow('Video', frame)
     video_capture.release()
     cv2.destroyAllWindows()
 

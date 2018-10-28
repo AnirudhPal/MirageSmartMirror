@@ -58,6 +58,15 @@ news_headline_font = QFont('Helvetica', 13)
 news_space_font = QFont('Helvetica', 4)
 font.setWeight(1)
 
+effect = QGraphicsDropShadowEffect()
+effect2 = QGraphicsDropShadowEffect()
+effect.setOffset(1, 1)
+effect2.setOffset(1, 1)
+effect.setBlurRadius(30)
+effect.setColor(QColor(255,255,255))
+effect2.setBlurRadius(20)
+effect2.setColor(QColor(255,255,255))
+
 class Window(QWidget):
     def __init__ (self):
         super().__init__()
@@ -66,14 +75,8 @@ class Window(QWidget):
         # self.currentWidget = None
 
     def init_ui(self):
-        # self.qt.showFullScreen()
-        self.analog = analog.AnalogClock()
-        self.rt = maps.Maps()
-        self.calendarEvents = googleCalendar.Calendar()
 
         self.qt.resize(800, 800)
-
-        datetime = QDateTime.currentDateTime()
 
         font = QFont('Helvetica', 18)
         font.setWeight(1)
@@ -83,25 +86,33 @@ class Window(QWidget):
         self.darkPalette.setColor(QPalette.Background, Qt.black)
         self.qt.setPalette(self.darkPalette)
 
-        effect = QGraphicsDropShadowEffect()
-        effect2 = QGraphicsDropShadowEffect()
-        effect.setOffset(1, 1)
-        effect2.setOffset(1, 1)
-        effect.setBlurRadius(30)
-        effect.setColor(QColor(255,255,255))
-        effect2.setBlurRadius(20)
-        effect2.setColor(QColor(255,255,255))
-        # self.qt.setGraphicsEffect(effect)
+        self.set_lockscreen_layout()
+        self.init_timer()
+        self.init_controller()
+        self.loggedIn = False
+        self.ExpirationTimerCount = 0
+        self.numberOfDetectedFaces = 0
+        self.faceFrame = 0
+        self.proximity = 300
+        self.prompt_asked = False
+        self.launch_face_detection = False
 
-        #
+
+        self.qt.showFullScreen()
+
+    def msd(self):
+        self.loggedIn = True
+        self.launch_face_detection = False
+        self.clearLayout(self.qt.v_box)
+        self.timer.stop()
+
+        self.rt = maps.Maps()
+        self.calendarEvents = googleCalendar.Calendar()
+
         self.qt.msb = QPushButton('Main screen')
         self.qt.gmb = QPushButton('Groom mode')
         self.qt.lsb = QPushButton('Lock screen')
         self.qt.l = QLabel()
-        self.qt.time = QLabel("<font color='white'>" + datetime.toString("MMM d, yyyy hh:mm:ss AP") + "</font")
-        self.qt.time.setFont(font)
-        self.analog.setGraphicsEffect(effect)
-        self.qt.time.setGraphicsEffect(effect2)
 
         # Main screen layout
         self.TimeWeatherBox = QHBoxLayout()
@@ -144,79 +155,21 @@ class Window(QWidget):
         for app in self.appList:
             self.appListBox.addWidget(app)
 
-
-
-
-
-        self.qt.digitaltime = QHBoxLayout()
-        self.qt.analogclock = QHBoxLayout()
-
-
-
-        # self.qt.welcomebox = QHBoxLayout()
-
-        self.qt.digitaltime.addWidget(self.qt.time)
-        self.qt.analogclock.addWidget(self.analog)
-        # self.qt.feedBox.addWidget(self.qt.l)
-
-        self.qt.h_box = QHBoxLayout()
-        # self.qt.h_box.addStretch()
-        self.qt.h_box.addWidget(self.qt.msb)
-        # self.qt.h_box.addWidget(self.qt.gmb)
-        # self.qt.h_box.addStretch()
-
-        self.qt.v_box = QVBoxLayout()
-        # self.qt.v_box.addWidget(self.qt.msb)
-        self.qt.v_box.addLayout(self.qt.h_box)
-        # self.qt.spacer = QSpacerItem(150, 150)
-        # self.qt.v_box.addSpacerItem(self.qt.spacer)
-        self.qt.v_box.addSpacing(150)
-        self.qt.v_box.addLayout(self.qt.analogclock)
-        self.qt.v_box.addLayout(self.qt.digitaltime)
-        # self.qt.v_box.addSpacing(50)
-        # self.qt.v_box.addLayout(self.qt.welcomebox)
-
-
-        self.qt.setLayout(self.qt.v_box)
-        self.qt.setWindowTitle('Lock screen')
-
-        self.qt.digitaltime.setAlignment(Qt.AlignCenter)
-
         self.qt.msb.clicked.connect(self.msd)
         self.qt.gmb.clicked.connect(self.gmd)
-        self.qt.lsb.clicked.connect(self.lsd)
+        self.qt.lsb.clicked.connect(self.set_lockscreen_layout)
         self.news.clicked.connect(self.news_headlines)
         self.calendar.clicked.connect(self.calendar_events)
         self.routes.clicked.connect(self.routes_info)
 
-        self.init_timer()
-        self.init_controller()
-        self.loggedIn = False
-        self.ExpirationTimerCount = 0
-        self.numberOfDetectedFaces = 0
-        self.faceFrame = 0
-        self.proximity = 300
+        # self.clearLayout(self.qt.v_box)
 
-
-        self.qt.showFullScreen()
-        # self.clearLayout(self.qt.analogclock)
-
-    def msd(self):
-    #     datetime = QDateTime.currentDateTime()
-    #     self.qt.time.setText("<font color='white'>" + datetime.toString() + "</font")
-        # self.clearLayout(self.qt.analogclock)
-        # self.clearLayout(self.qt.digitaltime)
-        # self.clearLayout(self.qt.h_box)
-        self.timer.stop()
-        self.clearLayout(self.qt.v_box)
-        # self.qt.v_box.deleteLater()
-        # self.gr = groom.Groom(self.qt)
         self.qt.setWindowTitle('Main screen')
         self.qt.lsb = QPushButton('Lock screen')
-        self.qt.lsb.clicked.connect(self.lsd)
+        self.qt.lsb.clicked.connect(self.set_lockscreen_layout)
         self.qt.v_box.addWidget(self.qt.lsb)
         self.qt.v_box.addLayout(self.TimeWeatherBox)
-        # self.qt.v_box.addSpacing(400)
+
         self.qt.v_box.addLayout(self.appBox)
         self.qt.v_box.addLayout(self.welcomeBox)
         self.qt.v_box.addSpacing(200)
@@ -226,28 +179,84 @@ class Window(QWidget):
     def gmd(self):
         self.timer.stop()
         self.clearLayout(self.qt.v_box)
-        # self.qt.v_box.deleteLater()
-        # self.gr = groom.Groom(self.qt)
-        # self.qt.v_box.addLayout(self.TimeWeatherBox)
+
         self.qt.v_box.addWidget(self.qt.lsb)
         self.qt.v_box.addWidget(groom.Groom().frame)
         self.qt.v_box.setContentsMargins(0,0,0,0)
         self.proximity = 1000
-        # self.qt.v_box.addSpacing(400)
-        # self.qt.v_box.addLayout(self.welcomeBox)
-        # self.qt.v_box.addLayout(self.appListBox)
 
-    def lsd(self):
-        self.datetime.timer.stop()
+    def set_buffering_screen(self):
         self.clearLayout(self.qt.v_box)
-        self.qt.v_box.deleteLater()
-        new_widget = QWidget()
-        self.qt = new_widget
-        self.init_ui()
-        # self.qt.v_box.addLayout(self.TimeWeatherBox)
-        # self.qt.v_box.addSpacing(400)
-        # self.qt.v_box.addLayout(self.welcomeBox)
-        # self.qt.v_box.addLayout(self.appListBox)
+        self.timer.stop()
+        prompt_box = QHBoxLayout()
+        self.prompt = QLabel("<font color='white'>" + "Please stand still while we detect your face and load your profile." + "</font")
+        self.prompt.setAlignment(Qt.AlignCenter)
+        prompt_box.addWidget(self.prompt)
+        self.qt.layout().addLayout(prompt_box)
+        # self.numberOfDetectedFaces,self.faceFrame = numberOfFaces()
+
+
+    def set_lockscreen_layout(self):
+        self.init_timer()
+        self.loggedIn = False
+        self.prompt_asked = False
+        font = QFont('Helvetica', 18)
+        font.setWeight(1)
+        effect = QGraphicsDropShadowEffect()
+        effect2 = QGraphicsDropShadowEffect()
+        effect.setOffset(1, 1)
+        effect2.setOffset(1, 1)
+        effect.setBlurRadius(30)
+        effect.setColor(QColor(255,255,255))
+        effect2.setBlurRadius(20)
+        effect2.setColor(QColor(255,255,255))
+
+        datetime = QDateTime.currentDateTime()
+        self.qt.time = QLabel("<font color='white'>" + datetime.toString("MMM d, yyyy hh:mm:ss AP") + "</font")
+        self.qt.time.setFont(font)
+        self.qt.time.setGraphicsEffect(effect2)
+
+        self.analog = analog.AnalogClock()
+        self.analog.setGraphicsEffect(effect)
+
+        self.qt.digitaltime = QHBoxLayout()
+        self.qt.analogclock = QHBoxLayout()
+        self.qt.digitaltime.addWidget(self.qt.time)
+        self.qt.analogclock.addWidget(self.analog)
+        self.qt.digitaltime.setAlignment(Qt.AlignCenter)
+
+        self.qt.h_box = QHBoxLayout()
+        self.qt.msb = QPushButton('Main screen')
+        self.qt.msb.clicked.connect(self.msd)
+        self.qt.h_box.addWidget(self.qt.msb)
+
+        prompt_box = QHBoxLayout()
+        self.prompt = QLabel()
+        self.prompt.setFixedHeight(30)
+        self.prompt.setAlignment(Qt.AlignCenter)
+        # self.prompt.setGraphicsEffect(effect2)
+        prompt_box.addWidget(self.prompt)
+
+
+        if self.qt.layout() != None:
+            self.clearLayout(self.qt.v_box)
+            self.qt.layout().addLayout(self.qt.h_box)
+            self.qt.layout().addSpacing(150)
+            self.qt.layout().addLayout(self.qt.analogclock)
+            self.qt.layout().addLayout(self.qt.digitaltime)
+            self.qt.layout().addLayout(prompt_box)
+        else:
+            self.qt.v_box = QVBoxLayout()
+            self.qt.v_box.addLayout(self.qt.h_box)
+            self.qt.v_box.addSpacing(150)
+            self.qt.v_box.addLayout(self.qt.analogclock)
+            self.qt.v_box.addLayout(self.qt.digitaltime)
+            self.qt.v_box.addLayout(prompt_box)
+            self.qt.setLayout(self.qt.v_box)
+
+        self.qt.setWindowTitle('Lock screen')
+
+
 
     def news_headlines(self):
         self.clearLayout(self.feed.feedForm)
@@ -331,7 +340,7 @@ class Window(QWidget):
     def init_controller(self):
         self.cTimer = QTimer()
         self.cTimer.timeout.connect(self.controller)
-        self.cTimer.start(5000)
+        self.cTimer.start(2000)
 
     def update_time(self):
         datetime = QDateTime.currentDateTime()
@@ -364,11 +373,23 @@ class Window(QWidget):
     def controller(self):
         # import ipdb; ipdb.set_trace()
 
-        if self.loggedIn is False:
-            self.numberOfDetectedFaces,self.faceFrame = numberOfFaces()
+        # if self.loggedIn is False:
+        #     self.numberOfDetectedFaces,self.faceFrame = numberOfFaces()
         # sensor.self.proximity()
         # self.proximity = 300
+        if self.launch_face_detection is True:
+            self.numberOfDetectedFaces,self.faceFrame = numberOfFaces()
+
         if self.proximity > 200:
+            if self.loggedIn is False:
+                if self.prompt_asked is False:
+                    self.prompt.setText("<font color='white'>" + "Please stand still and wait for your profile to load." + "</font")
+                    self.prompt_asked = True
+                # self.numberOfDetectedFaces,self.faceFrame = numberOfFaces()
+                self.launch_face_detection = True
+                # self.clearLayout(self.qt.v_box)
+                # self.timer.stop()
+                self.set_buffering_screen()
 
             if self.numberOfDetectedFaces == 1 and not self.loggedIn:
                 print("one face Detected")
@@ -390,7 +411,7 @@ class Window(QWidget):
                 print("one person only")
             else :
                 print("no one is here")
-                self.ExpirationTimerCount=self.ExpirationTimerCount+1
+                # self.ExpirationTimerCount=self.ExpirationTimerCount+1
 
                     #change ui to lock screen
 
@@ -400,6 +421,7 @@ class Window(QWidget):
             self.msd()
 
         if self.ExpirationTimerCount >= 10:
+            print("Time expired")
             self.loggedIn = False
 
 
@@ -410,43 +432,3 @@ Display = Window()
 # t.daemon = True
 # t.start()
 sys.exit(window_app.exec_())
-
-#create proximity sensor
-
-# while True:
-#     time.sleep(3)
-#     numberOfDetectedFaces,faceFrame = numberOfFaces()
-#     # sensor.proximity()
-#     proximity = 300
-#     if proximity > 200:
-#
-#         if numberOfDetectedFaces == 1 and not loggedIn:
-#             print("one face Detected")
-#             print(recognize(faceFrame)) #login
-#             # Display.msd()
-#             # loggedIn = True
-#
-#             #if unknown ask if user wants to setup a new profile
-#                 #setup profile Protocal
-#
-#             #if recognize retuned a name login
-#                 #loggedIn = True
-#                 #diSplAY
-#         elif numberOfDetectedFaces == 1 and loggedIn:
-#             print("one face and you are logged in")
-#             #if another user, start timer (5 sec) and switch to new profile
-#
-#         elif numberOfDetectedFaces > 1:
-#             print("one person only")
-#         else :
-#             print("no one is here")
-#             ExpirationTimerCount=ExpirationTimerCount+1
-#
-#                 #change ui to lock screen
-#
-#             #please one person in front
-#     elif proximity > 600:
-#         ExpirationTimerCount=ExpirationTimerCount+1
-#
-#     if ExpirationTimerCount >= 10:
-#         loggedIn = False
