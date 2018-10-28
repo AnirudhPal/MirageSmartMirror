@@ -1,4 +1,5 @@
 import sys
+import os
 import time
 import groom
 import DateTime
@@ -86,6 +87,10 @@ class Window(QWidget):
         self.darkPalette.setColor(QPalette.Background, Qt.black)
         self.qt.setPalette(self.darkPalette)
 
+        self.load_user_info(0)
+        # self.load_user_info(0)
+        # self.load_user_info(0)
+        # self.load_user_info(0)
         self.set_lockscreen_layout()
         self.init_timer()
         self.init_controller()
@@ -106,9 +111,9 @@ class Window(QWidget):
         self.clearLayout(self.qt.v_box)
         self.timer.stop()
 
-        user_destinations = ["305 Swindon Way, West Lafayette, Indiana", "222 West Wood St, West Lafayette, Indiana", "West Madison Street, Chicago, Illinois"]
-        self.rt = maps.Maps("250 Sheetz Street, West Lafayette, Indiana", user_destinations)
-        self.calendarEvents = googleCalendar.Calendar()
+        # user_destinations = ["305 Swindon Way, West Lafayette, Indiana", "222 West Wood St, West Lafayette, Indiana", "West Madison Street, Chicago, Illinois"]
+        # self.rt = maps.Maps("250 Sheetz Street, West Lafayette, Indiana", user_destinations)
+        # self.calendarEvents = googleCalendar.Calendar() # fix to take in user id and get user's token
 
         self.qt.msb = QPushButton('Main screen')
         self.qt.gmb = QPushButton('Groom mode')
@@ -122,7 +127,7 @@ class Window(QWidget):
         self.appBox = QHBoxLayout()
 
         ###
-        self.weather = weather.Weather()
+        # self.weather = weather.Weather()
         self.weather.weatherBox.setAlignment(Qt.AlignLeft)
         self.weather.setFixedHeight(150)
         self.TimeWeatherBox.addWidget(self.weather)
@@ -138,7 +143,7 @@ class Window(QWidget):
         self.welcomeBox.addWidget(self.welcomeLabel)
 
         ###
-        self.feed = feeds.Feeds()
+        # self.feed = feeds.Feeds()
         self.feed.setFixedWidth(800)
         self.appBox.addWidget(self.feed)
 
@@ -177,6 +182,9 @@ class Window(QWidget):
         self.qt.v_box.addLayout(self.appListBox)
         self.proximity = 300
 
+        # temp = DateTime.DateTime()
+        # self.qt.v_box = temp
+
     def gmd(self):
         self.timer.stop()
         self.clearLayout(self.qt.v_box)
@@ -196,10 +204,21 @@ class Window(QWidget):
         self.qt.layout().addLayout(prompt_box)
         # self.numberOfDetectedFaces,self.faceFrame = numberOfFaces()
 
+    def load_user_info(self, id):
+        # os.system('nohup python3 APIs.py &')
+        user_destinations = ["305 Swindon Way, West Lafayette, Indiana", "222 West Wood St, West Lafayette, Indiana", "West Madison Street, Chicago, Illinois"]
+        self.rt = maps.Maps("250 Sheetz Street, West Lafayette, Indiana", user_destinations)
+        self.calendarEvents = googleCalendar.Calendar() # fix to take in user id and get user's token
+        self.weather = weather.Weather("250 Sheetz Street, West Lafayette, Indiana")
+        self.datetime = DateTime.DateTime()
+        self.feed = feeds.Feeds()
+
+
 
     def set_lockscreen_layout(self):
         self.init_timer()
         self.loggedIn = False
+        self.numberOfDetectedFaces = 0
         self.prompt_asked = False
         font = QFont('Helvetica', 18)
         font.setWeight(1)
@@ -341,7 +360,7 @@ class Window(QWidget):
     def init_controller(self):
         self.cTimer = QTimer()
         self.cTimer.timeout.connect(self.controller)
-        self.cTimer.start(2000)
+        self.cTimer.start(3000)
 
     def update_time(self):
         datetime = QDateTime.currentDateTime()
@@ -388,13 +407,13 @@ class Window(QWidget):
                     self.prompt_asked = True
                 # self.numberOfDetectedFaces,self.faceFrame = numberOfFaces()
                 self.launch_face_detection = True
-                # self.clearLayout(self.qt.v_box)
-                # self.timer.stop()
-                self.set_buffering_screen()
+                # self.set_buffering_screen()
 
             if self.numberOfDetectedFaces == 1 and not self.loggedIn:
                 print("one face Detected")
-                print(recognize(self.faceFrame)) #login
+                name = recognize(self.faceFrame)
+                print(name) #login
+                self.load_user_info(0)
                 self.msd()
                 self.loggedIn = True
 
@@ -419,11 +438,13 @@ class Window(QWidget):
                 #please one person in front
         if self.proximity > 600:
             self.ExpirationTimerCount=self.ExpirationTimerCount+1
-            self.msd()
+            # self.load_user_info(0)
+            # self.msd()
 
         if self.ExpirationTimerCount >= 10:
             print("Time expired")
             self.loggedIn = False
+            self.numberOfDetectedFaces = 0
 
 
 window_app = QApplication(sys.argv)

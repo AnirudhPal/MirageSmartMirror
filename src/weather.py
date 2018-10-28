@@ -26,42 +26,26 @@ icons = {
 
 
 class Weather(QWidget):
-    def __init__ (self):
+    def __init__ (self, address):
         super().__init__()
+        self.address = address
         self.init_ui()
 
     def init_ui(self):
 
         geolocator = Nominatim(user_agent="MirageSmartMirror")
-        origin = geolocator.geocode("250 Sheetz Street, West Lafayette, Indiana")
-        destination = geolocator.geocode("305 Swindon Way, West Lafayette, Indiana")
-
-        # print((origin.latitude, origin.longitude))
+        origin = geolocator.geocode(self.address)
 
 
 
-
-        # maps_key = "&key=AIzaSyDKTb75-vuAvnWxO2Wfm_1DWlyr4BadgJc"
         weather_key = "50f9b96898249aa1a036886103f78788"
-
-        # maps_url1 = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial"
-        # maps_origin1 = "&origins=%f,%f" %(origin.latitude, origin.longitude)
-        # maps_destination1 = "&destinations=%f,%f" %(destination.latitude, destination.longitude)
-        # maps_request = maps_url1 + maps_origin1 + maps_destination1 + maps_key
-        # https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=40.424399,-86.925882&destinations=40.422035,-86.901596&key=AIzaSyDKTb75-vuAvnWxO2Wfm_1DWlyr4BadgJc
-
-        # maps_get1 = requests.get(maps_request)
-        # maps_json1 = maps_get1.json()
 
         weather_url = "https://api.darksky.net/forecast/" + weather_key
         # 0123456789abcdef9876543210fedcba/42.3601,-71.0589
         weather_request = weather_url + "/%f,%f" %(origin.latitude, origin.longitude)
-        # weather_request = weather_request +
-        # print(weather_request)
 
         weather_get = requests.get(weather_request)
         weather_json = weather_get.json()
-        # print(weather_json['timezone'])
 
 
 
@@ -72,8 +56,7 @@ class Weather(QWidget):
 
 
         self.weatherBox = QVBoxLayout()
-        # self.timeWeatherBox = QHBoxLayout()
-        # self.weatherBox.setAlignment(Qt.AlignRight)
+
         icon = icons[weather_json['currently']['icon']]
         image = cv2.imread(icon)
         image = cv2.resize(image, (50, 50), interpolation=cv2.INTER_CUBIC)
