@@ -5,11 +5,6 @@ import datetime
 from googleapiclient.discovery import build
 from httplib2 import Http
 from oauth2client import file, client, tools
-# from geopy.geocoders import Nominatim
-# import urllib.parse, urllib.request, json, requests
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
-from PyQt5.QtCore import *
 
 '''
 Client secret = kK5MrgIPk5GLluvDZS4E7HYM
@@ -20,9 +15,8 @@ Client ID = 130335195609-r8e5aguvg3sr2a1d0e2oap6bjrn3aoml.apps.googleusercontent
 SCOPES = 'https://www.googleapis.com/auth/calendar.readonly'
 
 
-class Calendar(QWidget):
+class Calendar:
     def __init__ (self):
-        super().__init__()
         self.init_ui()
 
     def init_ui(self):

@@ -106,7 +106,8 @@ class Window(QWidget):
         self.clearLayout(self.qt.v_box)
         self.timer.stop()
 
-        self.rt = maps.Maps()
+        user_destinations = ["305 Swindon Way, West Lafayette, Indiana", "222 West Wood St, West Lafayette, Indiana", "West Madison Street, Chicago, Illinois"]
+        self.rt = maps.Maps("250 Sheetz Street, West Lafayette, Indiana", user_destinations)
         self.calendarEvents = googleCalendar.Calendar()
 
         self.qt.msb = QPushButton('Main screen')
