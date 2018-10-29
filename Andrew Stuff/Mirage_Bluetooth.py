@@ -2,6 +2,7 @@
 import os
 import dbus
 import subprocess
+import socket
 
 try:
     from gi.repository import GObject
@@ -22,7 +23,7 @@ WIFI_MONITOR_SRVC = 'c30b8a67-d1a2-40e3-a407-9f126001b6cc'
 WIFI_STAT_CHRC = '43ec4c0c-6d53-44a6-ae81-a6e6518269d4'
 WIFI_SSID_CHRC = '1249e241-7624-4158-acd5-86226f7637c8'
 WIFI_PASS_CHRC = '290d03b7-6e73-4e1e-ab70-ac8997cc0506'
-
+IP_CHRC = 'a728e3b7-91e8-4c13-9923-f85dedbbac59'
 
 def get_wifi_status() :
 	# Check WiFi connectivity
@@ -33,6 +34,17 @@ def get_wifi_status() :
 	else:
 		return 0
 
+def get_ip() :
+	s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+	try:
+		# doesn't have to be reachable
+		s.connect(('10.255.255.255', 1))
+		IP = s.getsockname()[0]
+	except:
+		IP = '127.0.0.1'
+	finally:
+		s.close()
+	return IP
 
 def get_wifi_ssids() :
 	# Execute sudo iwlist wlan0 scan | grep -e ESSID | grep -oP 'ESSID:"\K[^"]+' | sort -u
@@ -53,6 +65,10 @@ def enter_password(password):
 	os.system('wpa_cli -i wlan0 reconfigure')
 	os.system('rm -f passphrase.txt')
 	# Should also remove plaintext password from wpa_supplicant.conf with sudo grep -vh '^[[:space:]]*#' /etc/wpa_supplicant/wpa_supplicant.conf 
+
+
+
+
 class WiFiSSIDChrc(localGATT.Characteristic):
 	ssid = ""
 	def __init__(self, service):
@@ -99,6 +115,54 @@ class WiFiPASSChrc(localGATT.Characteristic):
 		self.PropertiesChanged(constants.GATT_CHRC_IFACE,
 				       {'Value': dbus.Array(WiFiPASSChrc.wifiPass)},
 				       [])
+
+class IPChrc(localGATT.Characteristic):
+	ip = ""
+	def __init__(self, service):
+		localGATT.Characteristic.__init__(self,
+						  4,
+						  IP_CHRC,
+						  service,
+						  get_ip(),
+						  False,
+						  ['read', 'notify'])
+		
+	def ipAddr_cb(self):
+		ip = [get_ip()]
+		self.props[contants.GATT_CHRC_IFACE]['Value'] = ip
+		self.PropertiesChanged(consants.GATT_CHRC_IFACE,
+					{'Value': dbus.Array(ip)},
+					[])
+		return self.props[constants.GATT_CHRC_IFACE]['Notifying']
+
+	def ReadValue(self, options):
+		ip = [get_ip()]
+		self.props[constants.GATT_CHRC_IFACE]['Value'] = ip
+		return dbus.Array(self.props[constants.GATT_CHRC_IFACE]['Value']
+
+	def update_ip(self):
+		if not self.props[constants.GATT_CHRC_IFACE]['Notifying']:
+			return
+
+		print('Starting timer event')
+		GObject.timeout_add(500, self.ipAddr_cb)
+
+	def StartNotify(self):
+		if self.props[constants.GATT_CHRC_IFACE]['Notifying']:
+			print ('Already notifying, nothing to do')
+			return
+		print('Notifying on')
+		self.props[constants.GATT_CHRC_IFACE]['Notifying'] = True
+		self.update_ip()
+
+	def StopNotify(self):
+		if not self.props[constant.GATT_CHRC_IFACE]['Notifying']:
+			print ('Not notifying, nothing to do')
+			return
+
+		print('Notifying off')
+		self.props[constants.GATT_CHRC_IFACE]['Notifying'] = False
+		self.update_ip()
 
 
 class WiFiStatChrc(localGATT.Characteristic):
@@ -170,10 +234,12 @@ class ble:
 		self.wifiStatusCharc = WiFiStatChrc(self.srv)
 		self.wifiSSIDCharc = WiFiSSIDChrc(self.srv)
 		self.wifiPASSCharc = WiFiPASSChrc(self.srv)
+		self.ipAddrChrc = IPChrc(self.srv)
 
 		self.wifiStatusCharc.service = self.srv.path
 		self.wifiSSIDCharc.service = self.srv.path
 		self.wifiPASSCharc.service = self.srv.path
+		self.ipAddrChrc.service = self.srv.path
 
 		# If needed, do anything with Descriptors here
 
@@ -184,6 +250,7 @@ class ble:
 		self.app.add_managed_object(self.wifiStatusCharc)
 		self.app.add_managed_object(self.wifiSSIDCharc)
 		self.app.add_managed_object(self.wifiPASSCharc)
+		self.app.add_managed_object(self.ipAddrChrc)
 
 		# Register Application
 
@@ -206,10 +273,11 @@ class ble:
 
 		self.ad_manager = advertisement.AdvertisingManager(self.dongle.address)
 		self.ad_manager.register_advertisement(self.advert, {"local-name":"Pi"})
+		self.add_device_name('Mirage')
 
 	def add_call_back(self, callback):
 		self.wifiStatusCharc.PropertiesChanged = callback
-
+		
 	def start_bt(self):
 		self.app.start()
 
@@ -217,8 +285,8 @@ class ble:
 		self.ad_manager.unregister_advertisement(self.advert)
 
 if __name__ == '__main__':
-	print('Wifi status is {}'.format(get_wifi_status()))
-	print(get_wifi_status())
+	#print('Wifi status is {}'.format(get_wifi_status()))
+	#print(get_wifi_status())
 
 	try:
 		pi_wifi_monitor = ble()
