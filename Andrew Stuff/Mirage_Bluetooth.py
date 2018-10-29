@@ -126,26 +126,31 @@ class IPChrc(localGATT.Characteristic):
 						  get_ip(),
 						  False,
 						  ['read', 'notify'])
-		
+
 	def ipAddr_cb(self):
-		ip = [get_ip()]
-		self.props[contants.GATT_CHRC_IFACE]['Value'] = ip
-		self.PropertiesChanged(consants.GATT_CHRC_IFACE,
-					{'Value': dbus.Array(ip)},
+		IPChrc.ip = get_ip()
+		self.props[contants.GATT_CHRC_IFACE]['Value'] = IPChrc.ip.encode('utf-8')
+#		self.PropertiesChanged(constants.GATT_CHRC_IFACE,
+#					{'Value': dbus.ByteArray(self.props[constants.GATT_CHRC_IFACE]['Value'])},
+#					[])
+		self.PropertiesChanged(constants.GATT_CHRC_IFACE,
+					{'Value': dbus.Array(1)},
 					[])
+		print('Value: ', IPChrc.ip)
 		return self.props[constants.GATT_CHRC_IFACE]['Notifying']
 
-	def ReadValue(self, options):
-		ip = [get_ip()]
-		self.props[constants.GATT_CHRC_IFACE]['Value'] = ip
-		return dbus.Array(self.props[constants.GATT_CHRC_IFACE]['Value']
-
-	def update_ip(self):
+	def _update_ip(self):
 		if not self.props[constants.GATT_CHRC_IFACE]['Notifying']:
 			return
 
 		print('Starting timer event')
 		GObject.timeout_add(500, self.ipAddr_cb)
+
+	def ReadValue(self, options):
+		IPChrc.ip = get_ip()
+		self.props[constants.GATT_CHRC_IFACE]['Value'] = IPChrc.ip.encode('utf-8')
+		print('Value from Read Value: {}'.format(IPChrc.ip))
+		return dbus.ByteArray(self.props[constants.GATT_CHRC_IFACE]['Value'])
 
 	def StartNotify(self):
 		if self.props[constants.GATT_CHRC_IFACE]['Notifying']:
@@ -153,16 +158,16 @@ class IPChrc(localGATT.Characteristic):
 			return
 		print('Notifying on')
 		self.props[constants.GATT_CHRC_IFACE]['Notifying'] = True
-		self.update_ip()
+		self._update_ip()
 
 	def StopNotify(self):
-		if not self.props[constant.GATT_CHRC_IFACE]['Notifying']:
+		if not self.props[constants.GATT_CHRC_IFACE]['Notifying']:
 			print ('Not notifying, nothing to do')
 			return
 
 		print('Notifying off')
 		self.props[constants.GATT_CHRC_IFACE]['Notifying'] = False
-		self.update_ip()
+		self._update_ip()
 
 
 class WiFiStatChrc(localGATT.Characteristic):
@@ -213,7 +218,7 @@ class WiFiStatChrc(localGATT.Characteristic):
 		self._update_wifi_status()
 
 	def StopNotify(self):
-		if not self.props[constant.GATT_CHRC_IFACE]['Notifying']:
+		if not self.props[constants.GATT_CHRC_IFACE]['Notifying']:
 			print ('Not notifying, nothing to do')
 			return
 
@@ -270,14 +275,15 @@ class ble:
 			self.dongle.powered = True
 
 		# Register Advertisement
-
+		self.dongle.alias = "Mirage"
 		self.ad_manager = advertisement.AdvertisingManager(self.dongle.address)
 		self.ad_manager.register_advertisement(self.advert, {"local-name":"Pi"})
-		self.add_device_name('Mirage')
 
 	def add_call_back(self, callback):
-		self.wifiStatusCharc.PropertiesChanged = callback
-		
+		#self.wifiStatusCharc.PropertiesChanged = callback
+		self.ipAddrChrc.PropertiesChanged = callback
+
+
 	def start_bt(self):
 		self.app.start()
 
@@ -287,7 +293,7 @@ class ble:
 if __name__ == '__main__':
 	#print('Wifi status is {}'.format(get_wifi_status()))
 	#print(get_wifi_status())
-
+	print(get_ip())
 	try:
 		pi_wifi_monitor = ble()
 		pi_wifi_monitor.start_bt()
