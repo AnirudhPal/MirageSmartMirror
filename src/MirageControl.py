@@ -79,5 +79,11 @@ def delete_user(user_number):
 	return "User deleted and files updated"
 
 # Setup user for face calibration
-@app.route('/setup/newuser/<filename>'):
+@app.route('/setup/newuser/<filename>')
+def start_face_calibration(filename):
 	faceCalibration.faceCalibration(filename)
+
+# Cancel face calibration
+@app.route('/setup/cancel')
+def cancel_face_calibration():
+	faceCalibration.cancelCalibration()
