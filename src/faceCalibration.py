@@ -7,7 +7,8 @@ calibrationCancel = False
 def faceCalibration(name):
     camera = PiCamera()
     # camera.start_preview()
-    path = "./Users/%s/" % name
+    #path = "./Users/%s/" % name
+    path = "./Faces/%s/" % name
     try:
         os.mkdir(path)
     except OSError:
@@ -16,13 +17,13 @@ def faceCalibration(name):
         print ("Successfully created the directory %s " % path)
 
     for i in range(5):
-	if not calibrationCancel:
-        	sleep(5)
-        	camera.capture('./Users/%s/image%s.jpg' % (name , i))
+        if not (calibrationCancel):
+            sleep(5)
+            camera.capture('./Faces/%s/image%s.jpg' % (name , i))
     # camera.stop_preview()
-	else:
-		break
+        else:
+            break
 
 #faceCalibration("Andrew0")
 def cancelCalibration():
-	calibrationCancel = True
+    calibrationCancel = True

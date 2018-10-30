@@ -6,20 +6,20 @@ import faceCalibration
 
 app = Flask(__name__)
 
-M_USER_DIR = "/home/pi/Desktop/MirageUsers/"
+M_USER_DIR = "/home/pi/MirageSmartMirror/src/Users/"
 
 selected_user = 0
 numUsers = 0
 
 def get_num_users_plain():
-	files = os.listdir("/home/pi/Desktop/MirageUsers")
+	files = os.listdir("/home/pi/MirageSmartMirror/src/Users")
 	return len(files)
 
 # Get number of users
 @app.route('/user/getnum')
 def get_num_users():
 	global numUsers
-	files = os.listdir("/home/pi/Desktop/MirageUsers")
+	files = os.listdir("/home/pi/MirageSmartMirror/src/Users")
 	numUsers = len(files)
 	return str(numUsers)
 
@@ -68,7 +68,7 @@ def delete_user(user_number):
 		return "User not found"
 
 	new_num_users = get_num_users_plain()
-	files = os.listdir("/home/pi/Desktop/MirageUsers")
+	files = os.listdir("/home/pi/MirageSmartMirror/src/Users")
 	for i in range(new_num_users):
 		os.rename(M_USER_DIR + files[i], M_USER_DIR + files[i]+".temp")
 
@@ -82,7 +82,8 @@ def delete_user(user_number):
 @app.route('/setup/newuser/<filename>')
 def start_face_calibration(filename):
 	faceCalibration.faceCalibration(filename)
-
+	#print("Done")
+	return "Done"
 # Cancel face calibration
 @app.route('/setup/cancel')
 def cancel_face_calibration():

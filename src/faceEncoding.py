@@ -8,7 +8,7 @@ import os
 
 # grab the paths to the input images in our dataset
 print("[INFO] quantifying faces...")
-imagePaths = list(paths.list_images("./Users/"))
+imagePaths = list(paths.list_images("./Faces/"))
 
 # initialize the list of known encodings and known names
 knownEncodings = []
