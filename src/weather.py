@@ -9,19 +9,19 @@ from PyQt5.QtGui import QFont, QPalette, QColor, QPainter, QPolygon, QImage, QPi
 from PyQt5.QtCore import *
 
 icons = {
-'cloudy':'icons/cloudy.png',
-'partly-cloudy-day':'icons/cloudy.png',
-'partly-cloudy-night':'icons/cloudy.png',
-'fog':'icons/fog.png',
-'wind':'icons/wind.png',
-'sleet':'icons/sleet.png',
-'snow':'icons/snow.png',
-'rain':'icons/raining.png',
-'clear-day':'icons/sun.png',
-'clear-night':'icons/moon.png',
-'thunderstorm':'icons/storm.png',
-'hail':'icons/hail.png',
-'tornado':'icons/tornado.png'
+'cloudy':'/home/pi/MirageSmartMirror/src/icons/cloudy.png',
+'partly-cloudy-day':'/home/pi/MirageSmartMirror/src/icons/cloudy.png',
+'partly-cloudy-night':'/home/pi/MirageSmartMirror/src/icons/cloudy.png',
+'fog':'/home/pi/MirageSmartMirror/src/icons/fog.png',
+'wind':'/home/pi/MirageSmartMirror/src/icons/wind.png',
+'sleet':'/home/pi/MirageSmartMirror/src/icons/sleet.png',
+'snow':'/home/pi/MirageSmartMirror/src/icons/snow.png',
+'rain':'/home/pi/MirageSmartMirror/src/icons/raining.png',
+'clear-day':'/home/pi/MirageSmartMirror/src/icons/sun.png',
+'clear-night':'/home/pi/MirageSmartMirror/src/icons/moon.png',
+'thunderstorm':'/home/pi/MirageSmartMirror/src/icons/storm.png',
+'hail':'/home/pi/MirageSmartMirror/src/icons/hail.png',
+'tornado':'/home/pi/MirageSmartMirror/src/icons/tornado.png'
 }
 
 
