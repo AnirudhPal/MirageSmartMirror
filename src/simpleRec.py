@@ -1,4 +1,6 @@
 import face_recognition
+from imutils.video import VideoStream
+import imutils
 import cv2
 import pickle
 import time
@@ -61,30 +63,60 @@ def recognize(rgb_small_frame):
     # Release handle to the webcam
 
 
+# def numberOfFaces():
+# # Get a reference to webcam #0 (the default one)
+#     video_capture = cv2.VideoCapture(0)
+#     time.sleep(0.5)
+#
+#     # import ipdb; ipdb.set_trace() # BREAKPOINT
+#     process_this_frame = True
+#
+#
+#     # Grab a single frame of video
+#     ret, frame = video_capture.read()
+#
+#     # Resize frame of video to 1/4 size for faster face recognition processing
+#     small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
+#
+#     # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
+#     rgb_small_frame = small_frame[:, :, ::-1]
+#
+#
+#     # Find all the faces and face encodings in the current frame of video
+#     numberOfFaces = len(face_recognition.face_locations(rgb_small_frame))
+#     # cv2.imshow('Video', frame)
+#     video_capture.release()
+#     cv2.destroyAllWindows()
+#
+#
+#     return numberOfFaces,rgb_small_frame
 def numberOfFaces():
-# Get a reference to webcam #0 (the default one)
-    video_capture = cv2.VideoCapture(0)
-    time.sleep(0.5)
+# construct the argument parser and parse the arguments
+	# load the known faces and embeddings along with OpenCV's Haar
+	# cascade for face detection
+	detector = cv2.CascadeClassifier("./haar_face_cascade.xml")
+	# initialize the video stream and allow the camera sensor to warm up
+	print("[INFO] starting video stream...")
+	#vs = VideoStream(src=0).start()
+	vs = VideoStream(usePiCamera=True).start()
+	time.sleep(2.0)
 
-    # import ipdb; ipdb.set_trace() # BREAKPOINT
-    process_this_frame = True
+	# start the FPS counter
 
+	# loop over frames from the video file stream
+		# grab the frame from the threaded video stream and resize it
+		# to 500px (to speedup processing)
+	frame = vs.read()
+	frame = imutils.resize(frame, width=500)
 
-    # Grab a single frame of video
-    ret, frame = video_capture.read()
+	# convert the input frame from (1) BGR to grayscale (for face
+	# detection) and (2) from BGR to RGB (for face recognition)
+	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+	rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
-    # Resize frame of video to 1/4 size for faster face recognition processing
-    small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
+	# detect faces in the grayscale frame
+	rects = detector.detectMultiScale(gray, scaleFactor=1.1,
+		minNeighbors=5, minSize=(30, 30),
+		flags=cv2.CASCADE_SCALE_IMAGE)
 
-    # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
-    rgb_small_frame = small_frame[:, :, ::-1]
-
-
-    # Find all the faces and face encodings in the current frame of video
-    numberOfFaces = len(face_recognition.face_locations(rgb_small_frame))
-    # cv2.imshow('Video', frame)
-    video_capture.release()
-    cv2.destroyAllWindows()
-
-
-    return numberOfFaces,rgb_small_frame
+	return len(rects),rgb

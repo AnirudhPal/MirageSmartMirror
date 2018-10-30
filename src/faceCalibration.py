@@ -2,10 +2,10 @@ from time import sleep
 from picamera import PiCamera
 import os
 
-def faceCalibration:
+def faceCalibration(name):
     camera = PiCamera()
     # camera.start_preview()
-    path = "./Users/%/" % name
+    path = "./Users/%s/" % name
     try:
         os.mkdir(path)
     except OSError:

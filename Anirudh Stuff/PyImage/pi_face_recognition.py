@@ -40,14 +40,14 @@ while True:
 	# to 500px (to speedup processing)
 	frame = vs.read()
 	frame = imutils.resize(frame, width=500)
-	
+
 	# convert the input frame from (1) BGR to grayscale (for face
 	# detection) and (2) from BGR to RGB (for face recognition)
 	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 	rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
 	# detect faces in the grayscale frame
-	rects = detector.detectMultiScale(gray, scaleFactor=1.1, 
+	rects = detector.detectMultiScale(gray, scaleFactor=1.1,
 		minNeighbors=5, minSize=(30, 30),
 		flags=cv2.CASCADE_SCALE_IMAGE)
 
@@ -86,7 +86,7 @@ while True:
 			# of votes (note: in the event of an unlikely tie Python
 			# will select first entry in the dictionary)
 			name = max(counts, key=counts.get)
-		
+
 		# update the list of names
 		names.append(name)
 
@@ -117,4 +117,4 @@ print("[INFO] approx. FPS: {:.2f}".format(fps.fps()))
 
 # do a bit of cleanup
 cv2.destroyAllWindows()
-vs.stop() 
+vs.stop()

@@ -21,7 +21,7 @@ class Maps:
         ctx.check_hostname = False
         ctx.verify_mode = ssl.CERT_NONE
         geopy.geocoders.options.default_ssl_context = ctx
-        geolocator = Nominatim(scheme="https",user_agent="MirageSmartMirror")
+        geolocator = Nominatim(scheme="https",user_agent="MirageSmartMirror",timeout=3)
         maps_key = "&key=AIzaSyDKTb75-vuAvnWxO2Wfm_1DWlyr4BadgJc"
         maps_url = "https://maps.googleapis.com/maps/api/directions/json?"
         self.routes = []
