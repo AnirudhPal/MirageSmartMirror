@@ -107,6 +107,7 @@ def numberOfFaces():
 		# grab the frame from the threaded video stream and resize it
 		# to 500px (to speedup processing)
 	frame = vs.read()
+	#cv2.imshow('video', frame)
 	frame = imutils.resize(frame, width=500)
 
 	# convert the input frame from (1) BGR to grayscale (for face
