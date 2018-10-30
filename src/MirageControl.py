@@ -2,6 +2,7 @@ from flask import Flask
 import subprocess
 import os
 import json
+import faceCalibration
 
 app = Flask(__name__)
 
@@ -76,3 +77,7 @@ def delete_user(user_number):
 
 
 	return "User deleted and files updated"
+
+# Setup user for face calibration
+@app.route('/setup/newuser/<filename>'):
+	faceCalibration.faceCalibration(filename)
