@@ -5,7 +5,7 @@ import cv2
 import pickle
 import time
 
-
+vs =  VideoStream(usePiCamera=True).start()
 # This is a demo of running face recognition on live video from your webcam. It's a little more complicated than the
 # other example, but it includes some basic performance tweaks to make things run a lot faster:
 #   1. Process each video frame at 1/4 resolution (though still display it at full resolution)
@@ -98,7 +98,7 @@ def numberOfFaces():
 	# initialize the video stream and allow the camera sensor to warm up
 	print("[INFO] starting video stream...")
 	#vs = VideoStream(src=0).start()
-	vs = VideoStream(usePiCamera=True).start()
+	#vs = VideoStream(usePiCamera=True).start()
 	time.sleep(2.0)
 
 	# start the FPS counter
