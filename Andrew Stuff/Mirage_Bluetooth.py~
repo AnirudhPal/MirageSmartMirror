@@ -24,7 +24,6 @@ WIFI_STAT_CHRC = '43ec4c0c-6d53-44a6-ae81-a6e6518269d4'
 WIFI_SSID_CHRC = '1249e241-7624-4158-acd5-86226f7637c8'
 WIFI_PASS_CHRC = '290d03b7-6e73-4e1e-ab70-ac8997cc0506'
 IP_CHRC = 'a728e3b7-91e8-4c13-9923-f85dedbbac59'
-FACE_CALI_CHRC = '7a69e7f3-97b4-4a75-b354-7d64019f5ee0'
 
 def get_wifi_status() :
 	# Check WiFi connectivity
@@ -34,9 +33,6 @@ def get_wifi_status() :
 		return 1
 	else:
 		return 0
-
-def get_facial_calibration_status():
-	return 0
 
 def get_ip() :
 	s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -120,31 +116,6 @@ class WiFiPASSChrc(localGATT.Characteristic):
 				       {'Value': dbus.Array(WiFiPASSChrc.wifiPass)},
 				       [])
 
-class FaceCaliChrc(localGATT.Characteristic):
-	calibrationStatus = 0	# 0: Not Calibrating, 1: Calibrating, 2: Done Calibrating
-	def __init__(self, service):
-		localGATT.Characteristic.__init__(self,
-						  5,
-						  FACE_CALI_CHRC,
-						  service,
-						  get_facial_calibration_status(),
-						  False,
-						  ['read', 'write', 'notify'])
-
-	def faceCaliWrite_cb(self):
-		self.props[constants.GATT_CHRC_IFACE]['Value'] = FaceCaliChrc.calibrationStatus
-		self.PropertiesChanged(constants.GATT_CHRC_IFACE,
-					{'Value': dbus.Array(FaceCaliChrc.calibrationStatus)}, [])
-
-	def faceCaliRead_cb(self):
-		FaceCaliChrc.calibrationStatus = get_facial_calibration_status()
-		self.props[constants.GATT_CHRC_IFACE]['Value'] = FaceCaliChrc.calibrationStatus
-		self.PropertiesChanged(constants.GATT_CHRC_IFACE,
-					{'Value': dbus.Array(FaceCaliChrc.calibrationStatus)}, [])
-		return self.props[constants.GATT_CHRC_IFACE]['Notifying']
-
-	
-    
 class IPChrc(localGATT.Characteristic):
 	ip = ""
 	def __init__(self, service):
