@@ -2,6 +2,8 @@ from time import sleep
 from picamera import PiCamera
 import os
 
+calibrationCancel = False
+
 def faceCalibration(name):
     camera = PiCamera()
     # camera.start_preview()
@@ -14,8 +16,13 @@ def faceCalibration(name):
         print ("Successfully created the directory %s " % path)
 
     for i in range(5):
-        sleep(5)
-        camera.capture('./Users/%s/image%s.jpg' % (name , i))
+	if not calibrationCancel:
+        	sleep(5)
+        	camera.capture('./Users/%s/image%s.jpg' % (name , i))
     # camera.stop_preview()
+	else:
+		break
 
-faceCalibration("Andrew0")
+#faceCalibration("Andrew0")
+def cancelCalibration():
+	calibrationCancel = True
