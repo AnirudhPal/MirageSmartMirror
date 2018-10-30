@@ -26,7 +26,8 @@ font.setWeight(1)
 users = {}
 
 class User:
-    def __init__ (self, name, address, destinations, news):
+    def __init__ (self, id, name, address, destinations, news):
+        self.userId = id
         self.userName = name
         self.userAddress = address
         self.favDestinations = destinations
@@ -61,14 +62,19 @@ class User:
 
     def convertToJSON(self):
         return
-    def convertToObject(self, userJSON):
+    def convertToUser(self, userJSON):
+        self.userId = userJSON['id']
+        self.userName = userJSON['name']
+        self.userAddress = userJSON['address']
+        self.favDestinations = userJSON['destinations']
+        self.newsPreferences = userJSON['news']
         return
 
 if __name__== "__main__":
     user0 = User("Amjad", "250 Sheetz St.", "Home", "Sports")
     # user0.getNumberOfUsers()
     # user0.getUser(0)
-    user0.addUser(0, user0.getUser(0))
-    user0.addUser(1, user0.getUser(0))
+    # user0.addUser(0, user0.getUser(0))
+    # user0.addUser(1, user0.getUser(0))
     # user0.deleteUser(0)
-    print(users)
+    # print(users)
