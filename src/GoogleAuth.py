@@ -8,12 +8,14 @@ from threading import Timer
 SCOPE='https://www.googleapis.com/auth/calendar.readonly'
 CLIENT_ID='238441387160-vg5u4bb2td0vugjb7i39umeat5s6dtm0.apps.googleusercontent.com'
 CLIENT_SECRET='6xgHHdJrMfISGFtU3KKkryid'
-DEVICE_AUTH_PATH='/home/pi/Desktop/GoogleAuth/device_authorization.json'
-USER_AUTH_PATH='/home/pi/Desktop/GoogleAuth/user_authorization.json'
+DEVICE_AUTH_PATH='/home/pi/MirageSmartMirror/src/device_authorization.json'  #'/home/pi/Desktop/GoogleAuth/device_authorization.json'
+USER_AUTH_PATH='/home/pi/MirageSmartMirror/src/Users/' #'/home/pi/Desktop/GoogleAuth/user_authorization.json'
 
 userDidAuthorize = False
 rt = None
 uCode = ""
+authPath = USER_AUTH_PATH
+
 def getDeviceAuthorization():
 
 	res = subprocess.run(["curl", "-s", "-d", "client_id=238441387160-vg5u4bb2td0vugjb7i39umeat5s6dtm0.apps.googleusercontent.com&scope=https://www.googleapis.com/auth/calendar.readonly", "https://accounts.google.com/o/oauth2/device/code", "-o", DEVICE_AUTH_PATH])
@@ -37,6 +39,7 @@ def getDeviceCode():
 def requestUserAuth():
 	global rt
 	global userDidAuthorize
+	global authPath
 	if userDidAuthorize == True:
 		return
 	test = getDeviceCode()
@@ -50,10 +53,11 @@ def requestUserAuth():
 				"Content-Type: application/x-www-form-urlencoded",
 				"https://www.googleapis.com/oauth2/v4/token",
 				"-o",
-				USER_AUTH_PATH])
+				authPath])
+				#USER_AUTH_PATH + filename + '/' + filename + '_auth.json'])
 				#print(res.args)
 	if res.returncode == 0:
-		fp = open(USER_AUTH_PATH)
+		fp = open(authPath) #open(USER_AUTH_PATH + filename + '/' + filename + '_auth.json')
 		jsonObj = json.load(fp)
 		for x in jsonObj:
 			print(x + ": " + str(jsonObj[x]))
@@ -73,9 +77,12 @@ def getPollingExpiration():
 	jsonObj = json.load(fp)
 	return (int(jsonObj["expires_in"]))
 
-def pollForUserAuth():
+def pollForUserAuth(filename):
 	global userDidAuthorize
 	global rt
+	global authPath
+	authPath = authPath + filename + '/' + filename + '_auth.json'
+	
 	interval = getPollingInterval()
 	expiration = getPollingExpiration()
 	rt = RepeatedTimer(interval+1, requestUserAuth)
@@ -114,13 +121,13 @@ class RepeatedTimer(object):
 		self._timer.cancel()
 		self.is_running = False
 
-if __name__== "__main__":
-	res = getDeviceAuthorization()
-	if res == True:
-		print("Device Successfully requested Authorization")
-		displayAuthorizationCode()
-		res = pollForUserAuth()
-		if res == True:
-			print("User successfully authorized device")
-	else:
-		print("Device could not request Authorization")
+#if __name__== "__main__":
+#	res = getDeviceAuthorization()
+#	if res == True:
+#		print("Device Successfully requested Authorization")
+#		displayAuthorizationCode()
+#		res = pollForUserAuth()
+#		if res == True:
+#			print("User successfully authorized device")
+#	else:
+#		print("Device could not request Authorization")
