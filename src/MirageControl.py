@@ -45,7 +45,7 @@ def add_user(user_info):
 # Get user by number
 @app.route('/user/get/<user_number>')
 def get_user(user_number):
-	filename = M_USER_DIR + "user" + user_number + "user" + user_number + ".json"
+	filename = M_USER_DIR + "user" + user_number + "/user" + user_number + ".json"
 	with open(filename, 'r') as json_data:
 		try:
 			data = json.load(json_data)
@@ -56,7 +56,7 @@ def get_user(user_number):
 # Update user by number
 @app.route('/user/update/<user_number>/<user_info>')
 def update_user(user_number, user_info):
-	filename = M_USER_DIR + "user" + user_number + "user" + user_number + ".json"
+	filename = M_USER_DIR + "user" + user_number + "/user" + user_number + ".json"
 	with open(filename, 'w') as outfile:
 		try:
 			json.dump(user_info, outfile, ensure_ascii=False)
@@ -67,7 +67,7 @@ def update_user(user_number, user_info):
 # Delete user by number
 @app.route('/user/delete/<user_number>')
 def delete_user(user_number):
-	file_to_delete = M_USER_DIR + "user" + user_number + "user" + user_number + ".json"
+	file_to_delete = M_USER_DIR + "user" + user_number + "/user" + user_number + ".json"
 	if (os.path.exists(file_to_delete)):
 		os.remove(file_to_delete)
 		print("User removed")
