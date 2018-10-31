@@ -3,6 +3,7 @@ import subprocess
 import os
 import json
 import faceCalibration
+import GoogleAuth
 
 app = Flask(__name__)
 
@@ -91,7 +92,25 @@ def start_face_calibration(filename):
 	faceCalibration.faceCalibration(filename)
 	print("Done")
 	return "Done"
+
 # Cancel face calibration
 @app.route('/setup/cancel')
 def cancel_face_calibration():
 	faceCalibration.cancelCalibration()
+
+# Start Google Calendar Authorization
+@app.route('/user/authorize/google/<filename>')
+def start_google_auth(filename):
+	res = GoogleAuth.getDeviceAuthorization()
+	if res == True:
+		print("Device Successfully requested Authorization")
+		GoogleAuth.displayAuthorizationCode()
+		res = GoogleAuth.pollForUserAuth(filename)
+		if res == True:
+			print("User successfully authorized device")
+			return "Success"
+		else:
+			return "Failure"
+	else:
+		print("Device could not request Authorization")	
+		return "Failure"
