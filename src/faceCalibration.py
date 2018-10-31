@@ -4,11 +4,14 @@ import os
 
 calibrationCancel = False
 
+
 def faceCalibration(name):
-    camera = PiCamera()
     # camera.start_preview()
     #path = "./Users/%s/" % name
-    path = "./Faces/%s/" % name
+    camera = PiCamera()
+
+    sleep(2)
+    path = "/home/pi/MirageSmartMirror/src/Faces/%s/" % name
     try:
         os.mkdir(path)
     except OSError:
@@ -18,11 +21,12 @@ def faceCalibration(name):
 
     for i in range(5):
         if not (calibrationCancel):
-            sleep(5)
-            camera.capture('./Faces/%s/image%s.jpg' % (name , i))
+            sleep(2)
+            camera.capture('/home/pi/MirageSmartMirror/src/Faces/%s/image%s.jpg' % (name , i))
     # camera.stop_preview()
         else:
             break
+    camera.close()
 
 #faceCalibration("Andrew0")
 def cancelCalibration():

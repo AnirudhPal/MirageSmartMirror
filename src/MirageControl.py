@@ -27,18 +27,24 @@ def get_num_users():
 @app.route('/user/add/<user_info>')
 def add_user(user_info):
 	next_user_num = get_num_users_plain()
-	filename = M_USER_DIR + "user" + str(next_user_num) + ".json"
-	with open(filename, 'w') as outfile:
-		try:
-			json.dump(user_info, outfile, ensure_ascii=False)
-			return "User successfully added"
-		except:
-			return "Unable to add user, please try again"
+	dirName = M_USER_DIR + "user" + str(next_user_num)
+	filename = M_USER_DIR + "user" + str(next_user_num) + "/" + "user" + str(next_user_num) + ".json"
+	try:
+		os.mkdir(dirName)
+	except OSError:
+		print("Creation of the directory %s failed" % dirName)
+	else:
+		with open(filename, 'w') as outfile:
+			try:
+				json.dump(user_info, outfile, ensure_ascii=False)
+				return "User successfully added"
+			except:
+				return "Unable to add user, please try again"
 
 # Get user by number
 @app.route('/user/get/<user_number>')
 def get_user(user_number):
-	filename = M_USER_DIR + "user" + user_number + ".json"
+	filename = M_USER_DIR + "user" + user_number + "user" + user_number + ".json"
 	with open(filename, 'r') as json_data:
 		try:
 			data = json.load(json_data)
@@ -49,7 +55,7 @@ def get_user(user_number):
 # Update user by number
 @app.route('/user/update/<user_number>/<user_info>')
 def update_user(user_number, user_info):
-	filename = M_USER_DIR + "user" + user_number + ".json"
+	filename = M_USER_DIR + "user" + user_number + "user" + user_number + ".json"
 	with open(filename, 'w') as outfile:
 		try:
 			json.dump(user_info, outfile, ensure_ascii=False)
@@ -60,7 +66,7 @@ def update_user(user_number, user_info):
 # Delete user by number
 @app.route('/user/delete/<user_number>')
 def delete_user(user_number):
-	file_to_delete = M_USER_DIR + "user" + user_number + ".json"
+	file_to_delete = M_USER_DIR + "user" + user_number + "user" + user_number + ".json"
 	if (os.path.exists(file_to_delete)):
 		os.remove(file_to_delete)
 		print("User removed")
@@ -72,6 +78,7 @@ def delete_user(user_number):
 	for i in range(new_num_users):
 		os.rename(M_USER_DIR + files[i], M_USER_DIR + files[i]+".temp")
 
+
 	for j in range(new_num_users):
 		os.rename(M_USER_DIR + files[j] + ".temp", M_USER_DIR + "user" + str(j) + ".json")
 
@@ -82,7 +89,7 @@ def delete_user(user_number):
 @app.route('/setup/newuser/<filename>')
 def start_face_calibration(filename):
 	faceCalibration.faceCalibration(filename)
-	#print("Done")
+	print("Done")
 	return "Done"
 # Cancel face calibration
 @app.route('/setup/cancel')
