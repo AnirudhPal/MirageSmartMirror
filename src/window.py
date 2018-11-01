@@ -439,11 +439,10 @@ class Window(QWidget):
             self.leave_counter = 5
             return
 
-        # print(self.launch_face_detection)
-        # print(self.prompt_asked)
 
-        if self.launch_face_detection is True:
+        if self.launch_face_detection is True or self.face_detection_countdown > 0:
             self.numberOfDetectedFaces,self.faceFrame = numberOfFaces()
+            self.face_detection_countdown = self.face_detection_countdown - 1
             self.launch_face_detection = False
 
         self.proximity = testSensor.getProximity()
@@ -457,11 +456,13 @@ class Window(QWidget):
                     self.set_buffering_screen()
                 # self.numberOfDetectedFaces,self.faceFrame = numberOfFaces()
                     self.launch_face_detection = True
-                    self.face_detection_countdown = 10
+                    self.face_detection_countdown = 3
                 # self.set_buffering_screen()
 
             if self.numberOfDetectedFaces == 1 and not self.loggedIn:
                 print("one face Detected")
+                self.launch_face_detection = False
+                self.face_detection_countdown = 0
                 name = recognize(self.faceFrame)
                 print(name) #login
                 if(name == "Unknown"):
