@@ -28,6 +28,7 @@ def displayAuthorizationCode():
 
 	fp = open(DEVICE_AUTH_PATH)
 	jsonObj = json.load(fp)
+	# Display on Mirage here
 	print("User Code:", jsonObj["user_code"])
 	uCode = jsonObj["user_code"]
 
@@ -82,7 +83,7 @@ def pollForUserAuth(filename):
 	global rt
 	global authPath
 	authPath = authPath + filename + '/' + filename + '_auth.json'
-	
+
 	interval = getPollingInterval()
 	expiration = getPollingExpiration()
 	rt = RepeatedTimer(interval+1, requestUserAuth)
