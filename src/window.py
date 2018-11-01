@@ -104,15 +104,19 @@ class Window(QWidget):
         self.launch_face_detection = False
         self.new_user_prompt = False
         self.leave_counter = 0
+        self.curr_screen = 0    # 0: lock screen, 1: main screen, 2: groom mode
 
 
         self.qt.showFullScreen()
 
     def msd(self):
+        if self.curr_screen == 0:
+            self.timer.stop()
         self.loggedIn = True
         self.launch_face_detection = False
+        self.curr_screen = 1
         self.clearLayout(self.qt.v_box)
-        self.timer.stop()
+        # self.timer.stop()
 
         # user_destinations = ["305 Swindon Way, West Lafayette, Indiana", "222 West Wood St, West Lafayette, Indiana", "West Madison Street, Chicago, Illinois"]
         # self.rt = maps.Maps("250 Sheetz Street, West Lafayette, Indiana", user_destinations)
@@ -189,6 +193,7 @@ class Window(QWidget):
         # self.qt.v_box = temp
 
     def gmd(self):
+        self.curr_screen = 2
         self.timer.stop()
         self.clearLayout(self.qt.v_box)
 
@@ -231,6 +236,7 @@ class Window(QWidget):
         # self.init_timer()
         self.loggedIn = False
         self.numberOfDetectedFaces = 0
+        self.curr_screen = 0
         # self.prompt_asked = False
         font = QFont('Helvetica', 18)
         font.setWeight(1)
@@ -475,8 +481,12 @@ class Window(QWidget):
                     #change ui to lock screen
 
                 #please one person in front
-        if self.proximity > 600:
-            self.ExpirationTimerCount=self.ExpirationTimerCount+1
+        if self.proximity > 5:
+            if self.curr_screen == 2:
+                self.msd()
+            elif self.curr_screen == 1:
+                self.set_lockscreen_layout()
+            # self.ExpirationTimerCount=self.ExpirationTimerCount+1
             # self.load_user_info(0)
             # self.msd()
 
