@@ -5,6 +5,8 @@ import cv2
 import pickle
 import time
 
+vs = VideoStream(usePiCamera=True).start()
+
 # This is a demo of running face recognition on live video from your webcam. It's a little more complicated than the
 # other example, but it includes some basic performance tweaks to make things run a lot faster:
 #   1. Process each video frame at 1/4 resolution (though still display it at full resolution)
@@ -90,7 +92,7 @@ def recognize(rgb_small_frame):
 #
 #     return numberOfFaces,rgb_small_frame
 def numberOfFaces():
-	vs =  VideoStream(usePiCamera=True).start()
+	#vs =  VideoStream(usePiCamera=True).start()
 
 # construct the argument parser and parse the arguments
 	# load the known faces and embeddings along with OpenCV's Haar
@@ -108,6 +110,7 @@ def numberOfFaces():
 		# grab the frame from the threaded video stream and resize it
 		# to 500px (to speedup processing)
 	frame = vs.read()
+	print(frame)
 	#cv2.imshow('video', frame)
 	frame = imutils.resize(frame, width=500)
 
@@ -120,6 +123,6 @@ def numberOfFaces():
 	rects = detector.detectMultiScale(gray, scaleFactor=1.1,
 		minNeighbors=5, minSize=(30, 30),
 		flags=cv2.CASCADE_SCALE_IMAGE)
-	vs.stop()
+	#vs.stop()
 	return len(rects),rgb
 #print(numberOfFaces())

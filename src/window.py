@@ -19,7 +19,8 @@ from PyQt5.QtWidgets import *#QApplication, QWidget, QLabel, QFormLayout, QVBoxL
 from PyQt5.QtGui import *#QFont, QPalette, QColor, QPainter, QPolygon
 from PyQt5.QtCore import *
 from simpleRec import *
-
+# for sensor
+import testSensor
 
 
 '''
@@ -396,14 +397,15 @@ class Window(QWidget):
         # if self.loggedIn is False:
         #     self.numberOfDetectedFaces,self.faceFrame = numberOfFaces()
         # sensor.self.proximity()
-        # self.proximity = 300
+        self.proximity = testSensor.getProximity()
         if self.launch_face_detection is True:
             self.numberOfDetectedFaces,self.faceFrame = numberOfFaces()
+        print(self.numberOfDetectedFaces)
 
-        if self.proximity > 200:
+        if self.proximity > 2:
             if self.loggedIn is False:
                 if self.prompt_asked is False:
-                    self.prompt.setText("<font color='white'>" + "Please stand still and wait for your profile to load." + "</font")
+                    self.prompt.setText("<font color='white'>" + "Please stand still and wait for your profile to load." + "</font>")
                     self.prompt_asked = True
                 # self.numberOfDetectedFaces,self.faceFrame = numberOfFaces()
                 self.launch_face_detection = True
