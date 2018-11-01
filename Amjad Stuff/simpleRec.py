@@ -5,6 +5,7 @@ import cv2
 import pickle
 import time
 
+vs = VideoStream(usePiCamera=True).start()
 
 # This is a demo of running face recognition on live video from your webcam. It's a little more complicated than the
 # other example, but it includes some basic performance tweaks to make things run a lot faster:
@@ -16,7 +17,7 @@ import time
 # specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
 def recognize(rgb_small_frame):
 
-    data = pickle.loads(open("./faceRecognitionEncodings/encodings", "rb").read())
+    data = pickle.loads(open("/home/pi/MirageSmartMirror/src/faceRecognitionEncodings/encodings", "rb").read())
 
     # Create arrays of known face encodings and their names
     known_face_encodings = data['encodings']
@@ -91,14 +92,16 @@ def recognize(rgb_small_frame):
 #
 #     return numberOfFaces,rgb_small_frame
 def numberOfFaces():
+	#vs =  VideoStream(usePiCamera=True).start()
+
 # construct the argument parser and parse the arguments
 	# load the known faces and embeddings along with OpenCV's Haar
 	# cascade for face detection
-	detector = cv2.CascadeClassifier("./haar_face_cascade.xml")
+	detector = cv2.CascadeClassifier("/home/pi/MirageSmartMirror/src/haar_face_cascade.xml")
 	# initialize the video stream and allow the camera sensor to warm up
-	print("[INFO] starting video stream...")
+	#print("[INFO] starting video stream...")
 	#vs = VideoStream(src=0).start()
-	vs = VideoStream(usePiCamera=True).start()
+	#vs = VideoStream(usePiCamera=True).start()
 	time.sleep(2.0)
 
 	# start the FPS counter
@@ -107,6 +110,8 @@ def numberOfFaces():
 		# grab the frame from the threaded video stream and resize it
 		# to 500px (to speedup processing)
 	frame = vs.read()
+	#print(frame)
+	#cv2.imshow('video', frame)
 	frame = imutils.resize(frame, width=500)
 
 	# convert the input frame from (1) BGR to grayscale (for face
@@ -118,5 +123,6 @@ def numberOfFaces():
 	rects = detector.detectMultiScale(gray, scaleFactor=1.1,
 		minNeighbors=5, minSize=(30, 30),
 		flags=cv2.CASCADE_SCALE_IMAGE)
-
+	#vs.stop()
 	return len(rects),rgb
+#print(numberOfFaces())
