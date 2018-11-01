@@ -99,7 +99,7 @@ def numberOfFaces():
 	# cascade for face detection
 	detector = cv2.CascadeClassifier("/home/pi/MirageSmartMirror/src/haar_face_cascade.xml")
 	# initialize the video stream and allow the camera sensor to warm up
-	print("[INFO] starting video stream...")
+	#print("[INFO] starting video stream...")
 	#vs = VideoStream(src=0).start()
 	#vs = VideoStream(usePiCamera=True).start()
 	time.sleep(2.0)
@@ -110,7 +110,7 @@ def numberOfFaces():
 		# grab the frame from the threaded video stream and resize it
 		# to 500px (to speedup processing)
 	frame = vs.read()
-	print(frame)
+	#print(frame)
 	#cv2.imshow('video', frame)
 	frame = imutils.resize(frame, width=500)
 
