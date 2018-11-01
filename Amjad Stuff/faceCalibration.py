@@ -1,11 +1,18 @@
 from time import sleep
 from picamera import PiCamera
+import simpleRec
 import os
 
+calibrationCancel = False
+
+
 def faceCalibration(name):
-    camera = PiCamera()
     # camera.start_preview()
-    path = "./Users/%s/" % name
+    #path = "./Users/%s/" % name
+    # camera = PiCamera()
+    # simpleRec.vs.start()
+    sleep(2)
+    path = "/home/pi/MirageSmartMirror/src/Faces/%s/" % name
     try:
         os.mkdir(path)
     except OSError:
@@ -14,8 +21,17 @@ def faceCalibration(name):
         print ("Successfully created the directory %s " % path)
 
     for i in range(5):
-        sleep(5)
-        camera.capture('./Users/%s/image%s.jpg' % (name , i))
+        if not (calibrationCancel):
+            sleep(2)
+            # camera.capture('/home/pi/MirageSmartMirror/src/Faces/%s/image%s.jpg' % (name , i))
+            frame = simpleRec.vs.read()
+            pathImage = '/home/pi/MirageSmartMirror/src/Faces/%s/image%s.jpg' % (name , i)
+            simpleRec.cv2.imwrite( pathImage,frame );
     # camera.stop_preview()
-
-faceCalibration("Andrew0")
+        else:
+            break
+    #simpleRec.vs.stop()
+faceCalibration("ali12")
+#faceCalibration("Andrew0")
+def cancelCalibration():
+    calibrationCancel = True

@@ -8,7 +8,7 @@ import os
 
 # grab the paths to the input images in our dataset
 print("[INFO] quantifying faces...")
-imagePaths = list(paths.list_images("./Users/"))
+imagePaths = list(paths.list_images("/home/pi/MirageSmartMirror/src/Faces/"))
 
 # initialize the list of known encodings and known names
 knownEncodings = []
@@ -42,6 +42,6 @@ for (i, imagePath) in enumerate(imagePaths):
 print("[INFO] serializing encodings...")
 data = {"encodings": knownEncodings, "names": knownNames}
 print(data)
-f = open("./faceRecognitionEncodings/encodings", "wb")
+f = open("/home/pi/MirageSmartMirror/src/faceRecognitionEncodings/encodings", "wb")
 f.write(pickle.dumps(data))
 f.close()

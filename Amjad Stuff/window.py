@@ -19,7 +19,8 @@ from PyQt5.QtWidgets import *#QApplication, QWidget, QLabel, QFormLayout, QVBoxL
 from PyQt5.QtGui import *#QFont, QPalette, QColor, QPainter, QPolygon
 from PyQt5.QtCore import *
 from simpleRec import *
-
+# for sensor
+import testSensor
 
 
 '''
@@ -101,15 +102,21 @@ class Window(QWidget):
         self.proximity = 300
         self.prompt_asked = False
         self.launch_face_detection = False
+        self.new_user_prompt = False
+        self.leave_counter = 0
+        self.curr_screen = 0    # 0: lock screen, 1: main screen, 2: groom mode
 
 
         self.qt.showFullScreen()
 
     def msd(self):
+        if self.curr_screen == 0:
+            self.timer.stop()
         self.loggedIn = True
         self.launch_face_detection = False
+        self.curr_screen = 1
         self.clearLayout(self.qt.v_box)
-        self.timer.stop()
+        # self.timer.stop()
 
         # user_destinations = ["305 Swindon Way, West Lafayette, Indiana", "222 West Wood St, West Lafayette, Indiana", "West Madison Street, Chicago, Illinois"]
         # self.rt = maps.Maps("250 Sheetz Street, West Lafayette, Indiana", user_destinations)
@@ -186,6 +193,7 @@ class Window(QWidget):
         # self.qt.v_box = temp
 
     def gmd(self):
+        self.curr_screen = 2
         self.timer.stop()
         self.clearLayout(self.qt.v_box)
 
@@ -204,6 +212,15 @@ class Window(QWidget):
         self.qt.layout().addLayout(prompt_box)
         # self.numberOfDetectedFaces,self.faceFrame = numberOfFaces()
 
+    def set_new_user_screen(self):
+        self.clearLayout(self.qt.v_box)
+        # self.timer.stop()
+        prompt_box = QHBoxLayout()
+        self.prompt = QLabel("<font color='white'>" + "Face not recognized! Please download our MirageCompanion iPhone App to set up a new profile." + "</font")
+        self.prompt.setAlignment(Qt.AlignCenter)
+        prompt_box.addWidget(self.prompt)
+        self.qt.layout().addLayout(prompt_box)
+
     def load_user_info(self, id):
         # os.system('nohup python3 APIs.py &')
         user_destinations = ["305 Swindon Way, West Lafayette, Indiana", "222 West Wood St, West Lafayette, Indiana", "West Madison Street, Chicago, Illinois"]
@@ -216,10 +233,11 @@ class Window(QWidget):
 
 
     def set_lockscreen_layout(self):
-        self.init_timer()
+        # self.init_timer()
         self.loggedIn = False
         self.numberOfDetectedFaces = 0
-        self.prompt_asked = False
+        self.curr_screen = 0
+        # self.prompt_asked = False
         font = QFont('Helvetica', 18)
         font.setWeight(1)
         effect = QGraphicsDropShadowEffect()
@@ -265,6 +283,7 @@ class Window(QWidget):
             self.qt.layout().addLayout(self.qt.analogclock)
             self.qt.layout().addLayout(self.qt.digitaltime)
             self.qt.layout().addLayout(prompt_box)
+            self.init_timer()
         else:
             self.qt.v_box = QVBoxLayout()
             self.qt.v_box.addLayout(self.qt.h_box)
@@ -273,6 +292,7 @@ class Window(QWidget):
             self.qt.v_box.addLayout(self.qt.digitaltime)
             self.qt.v_box.addLayout(prompt_box)
             self.qt.setLayout(self.qt.v_box)
+            self.init_timer()
 
         self.qt.setWindowTitle('Lock screen')
 
@@ -365,7 +385,8 @@ class Window(QWidget):
     def update_time(self):
         datetime = QDateTime.currentDateTime()
         if self.qt.digitaltime != None:
-            self.qt.time.setText("<font color='white'>" + datetime.toString("MMM d, yyyy hh:mm:ss AP") + "</font")
+            if self.qt.time != None:
+                self.qt.time.setText("<font color='white'>" + datetime.toString("MMM d, yyyy hh:mm:ss AP") + "</font")
 
     # def fade(self):
     #     self.fadeTimer = QTimer()
@@ -393,29 +414,52 @@ class Window(QWidget):
     def controller(self):
         # import ipdb; ipdb.set_trace()
 
-        # if self.loggedIn is False:
-        #     self.numberOfDetectedFaces,self.faceFrame = numberOfFaces()
-        # sensor.self.proximity()
-        # self.proximity = 300
+        if self.leave_counter > 0:
+            self.leave_counter = self.leave_counter - 1
+            return
+        else:
+            self.prompt_asked = False
+
+        if self.new_user_prompt is True:
+            time.sleep(5)
+            self.set_lockscreen_layout()
+            self.new_user_prompt = False
+            self.launch_face_detection = False
+            self.leave_counter = 3
+            return
+
+        self.proximity = testSensor.getProximity()
+
         if self.launch_face_detection is True:
             self.numberOfDetectedFaces,self.faceFrame = numberOfFaces()
+            self.launch_face_detection = False
+        # print(self.numberOfDetectedFaces)
 
-        if self.proximity > 200:
+        if self.proximity > 2:
             if self.loggedIn is False:
                 if self.prompt_asked is False:
-                    self.prompt.setText("<font color='white'>" + "Please stand still and wait for your profile to load." + "</font")
+                    self.prompt.setText("<font color='white'>" + "Please stand still and wait for your profile to load." + "</font>")
                     self.prompt_asked = True
+                    self.set_buffering_screen()
                 # self.numberOfDetectedFaces,self.faceFrame = numberOfFaces()
-                self.launch_face_detection = True
+                    self.launch_face_detection = True
                 # self.set_buffering_screen()
 
             if self.numberOfDetectedFaces == 1 and not self.loggedIn:
                 print("one face Detected")
                 name = recognize(self.faceFrame)
                 print(name) #login
-                self.load_user_info(0)
-                self.msd()
-                self.loggedIn = True
+                if(name == "Unknown"):
+                    self.set_new_user_screen()
+                    self.new_user_prompt = True
+                    # self.launch_face_detection = True
+                    # self.prompt_asked = False
+                    # time.sleep(6)
+                    # self.set_lockscreen_layout()
+                else:
+                    self.load_user_info(0)
+                    self.msd()
+                    self.loggedIn = True
 
                 #if unknown ask if user wants to setup a new profile
                     #setup profile Protocal
@@ -430,14 +474,19 @@ class Window(QWidget):
             elif self.numberOfDetectedFaces > 1:
                 print("one person only")
             else :
+                self.launch_face_detection = True
                 print("no one is here")
                 # self.ExpirationTimerCount=self.ExpirationTimerCount+1
 
                     #change ui to lock screen
 
                 #please one person in front
-        if self.proximity > 600:
-            self.ExpirationTimerCount=self.ExpirationTimerCount+1
+        if self.proximity > 5:
+            if self.curr_screen == 2:
+                self.msd()
+            elif self.curr_screen == 1:
+                self.set_lockscreen_layout()
+            # self.ExpirationTimerCount=self.ExpirationTimerCount+1
             # self.load_user_info(0)
             # self.msd()
 
