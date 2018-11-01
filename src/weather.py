@@ -84,6 +84,7 @@ class Weather(QWidget):
         # self.temp.setText("<font color='white'>" + "72" + u'\N{DEGREE SIGN}' + "</font")
 
         self.icon = QLabel()
+        self.icon.setFixedHeight(20)
         self.icon.setAlignment(Qt.AlignLeft)
         self.icon.setPixmap(QPixmap.fromImage(image))
 

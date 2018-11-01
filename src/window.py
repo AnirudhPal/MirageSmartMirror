@@ -28,30 +28,6 @@ import testSensor
 is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
 '''
 
-# Init
-newsapi = NewsApiClient(api_key='33ff7834a7ee40928e7bb90746c8b6e5')
-
-# /v2/top-headlines
-top_headlines = newsapi.get_top_headlines(
-                                        language='en',
-                                          country='us')
-
-# /v2/everything
-#all_articles = newsapi.get_everything(language='en',
-                                      # sort_by='relevancy')
-
-# /v2/sources
-news_sources = newsapi.get_sources()
-# print(all_articles)
-# print(top_headlines)
-
-news_url = ('https://newsapi.org/v2/top-headlines?'
-       'country=us&'
-       'apiKey=33ff7834a7ee40928e7bb90746c8b6e5')
-news_response = requests.get(news_url)
-news_data = news_response.json()
-# for i in range(10):
-#     print(news_data['articles'][i]['title'])
 
 
 font = QFont('Helvetica', 24)
@@ -88,13 +64,11 @@ class Window(QWidget):
         self.darkPalette.setColor(QPalette.Background, Qt.black)
         self.qt.setPalette(self.darkPalette)
 
-        self.load_user_info(0)
         # self.load_user_info(0)
         # self.load_user_info(0)
         # self.load_user_info(0)
-        self.set_lockscreen_layout()
-        self.init_timer()
-        self.init_controller()
+        # self.load_user_info(0)
+
         self.loggedIn = False
         self.ExpirationTimerCount = 0
         self.numberOfDetectedFaces = 0
@@ -105,6 +79,11 @@ class Window(QWidget):
         self.new_user_prompt = False
         self.leave_counter = 0
         self.curr_screen = 0    # 0: lock screen, 1: main screen, 2: groom mode
+        self.curr_user = 0
+
+        self.set_lockscreen_layout()
+        self.init_timer()
+        self.init_controller()
 
 
         self.qt.showFullScreen()
@@ -230,14 +209,27 @@ class Window(QWidget):
         prompt_box.addWidget(self.prompt)
         self.qt.layout().addLayout(prompt_box)
 
-    def load_user_info(self, id):
+    def load_user_info(self, user_dict):
         # os.system('nohup python3 APIs.py &')
-        user_destinations = ["305 Swindon Way, West Lafayette, Indiana", "222 West Wood St, West Lafayette, Indiana", "West Madison Street, Chicago, Illinois"]
-        self.rt = maps.Maps("250 Sheetz Street, West Lafayette, Indiana", user_destinations)
+        # user_destinations = ["305 Swindon Way, West Lafayette, Indiana", "222 West Wood St, West Lafayette, Indiana", "West Madison Street, Chicago, Illinois"]
+        self.rt = maps.Maps(user_dict["address"], user_dict['freqDests'])
         self.calendarEvents = googleCalendar.Calendar() # fix to take in user id and get user's token
-        self.weather = weather.Weather("250 Sheetz Street, West Lafayette, Indiana")
+        self.weather = weather.Weather(user_dict["address"])
         self.datetime = DateTime.DateTime()
         self.feed = feeds.Feeds()
+        # Init
+        newsapi = NewsApiClient(api_key='33ff7834a7ee40928e7bb90746c8b6e5')
+        # top_headlines = newsapi.get_top_headlines(category=user_dict["newsCategories"][0]
+        #                                         language='en',
+        #                                           country='us')
+        news_sources = newsapi.get_sources()
+        news_url = ('https://newsapi.org/v2/top-headlines?'
+               'category=%s&'
+               'country=us&'
+               'apiKey=33ff7834a7ee40928e7bb90746c8b6e5' %(user_dict["newsCategories"][0]))
+        # print(news_url)
+        news_response = requests.get(news_url)
+        self.news_data = news_response.json()
 
 
 
@@ -315,17 +307,17 @@ class Window(QWidget):
         self.routes.setEnabled(True)
 
         self.feed.title.setFont(font)
-        self.feed.title.setText("<font color='white'>" + "News Headlines" + "</font")
+        self.feed.title.setText("<font color='white'>" + "News Headlines" + "</font>")
 
         for i in range(6):
-            temp1 = QLabel("<font color='white'>" + news_data['articles'][i]['title'] + "." + "</font")
+            temp1 = QLabel("<font color='white'>" + self.news_data['articles'][i]['title'] + "." + "</font")
             temp1.setFont(news_headline_font)
-             # + news_data['articles'][i]['source']['name']
-            temp2 = QLabel("<font color='white'>" + news_data['articles'][i]['source']['name'] + "</font")
+             # + self.news_data['articles'][i]['source']['name']
+            temp2 = QLabel("<font color='white'>" + self.news_data['articles'][i]['source']['name'] + "</font")
             temp2.setFont(news_source_font)
             temp3 = QLabel()
             temp3.setFont(news_space_font)
-            # news_data['articles'][i]['source']['name']
+            # self.news_data['articles'][i]['source']['name']
             temp1.setAlignment(Qt.AlignLeft)
             self.feed.feedForm.addRow(temp2, temp1)
             self.feed.feedForm.addRow(temp3)
@@ -429,6 +421,10 @@ class Window(QWidget):
         else:
             self.prompt_asked = False
 
+        # if self.loggedIn is False:
+        #     self.numberOfDetectedFaces,self.faceFrame = numberOfFaces()
+        # sensor.self.proximity()
+        # self.proximity = 300
         if self.new_user_prompt is True:
             time.sleep(5)
             self.set_lockscreen_layout()
@@ -437,17 +433,17 @@ class Window(QWidget):
             self.leave_counter = 3
             return
 
-        self.proximity = testSensor.getProximity()
+        # print(self.launch_face_detection)
+        # print(self.prompt_asked)
 
         if self.launch_face_detection is True:
             self.numberOfDetectedFaces,self.faceFrame = numberOfFaces()
             self.launch_face_detection = False
-        # print(self.numberOfDetectedFaces)
 
-        if self.proximity > 2:
+        if self.proximity > 200:
             if self.loggedIn is False:
                 if self.prompt_asked is False:
-                    self.prompt.setText("<font color='white'>" + "Please stand still and wait for your profile to load." + "</font>")
+                    self.prompt.setText("<font color='white'>" + "Please stand still and wait for your profile to load." + "</font")
                     self.prompt_asked = True
                     self.set_buffering_screen()
                 # self.numberOfDetectedFaces,self.faceFrame = numberOfFaces()
@@ -466,7 +462,13 @@ class Window(QWidget):
                     # time.sleep(6)
                     # self.set_lockscreen_layout()
                 else:
-                    self.load_user_info(0)
+                    with open('/home/pi/MirageSmartMirror/src/Users/%s/%s.json' %(name, name)) as f:
+                        data = json.load(f)
+
+                    # print("user info:")
+                    self.curr_user = json.loads(data)
+                    # print(self.curr_user["id"])
+                    self.load_user_info(self.curr_user)
                     self.msd()
                     self.loggedIn = True
 
@@ -485,24 +487,22 @@ class Window(QWidget):
             else :
                 self.launch_face_detection = True
                 print("no one is here")
-                # self.ExpirationTimerCount=self.ExpirationTimerCount+1
+                self.ExpirationTimerCount=self.ExpirationTimerCount+1
 
                     #change ui to lock screen
 
                 #please one person in front
-        if self.proximity > 5:
-            if self.curr_screen == 2:
-                self.msd()
-            elif self.curr_screen == 1:
-                self.set_lockscreen_layout()
-            # self.ExpirationTimerCount=self.ExpirationTimerCount+1
+        if self.proximity > 600:
+            self.ExpirationTimerCount=self.ExpirationTimerCount+1
             # self.load_user_info(0)
             # self.msd()
 
-        if self.ExpirationTimerCount >= 10:
+        if self.ExpirationTimerCount >= 3:
             print("Time expired")
-            self.loggedIn = False
-            self.numberOfDetectedFaces = 0
+            self.set_lockscreen_layout()
+            self.new_user_prompt = False
+            self.launch_face_detection = False
+            self.ExpirationTimerCount = 0
 
 
 window_app = QApplication(sys.argv)

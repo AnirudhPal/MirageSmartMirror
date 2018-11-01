@@ -107,6 +107,8 @@ class Window(QWidget):
         self.curr_screen = 0    # 0: lock screen, 1: main screen, 2: groom mode
 
 
+
+
         self.qt.showFullScreen()
 
     def msd(self):
@@ -229,6 +231,11 @@ class Window(QWidget):
         self.weather = weather.Weather("250 Sheetz Street, West Lafayette, Indiana")
         self.datetime = DateTime.DateTime()
         self.feed = feeds.Feeds()
+        # with open('/Users/user0/user0.json') as f:
+        #     data = json.load(f)
+        #
+        # print("user info:")
+        # print(data)
 
 
 
