@@ -4,6 +4,7 @@ import os
 import subprocess
 from threading import Timer
 #import requests
+import window
 
 SCOPE='https://www.googleapis.com/auth/calendar.readonly'
 CLIENT_ID='238441387160-vg5u4bb2td0vugjb7i39umeat5s6dtm0.apps.googleusercontent.com'
@@ -29,6 +30,7 @@ def displayAuthorizationCode():
 	fp = open(DEVICE_AUTH_PATH)
 	jsonObj = json.load(fp)
 	# Display on Mirage here
+	window.show_auth_code(jsonObj["user_code"])
 	print("User Code:", jsonObj["user_code"])
 	uCode = jsonObj["user_code"]
 
@@ -89,6 +91,7 @@ def pollForUserAuth(filename):
 	rt = RepeatedTimer(interval+1, requestUserAuth)
 	if userDidAuthorize == True:
 		rt.stop()
+		window.set_lockscreen_layout()
 		return True
 	elif rt.elapsedTime > expiration:
 		rt.stop()

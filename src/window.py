@@ -221,6 +221,15 @@ class Window(QWidget):
         prompt_box.addWidget(self.prompt)
         self.qt.layout().addLayout(prompt_box)
 
+    def show_auth_code(self, code):
+        self.clearLayout(self.qt.v_box)
+        # self.timer.stop()
+        prompt_box = QHBoxLayout()
+        self.prompt = QLabel("<font color='white'>" + "Enter this code: " + code + "</font>")
+        self.prompt.setAlignment(Qt.AlignCenter)
+        prompt_box.addWidget(self.prompt)
+        self.qt.layout().addLayout(prompt_box)
+
     def load_user_info(self, id):
         # os.system('nohup python3 APIs.py &')
         user_destinations = ["305 Swindon Way, West Lafayette, Indiana", "222 West Wood St, West Lafayette, Indiana", "West Madison Street, Chicago, Illinois"]
