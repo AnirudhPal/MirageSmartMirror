@@ -59,7 +59,8 @@ def recognize(rgb_small_frame):
             # votes (note: in the event of an unlikely tie Python will
             # select first entry in the dictionary)
             name = max(counts, key=counts.get)
-
+        if name is None:
+            name = "Unknown"
         return name
 
     # Release handle to the webcam
