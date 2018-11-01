@@ -59,7 +59,7 @@ class Weather(QWidget):
 
         icon = icons[weather_json['currently']['icon']]
         image = cv2.imread(icon)
-        image = cv2.resize(image, (50, 50), interpolation=cv2.INTER_CUBIC)
+        image = cv2.resize(image, (40, 40), interpolation=cv2.INTER_CUBIC)
         image = QImage(image, image.shape[1], image.shape[0], image.strides[0], QImage.Format_RGB888)
 
         self.dailySummary = QLabel()
@@ -84,7 +84,7 @@ class Weather(QWidget):
         # self.temp.setText("<font color='white'>" + "72" + u'\N{DEGREE SIGN}' + "</font")
 
         self.icon = QLabel()
-        self.icon.setFixedHeight(20)
+        self.icon.setFixedHeight(50)
         self.icon.setAlignment(Qt.AlignLeft)
         self.icon.setPixmap(QPixmap.fromImage(image))
 
@@ -92,8 +92,8 @@ class Weather(QWidget):
 
         self.weatherBox.addWidget(self.dailySummary)
         self.weatherBox.addWidget(self.currently)
-        self.weatherBox.addWidget(self.icon)
         self.weatherBox.addWidget(self.temp)
+        self.weatherBox.addWidget(self.icon)
 
         self.weatherBox.setAlignment(Qt.AlignLeft)
 

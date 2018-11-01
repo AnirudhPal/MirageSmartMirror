@@ -1,8 +1,6 @@
 from time import sleep
-from picamera import PiCamera
 import simpleRec
 import os
-
 calibrationCancel = False
 
 
@@ -10,7 +8,9 @@ def faceCalibration(name):
     # camera.start_preview()
     #path = "./Users/%s/" % name
     # camera = PiCamera()
-    # simpleRec.vs.start()
+    #simpleRec.vs.start()
+    simpleRec.vs.stop()
+    simpleRec.vs.start()
     sleep(2)
     path = "/home/pi/MirageSmartMirror/src/Users/%s/" % name
     try:
@@ -30,8 +30,11 @@ def faceCalibration(name):
     # camera.stop_preview()
         else:
             break
-    #simpleRec.vs.stop()
-faceCalibration("ali12")
+    simpleRec.vs.stop()
 #faceCalibration("Andrew0")
 def cancelCalibration():
     calibrationCancel = True
+
+if __name__ == "__main__":
+    # Do nothing
+   nothing = 0

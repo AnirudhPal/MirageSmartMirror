@@ -73,7 +73,7 @@ class Window(QWidget):
         self.ExpirationTimerCount = 0
         self.numberOfDetectedFaces = 0
         self.faceFrame = 0
-        self.proximity = 300
+        self.proximity = 1
         self.prompt_asked = False
         self.launch_face_detection = False
         self.new_user_prompt = False
@@ -159,14 +159,13 @@ class Window(QWidget):
         self.qt.setWindowTitle('Main screen')
         self.qt.lsb = QPushButton('Lock screen')
         self.qt.lsb.clicked.connect(self.set_lockscreen_layout)
-        self.qt.v_box.addWidget(self.qt.lsb)
+        #self.qt.v_box.addWidget(self.qt.lsb)
         self.qt.v_box.addLayout(self.TimeWeatherBox)
 
         self.qt.v_box.addLayout(self.appBox)
         self.qt.v_box.addLayout(self.welcomeBox)
         self.qt.v_box.addSpacing(200)
         self.qt.v_box.addLayout(self.appListBox)
-        self.proximity = 300
 
         # temp = DateTime.DateTime()
         # self.qt.v_box = temp
@@ -179,7 +178,6 @@ class Window(QWidget):
         self.qt.v_box.addWidget(self.qt.lsb)
         self.qt.v_box.addWidget(groom.Groom().frame)
         self.qt.v_box.setContentsMargins(0,0,0,0)
-        self.proximity = 1000
 
     def set_buffering_screen(self):
         self.clearLayout(self.qt.v_box)
@@ -267,7 +265,7 @@ class Window(QWidget):
         self.qt.h_box = QHBoxLayout()
         self.qt.msb = QPushButton('Main screen')
         self.qt.msb.clicked.connect(self.msd)
-        self.qt.h_box.addWidget(self.qt.msb)
+        #self.qt.h_box.addWidget(self.qt.msb)
 
         prompt_box = QHBoxLayout()
         self.prompt = QLabel()
@@ -381,7 +379,7 @@ class Window(QWidget):
     def init_controller(self):
         self.cTimer = QTimer()
         self.cTimer.timeout.connect(self.controller)
-        self.cTimer.start(3000)
+        self.cTimer.start(1000)
 
     def update_time(self):
         datetime = QDateTime.currentDateTime()
@@ -430,7 +428,7 @@ class Window(QWidget):
             self.set_lockscreen_layout()
             self.new_user_prompt = False
             self.launch_face_detection = False
-            self.leave_counter = 3
+            self.leave_counter = 5
             return
 
         # print(self.launch_face_detection)
@@ -495,24 +493,26 @@ class Window(QWidget):
                     #change ui to lock screen
 
                 #please one person in front
-        if self.proximity > 5:
+        if self.proximity > 60 and self.loggedIn is True:
             if self.curr_screen == 2:
+                self.load_user_info(self.curr_user)
                 self.msd()
-            elif self.curr_screen == 1:
+        if self.proximity > 250 and self.loggedIn is True:
+            if self.curr_screen == 1:
                 self.set_lockscreen_layout()
 
-        if self.ExpirationTimerCount >= 3:
+        if self.ExpirationTimerCount >= 10:
             print("Time expired")
             self.set_lockscreen_layout()
             self.new_user_prompt = False
             self.launch_face_detection = False
             self.ExpirationTimerCount = 0
 
-
-window_app = QApplication(sys.argv)
+if __name__ == "__main__":
+    window_app = QApplication(sys.argv)
 # a_window = Window()
-Display = Window()
+    Display = Window()
 # t = threading.Thread(target = lambda: Display.controller())
 # t.daemon = True
 # t.start()
-sys.exit(window_app.exec_())
+    sys.exit(window_app.exec_())

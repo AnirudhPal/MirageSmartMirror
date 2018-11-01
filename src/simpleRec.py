@@ -4,8 +4,9 @@ import imutils
 import cv2
 import pickle
 import time
+import os
 
-vs = VideoStream(usePiCamera=True).start()
+calibrationCancel = False
 
 # This is a demo of running face recognition on live video from your webcam. It's a little more complicated than the
 # other example, but it includes some basic performance tweaks to make things run a lot faster:
@@ -93,7 +94,8 @@ def recognize(rgb_small_frame):
 #     return numberOfFaces,rgb_small_frame
 def numberOfFaces():
 	#vs =  VideoStream(usePiCamera=True).start()
-
+	vs = VideoStream(usePiCamera=True)
+	vs.start()
 # construct the argument parser and parse the arguments
 	# load the known faces and embeddings along with OpenCV's Haar
 	# cascade for face detection
@@ -123,5 +125,41 @@ def numberOfFaces():
 	rects = detector.detectMultiScale(gray, scaleFactor=1.1,
 		minNeighbors=5, minSize=(30, 30),
 		flags=cv2.CASCADE_SCALE_IMAGE)
-	#vs.stop()
+	vs.stop()
 	return len(rects),rgb
+
+def faceCalibration(name):
+    vs = VideoStream(usePiCamera=True)
+
+    # camera.start_preview()
+    #path = "./Users/%s/" % name
+    # camera = PiCamera()
+    #simpleRec.vs.start()
+    vs.start()
+    time.sleep(2)
+    path = "/home/pi/MirageSmartMirror/src/Users/%s/" % name
+    try:
+        os.mkdir(path)
+    except OSError:
+        print ("Creation of the directory %s failed" % path)
+    else:
+        print ("Successfully created the directory %s " % path)
+
+    for i in range(5):
+        if not (calibrationCancel):
+            time.sleep(2)
+            # camera.capture('/home/pi/MirageSmartMirror/src/Faces/%s/image%s.jpg' % (name , i))
+            frame = vs.read()
+            pathImage = '/home/pi/MirageSmartMirror/src/Users/%s/image%s.jpg' % (name , i)
+            cv2.imwrite( pathImage,frame );
+    # camera.stop_preview()
+        else:
+            break
+    vs.stop()
+#faceCalibration("Andrew0")
+def cancelCalibration():
+    calibrationCancel = True
+
+
+if __name__ == "__main__":
+	nothing = 0

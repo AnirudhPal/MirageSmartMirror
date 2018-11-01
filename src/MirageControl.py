@@ -2,7 +2,7 @@ from flask import Flask
 import subprocess
 import os
 import json
-import faceCalibration
+from simpleRec import faceCalibration
 import GoogleAuth
 
 app = Flask(__name__)
@@ -30,7 +30,7 @@ def add_user(user_file, user_info):
 	next_user_num = get_num_users_plain()
 	dirName = M_USER_DIR + "user" + str(next_user_num)
 #	filename = M_USER_DIR + "user" + str(next_user_num) + "/" + "user" + str(next_user_num) + ".json"
-	filename = M_USER_DIR + user_file + "/" + user_file ".json"
+	filename = M_USER_DIR + user_file + "/" + user_file + ".json"
 
 #	try:
 #		os.mkdir(dirName)
@@ -91,14 +91,14 @@ def delete_user(user_number):
 # Setup user for face calibration
 @app.route('/setup/newuser/<filename>')
 def start_face_calibration(filename):
-	faceCalibration.faceCalibration(filename)
+	faceCalibration(filename)
 	print("Done")
 	return "Done"
 
 # Cancel face calibration
 @app.route('/setup/cancel')
 def cancel_face_calibration():
-	faceCalibration.cancelCalibration()
+	cancelCalibration()
 
 # Start Google Calendar Authorization
 @app.route('/user/authorize/google/<filename>')
@@ -114,5 +114,5 @@ def start_google_auth(filename):
 		else:
 			return "Failure"
 	else:
-		print("Device could not request Authorization")	
+		print("Device could not request Authorization")
 		return "Failure"
