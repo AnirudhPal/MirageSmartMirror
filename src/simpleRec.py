@@ -112,7 +112,7 @@ def numberOfFaces():
 		# grab the frame from the threaded video stream and resize it
 		# to 500px (to speedup processing)
 	frame = vs.read()
-	print(frame)
+	# print(frame)
 	#cv2.imshow('video', frame)
 	frame = imutils.resize(frame, width=500)
 
