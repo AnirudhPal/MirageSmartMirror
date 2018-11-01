@@ -444,7 +444,7 @@ class Window(QWidget):
             self.numberOfDetectedFaces,self.faceFrame = numberOfFaces()
             self.face_detection_countdown = self.face_detection_countdown - 1
             self.launch_face_detection = False
-        else:
+        elif self.loggedIn is False:
             self.curr_screen = 0
             self.set_lockscreen_layout()
 
