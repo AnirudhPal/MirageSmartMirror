@@ -440,7 +440,10 @@ class Window(QWidget):
             self.numberOfDetectedFaces,self.faceFrame = numberOfFaces()
             self.launch_face_detection = False
 
-        if self.proximity > 200:
+        self.proximity = testSensor.getProximity()
+        print("Proximity value: %d" %self.proximity)
+
+        if self.proximity > 2:
             if self.loggedIn is False:
                 if self.prompt_asked is False:
                     self.prompt.setText("<font color='white'>" + "Please stand still and wait for your profile to load." + "</font")
@@ -492,10 +495,11 @@ class Window(QWidget):
                     #change ui to lock screen
 
                 #please one person in front
-        if self.proximity > 600:
-            self.ExpirationTimerCount=self.ExpirationTimerCount+1
-            # self.load_user_info(0)
-            # self.msd()
+        if self.proximity > 5:
+            if self.curr_screen == 2:
+                self.msd()
+            elif self.curr_screen == 1:
+                self.set_lockscreen_layout()
 
         if self.ExpirationTimerCount >= 3:
             print("Time expired")
