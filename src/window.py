@@ -79,8 +79,9 @@ class Window(QWidget):
         self.new_user_prompt = False
         self.google_code_prompt = False
         self.leave_counter = 0
-        self.curr_screen = 0    # 0: lock screen, 1: main screen, 2: groom mode
+        self.curr_screen = 0    # 0: lock screen, 1: main screen, 2: groom mode, 3: prompt screen
         self.curr_user = 0
+        self.face_detection_countdown = 0
 
         self.set_lockscreen_layout()
         self.init_timer()
@@ -183,6 +184,7 @@ class Window(QWidget):
     def set_buffering_screen(self):
         self.clearLayout(self.qt.v_box)
         self.timer.stop()
+        self.curr_screen = 3
         prompt_box = QHBoxLayout()
         self.prompt = QLabel("<font color='white'>" + "Please stand still while we detect your face and load your profile." + "</font")
         self.prompt.setAlignment(Qt.AlignCenter)
@@ -193,6 +195,7 @@ class Window(QWidget):
     def set_new_user_screen(self):
         self.clearLayout(self.qt.v_box)
         # self.timer.stop()
+        self.curr_screen = 3
         prompt_box = QHBoxLayout()
         self.prompt = QLabel("<font color='white'>" + "Face not recognized! Please download our MirageCompanion iPhone App to set up a new profile." + "</font")
         self.prompt.setAlignment(Qt.AlignCenter)
@@ -202,6 +205,7 @@ class Window(QWidget):
     def show_auth_code(self, code):
         self.clearLayout(self.qt.v_box)
         # self.timer.stop()
+        self.curr_screen = 3
         prompt_box = QHBoxLayout()
         self.prompt = QLabel("<font color='white'>" + "Enter this code: " + code + "</font>")
         self.prompt.setAlignment(Qt.AlignCenter)
@@ -453,6 +457,7 @@ class Window(QWidget):
                     self.set_buffering_screen()
                 # self.numberOfDetectedFaces,self.faceFrame = numberOfFaces()
                     self.launch_face_detection = True
+                    self.face_detection_countdown = 10
                 # self.set_buffering_screen()
 
             if self.numberOfDetectedFaces == 1 and not self.loggedIn:
@@ -495,7 +500,9 @@ class Window(QWidget):
                 self.ExpirationTimerCount=self.ExpirationTimerCount+1
 
                     #change ui to lock screen
-
+        elif self.curr_screen == 3:
+            self.curr_screen = 0
+            self.set_lockscreen_layout()
                 #please one person in front
         if self.proximity > 60 and self.loggedIn is True:
             if self.curr_screen == 2:
