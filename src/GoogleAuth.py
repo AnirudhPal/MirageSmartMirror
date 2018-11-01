@@ -31,6 +31,7 @@ def displayAuthorizationCode():
 	jsonObj = json.load(fp)
 	# Display on Mirage here
 	window.show_auth_code(jsonObj["user_code"])
+	window.google_code_prompt = True
 	print("User Code:", jsonObj["user_code"])
 	uCode = jsonObj["user_code"]
 
@@ -91,11 +92,14 @@ def pollForUserAuth(filename):
 	rt = RepeatedTimer(interval+1, requestUserAuth)
 	if userDidAuthorize == True:
 		rt.stop()
+		window.google_code_prompt = False
 		window.set_lockscreen_layout()
 		return True
 	elif rt.elapsedTime > expiration:
 		rt.stop()
 		print("User did not authorize in time")
+		window.google_code_prompt = False
+		window.set_lockscreen_layout()
 		return False
 
 class RepeatedTimer(object):

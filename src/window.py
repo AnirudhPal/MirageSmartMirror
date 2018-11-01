@@ -77,6 +77,7 @@ class Window(QWidget):
         self.prompt_asked = False
         self.launch_face_detection = False
         self.new_user_prompt = False
+        self.google_code_prompt = False
         self.leave_counter = 0
         self.curr_screen = 0    # 0: lock screen, 1: main screen, 2: groom mode
         self.curr_user = 0
@@ -123,7 +124,7 @@ class Window(QWidget):
         self.TimeWeatherBox.addWidget(self.datetime)
 
         ###
-        self.welcomeLabel = QLabel("<font color='white'>" + "Welcome, Amjad!" + "</font")
+        self.welcomeLabel = QLabel("<font color='white'>" + "Welcome, %s!"%(self.curr_user['name']) + "</font")
         self.welcomeLabel.setAlignment(Qt.AlignCenter)
         self.welcomeLabel.setFixedHeight(100)
         self.welcomeBox.addWidget(self.welcomeLabel)
@@ -175,7 +176,7 @@ class Window(QWidget):
         self.timer.stop()
         self.clearLayout(self.qt.v_box)
 
-        self.qt.v_box.addWidget(self.qt.lsb)
+        #self.qt.v_box.addWidget(self.qt.lsb)
         self.qt.v_box.addWidget(groom.Groom().frame)
         self.qt.v_box.setContentsMargins(0,0,0,0)
 
@@ -412,6 +413,9 @@ class Window(QWidget):
 
     def controller(self):
         # import ipdb; ipdb.set_trace()
+
+        if self.google_code_prompt is True:
+            return
 
         if self.leave_counter > 0:
             self.leave_counter = self.leave_counter - 1
