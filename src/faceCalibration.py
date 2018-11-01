@@ -12,7 +12,7 @@ def faceCalibration(name):
     # camera = PiCamera()
     # simpleRec.vs.start()
     sleep(2)
-    path = "/home/pi/MirageSmartMirror/src/Faces/%s/" % name
+    path = "/home/pi/MirageSmartMirror/src/Users/%s/" % name
     try:
         os.mkdir(path)
     except OSError:
@@ -25,7 +25,7 @@ def faceCalibration(name):
             sleep(2)
             # camera.capture('/home/pi/MirageSmartMirror/src/Faces/%s/image%s.jpg' % (name , i))
             frame = simpleRec.vs.read()
-            pathImage = '/home/pi/MirageSmartMirror/src/Faces/%s/image%s.jpg' % (name , i)
+            pathImage = '/home/pi/MirageSmartMirror/src/Users/%s/image%s.jpg' % (name , i)
             simpleRec.cv2.imwrite( pathImage,frame );
     # camera.stop_preview()
         else:

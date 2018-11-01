@@ -25,22 +25,24 @@ def get_num_users():
 	return str(numUsers)
 
 # Add a new user
-@app.route('/user/add/<user_info>')
-def add_user(user_info):
+@app.route('/user/add/<user_file>/<user_info>')
+def add_user(user_file, user_info):
 	next_user_num = get_num_users_plain()
 	dirName = M_USER_DIR + "user" + str(next_user_num)
-	filename = M_USER_DIR + "user" + str(next_user_num) + "/" + "user" + str(next_user_num) + ".json"
-	try:
-		os.mkdir(dirName)
-	except OSError:
-		print("Creation of the directory %s failed" % dirName)
-	else:
-		with open(filename, 'w') as outfile:
-			try:
-				json.dump(user_info, outfile, ensure_ascii=False)
-				return "User successfully added"
-			except:
-				return "Unable to add user, please try again"
+#	filename = M_USER_DIR + "user" + str(next_user_num) + "/" + "user" + str(next_user_num) + ".json"
+	filename = M_USER_DIR + user_file + "/" + user_file ".json"
+
+#	try:
+#		os.mkdir(dirName)
+#	except OSError:
+#		print("Creation of the directory %s failed" % dirName)
+#	else:
+	with open(filename, 'w') as outfile:
+		try:
+			json.dump(user_info, outfile, ensure_ascii=False)
+			return "User successfully added"
+		except:
+			return "Unable to add user, please try again"
 
 # Get user by number
 @app.route('/user/get/<user_number>')

@@ -8,7 +8,7 @@ import os
 
 # grab the paths to the input images in our dataset
 print("[INFO] quantifying faces...")
-imagePaths = list(paths.list_images("/home/pi/MirageSmartMirror/src/Faces/"))
+imagePaths = list(paths.list_images("/home/pi/MirageSmartMirror/src/Users/"))
 
 # initialize the list of known encodings and known names
 knownEncodings = []
