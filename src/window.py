@@ -444,6 +444,9 @@ class Window(QWidget):
             self.numberOfDetectedFaces,self.faceFrame = numberOfFaces()
             self.face_detection_countdown = self.face_detection_countdown - 1
             self.launch_face_detection = False
+        else:
+            self.curr_screen = 0
+            self.set_lockscreen_layout()
 
         self.proximity = testSensor.getProximity()
         print("Proximity value: %d" %self.proximity)
@@ -501,9 +504,9 @@ class Window(QWidget):
                 self.ExpirationTimerCount=self.ExpirationTimerCount+1
 
                     #change ui to lock screen
-        elif self.curr_screen == 3:
-            self.curr_screen = 0
-            self.set_lockscreen_layout()
+        # elif self.curr_screen == 3:
+        #     self.curr_screen = 0
+        #     self.set_lockscreen_layout()
                 #please one person in front
         if self.proximity > 60 and self.loggedIn is True:
             if self.curr_screen == 2:
