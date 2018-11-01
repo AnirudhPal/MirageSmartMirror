@@ -462,46 +462,78 @@ class Window(QWidget):
                     self.face_detection_countdown = 3
                 # self.set_buffering_screen()
 
-            if self.numberOfDetectedFaces == 1 and not self.loggedIn:
-                print("one face Detected")
-                self.launch_face_detection = False
-                self.face_detection_countdown = 0
-                name = recognize(self.faceFrame)
-                print(name) #login
-                if(name == "Unknown"):
-                    self.set_new_user_screen()
-                    self.new_user_prompt = True
-                    # self.launch_face_detection = True
-                    # self.prompt_asked = False
-                    # time.sleep(6)
-                    # self.set_lockscreen_layout()
-                else:
-                    with open('/home/pi/MirageSmartMirror/src/Users/%s/%s.json' %(name, name)) as f:
-                        data = json.load(f)
 
-                    # print("user info:")
-                    self.curr_user = json.loads(data)
-                    # print(self.curr_user["id"])
-                    self.load_user_info(self.curr_user)
-                    self.msd()
-                    self.loggedIn = True
+        if self.numberOfDetectedFaces == 1 and not self.loggedIn:
+            print("one face Detected")
+            self.launch_face_detection = False
+            self.face_detection_countdown = 0
+            name = recognize(self.faceFrame)
+            print(name) #login
+            if(name == "Unknown"):
+                self.set_new_user_screen()
+                self.new_user_prompt = True
+            else:
+                with open('/home/pi/MirageSmartMirror/src/Users/%s/%s.json' %(name, name)) as f:
+                    data = json.load(f)
 
-                #if unknown ask if user wants to setup a new profile
-                    #setup profile Protocal
+                # print("user info:")
+                self.curr_user = json.loads(data)
+                # print(self.curr_user["id"])
+                self.load_user_info(self.curr_user)
+                self.msd()
+                self.loggedIn = True
 
-                #if recognize retuned a name login
-                    #loggedIn = True
-                    #diSplAY
-            elif self.numberOfDetectedFaces == 1 and self.loggedIn:
-                print("one face and you are logged in")
-                #if another user, start timer (5 sec) and switch to new profile
+        elif self.numberOfDetectedFaces == 1 and self.loggedIn:
+            print("one face and you are logged in")
+            #if another user, start timer (5 sec) and switch to new profile
 
-            elif self.numberOfDetectedFaces > 1:
-                print("one person only")
-            else :
-                self.launch_face_detection = True
-                print("no one is here")
-                self.ExpirationTimerCount=self.ExpirationTimerCount+1
+        elif self.numberOfDetectedFaces > 1:
+            print("one person only")
+        else:
+            self.launch_face_detection = True
+            print("no one is here")
+            self.ExpirationTimerCount=self.ExpirationTimerCount+1
+
+            # if self.numberOfDetectedFaces == 1 and not self.loggedIn:
+            #     print("one face Detected")
+            #     self.launch_face_detection = False
+            #     self.face_detection_countdown = 0
+            #     name = recognize(self.faceFrame)
+            #     print(name) #login
+            #     if(name == "Unknown"):
+            #         self.set_new_user_screen()
+            #         self.new_user_prompt = True
+            #         # self.launch_face_detection = True
+            #         # self.prompt_asked = False
+            #         # time.sleep(6)
+            #         # self.set_lockscreen_layout()
+            #     else:
+            #         with open('/home/pi/MirageSmartMirror/src/Users/%s/%s.json' %(name, name)) as f:
+            #             data = json.load(f)
+            #
+            #         # print("user info:")
+            #         self.curr_user = json.loads(data)
+            #         # print(self.curr_user["id"])
+            #         self.load_user_info(self.curr_user)
+            #         self.msd()
+            #         self.loggedIn = True
+            #
+            #     #if unknown ask if user wants to setup a new profile
+            #         #setup profile Protocal
+            #
+            #     #if recognize retuned a name login
+            #         #loggedIn = True
+            #         #diSplAY
+            # elif self.numberOfDetectedFaces == 1 and self.loggedIn:
+            #     print("one face and you are logged in")
+            #     #if another user, start timer (5 sec) and switch to new profile
+            #
+            # elif self.numberOfDetectedFaces > 1:
+            #     print("one person only")
+            # else :
+            #     self.launch_face_detection = True
+            #     print("no one is here")
+            #     self.ExpirationTimerCount=self.ExpirationTimerCount+1
 
                     #change ui to lock screen
         # elif self.curr_screen == 3:
