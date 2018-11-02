@@ -22,6 +22,7 @@ from simpleRec import *
 # for sensor
 import testSensor
 
+global Display
 
 '''
 <div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
@@ -44,6 +45,11 @@ effect.setBlurRadius(30)
 effect.setColor(QColor(255,255,255))
 effect2.setBlurRadius(20)
 effect2.setColor(QColor(255,255,255))
+
+def show_google_auth_code(code):
+    global Display
+    Display.google_code = code
+    Display.show_auth_code()
 
 class Window(QWidget):
     def __init__ (self):
@@ -82,6 +88,7 @@ class Window(QWidget):
         self.curr_screen = 0    # 0: lock screen, 1: main screen, 2: groom mode, 3: prompt screen
         self.curr_user = 0
         self.face_detection_countdown = 0
+        self.google_code = 0
 
         self.set_lockscreen_layout()
         self.init_timer()
@@ -202,12 +209,13 @@ class Window(QWidget):
         prompt_box.addWidget(self.prompt)
         self.qt.layout().addLayout(prompt_box)
 
-    def show_auth_code(self, code):
+    def show_auth_code(self):
         self.clearLayout(self.qt.v_box)
         # self.timer.stop()
         self.curr_screen = 3
         prompt_box = QHBoxLayout()
-        self.prompt = QLabel("<font color='white'>" + "Enter this code: " + code + "</font>")
+        print("Authorization code in window.py: %s" %self.google_code)
+        self.prompt = QLabel("<font color='white'>" + "Enter this code: " + self.google_code + "</font>")
         self.prompt.setAlignment(Qt.AlignCenter)
         prompt_box.addWidget(self.prompt)
         self.qt.layout().addLayout(prompt_box)
@@ -451,7 +459,7 @@ class Window(QWidget):
         self.proximity = testSensor.getProximity()
         print("Proximity value: %d" %self.proximity)
 
-        if self.proximity > 2:
+        if self.proximity > 50:
             if self.loggedIn is False:
                 if self.prompt_asked is False:
                     self.prompt.setText("<font color='white'>" + "Please stand still and wait for your profile to load." + "</font")
@@ -490,7 +498,7 @@ class Window(QWidget):
         elif self.numberOfDetectedFaces > 1:
             print("one person only")
         else:
-            self.launch_face_detection = True
+            #self.launch_face_detection = True
             print("no one is here")
             self.ExpirationTimerCount=self.ExpirationTimerCount+1
 
@@ -540,7 +548,7 @@ class Window(QWidget):
         #     self.curr_screen = 0
         #     self.set_lockscreen_layout()
                 #please one person in front
-        if self.proximity > 60 and self.loggedIn is True:
+        if self.proximity > 50 and self.loggedIn is True:
             if self.curr_screen == 2:
                 self.load_user_info(self.curr_user)
                 self.msd()
@@ -556,6 +564,8 @@ class Window(QWidget):
             self.ExpirationTimerCount = 0
 
 if __name__ == "__main__":
+
+    global Display
     window_app = QApplication(sys.argv)
 # a_window = Window()
     Display = Window()

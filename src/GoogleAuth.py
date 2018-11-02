@@ -3,8 +3,7 @@ import json
 import os
 import subprocess
 from threading import Timer
-#import requests
-import window
+#import window
 
 SCOPE='https://www.googleapis.com/auth/calendar.readonly'
 CLIENT_ID='238441387160-vg5u4bb2td0vugjb7i39umeat5s6dtm0.apps.googleusercontent.com'
@@ -29,11 +28,23 @@ def displayAuthorizationCode():
 
 	fp = open(DEVICE_AUTH_PATH)
 	jsonObj = json.load(fp)
-	# Display on Mirage here
-	window.show_auth_code(jsonObj["user_code"])
-	window.google_code_prompt = True
 	print("User Code:", jsonObj["user_code"])
 	uCode = jsonObj["user_code"]
+	jsonData = "{\"hasCode\":\"True\",\"userCode\":\"" + uCode + "\"}"
+	filename = '/home/pi/MirageSmartMirror/src/googleCode.json'
+	with open(filename, 'w') as outfile:
+		try:
+			json.dump(jsonData, outfile, ensure_ascii=False)
+			print("Added userCode to userCode.json")
+		except:
+			return "Unable to successfully add userCode to userCode.json"
+
+	#window.show_google_auth_code(uCode)
+	# Display on Mirage here
+	#Display.google_code = uCode
+	#print("WTF!: %s" %Display.google_code)
+	#Display.show_auth_code()
+	#Display.google_code_prompt = True
 
 def getDeviceCode():
 	fp = open(DEVICE_AUTH_PATH)
@@ -48,7 +59,7 @@ def requestUserAuth():
 		return
 	test = getDeviceCode()
 	#r = requests.post("https://www.googleapis.com/oauth2/v4/token",  data={'client_id':CLIENT_ID, 'client_secret':CLIENT_SECRET, 'code':test, 'grant_type':'http://oauth.net/grant_type/device/1.0'})
-	#print(r.json())
+	#vprint(r.json())
 	res = subprocess.run(["curl",
 				"-s",
 				"-d",
@@ -92,14 +103,27 @@ def pollForUserAuth(filename):
 	rt = RepeatedTimer(interval+1, requestUserAuth)
 	if userDidAuthorize == True:
 		rt.stop()
-		window.google_code_prompt = False
-		window.set_lockscreen_layout()
+		jsonData = "{\"hasCode\":\"False\"}"
+		with open('/home/pi/MirageSmartMirror/src/userCode.json', 'w') as outfile:
+			try:
+				json.dump(jsonData, outfile, ensure_ascii=False)
+				print("Successfully deleted userCode from userCode.json")
+			except:
+				print("Could not delete userCode from userCode.json")
+		#Display.google_code_prompt = False
+		#Display.set_lockscreen_layout()
 		return True
 	elif rt.elapsedTime > expiration:
 		rt.stop()
 		print("User did not authorize in time")
-		window.google_code_prompt = False
-		window.set_lockscreen_layout()
+		jsonData = "{\"hasCode\":\"False\"}"
+		with open('/home/pi/MirageSmartMirror/src/userCode.json', 'w') as outfile:
+			try:
+				json.dump(jsonData, outfile, ensure_ascii=False)
+				print("Successfully deleted userCode from userCode.json")
+			except:
+				print("Could not delete userCode from userCode.json")
+		#Display.set_lockscreen_layout()
 		return False
 
 class RepeatedTimer(object):

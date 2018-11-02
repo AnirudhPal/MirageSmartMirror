@@ -113,6 +113,7 @@ def numberOfFaces():
 		# grab the frame from the threaded video stream and resize it
 		# to 500px (to speedup processing)
 	frame = vs.read()
+	frame = cv2.rotate(frame, rotateCode=cv2.ROTATE_180) # Tried to rotate image - Amjad
 	# print(frame)
 	#cv2.imshow('video', frame)
 	frame = imutils.resize(frame, width=500)
@@ -151,6 +152,7 @@ def faceCalibration(name):
             time.sleep(2)
             # camera.capture('/home/pi/MirageSmartMirror/src/Faces/%s/image%s.jpg' % (name , i))
             frame = vs.read()
+            frame = cv2.rotate(frame, rotateCode=cv2.ROTATE_180) # Tried to rotate image - Amjad
             pathImage = '/home/pi/MirageSmartMirror/src/Users/%s/image%s.jpg' % (name , i)
             cv2.imwrite( pathImage,frame );
     # camera.stop_preview()
