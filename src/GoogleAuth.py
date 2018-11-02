@@ -31,13 +31,13 @@ def displayAuthorizationCode():
 	print("User Code:", jsonObj["user_code"])
 	uCode = jsonObj["user_code"]
 	jsonData = "{\"hasCode\":\"True\",\"userCode\":\"" + uCode + "\"}"
-	filename = '/home/pi/MirageSmartMirror/src/googleCode.json'
+	filename = '/home/pi/MirageSmartMirror/src/userCode.json'
 	with open(filename, 'w') as outfile:
 		try:
 			json.dump(jsonData, outfile, ensure_ascii=False)
 			print("Added userCode to userCode.json")
 		except:
-			return "Unable to successfully add userCode to userCode.json"
+			print("Unable to successfully add userCode to userCode.json")
 
 	#window.show_google_auth_code(uCode)
 	# Display on Mirage here
@@ -79,6 +79,14 @@ def requestUserAuth():
 			if x == "access_token":
 				userDidAuthorize = True
 				rt.stop()
+				jsonData = "{\"hasCode\":\"False\"}"
+				with open('/home/pi/MirageSmartMirror/src/userCode.json', 'w') as outfile:
+					try:
+						json.dump(jsonData, outfile, ensure_ascii=False)
+						print("Successfully deleted userCode from userCode.json")
+					except:
+						print("Could not delete userCode from userCode.json")
+
 				print("User did authorize, access token: " + jsonObj[x])
 				return
 
@@ -110,8 +118,6 @@ def pollForUserAuth(filename):
 				print("Successfully deleted userCode from userCode.json")
 			except:
 				print("Could not delete userCode from userCode.json")
-		#Display.google_code_prompt = False
-		#Display.set_lockscreen_layout()
 		return True
 	elif rt.elapsedTime > expiration:
 		rt.stop()
@@ -123,7 +129,6 @@ def pollForUserAuth(filename):
 				print("Successfully deleted userCode from userCode.json")
 			except:
 				print("Could not delete userCode from userCode.json")
-		#Display.set_lockscreen_layout()
 		return False
 
 class RepeatedTimer(object):

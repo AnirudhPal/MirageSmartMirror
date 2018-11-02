@@ -83,6 +83,7 @@ class Window(QWidget):
         self.curr_user = 0
         self.face_detection_countdown = 0
         self.google_code = None
+        self.google_prompt = False
 
         self.set_lockscreen_layout()
         self.init_timer()
@@ -205,10 +206,10 @@ class Window(QWidget):
 
     def show_auth_code(self):
         self.clearLayout(self.qt.v_box)
-        # self.timer.stop()
+        self.timer.stop()
         self.curr_screen = 3
         prompt_box = QHBoxLayout()
-        print("Authorization code in window.py: %s" %self.google_code)
+        #print("Authorization code in window.py: %s" %self.google_code)
         self.prompt = QLabel("<font color='white'>" + "Enter this code: " + self.google_code + "</font>")
         self.prompt.setAlignment(Qt.AlignCenter)
         prompt_box.addWidget(self.prompt)
@@ -437,11 +438,14 @@ class Window(QWidget):
                 data = json.load(f)
             dict = json.loads(data)
             self.google_code = dict['userCode']
+            self.google_prompt = True
             self.show_auth_code()
             self.leave_counter = 10
             return
-        else:
+        elif self.google_prompt is True:
             self.google_code = None
+            self.google_prompt = False
+            self.set_lockscreen_layout()
 
         # if self.loggedIn is False:
         #     self.numberOfDetectedFaces,self.faceFrame = numberOfFaces()
