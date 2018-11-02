@@ -219,7 +219,7 @@ class Window(QWidget):
         # os.system('nohup python3 APIs.py &')
         # user_destinations = ["305 Swindon Way, West Lafayette, Indiana", "222 West Wood St, West Lafayette, Indiana", "West Madison Street, Chicago, Illinois"]
         self.rt = maps.Maps(user_dict["address"], user_dict['freqDests'])
-        self.calendarEvents = googleCalendar.Calendar() # fix to take in user id and get user's token
+        self.calendarEvents = googleCalendar.Calendar(user_dict['id']) # fix to take in user id and get user's token
         self.weather = weather.Weather(user_dict["address"])
         self.datetime = DateTime.DateTime()
         self.feed = feeds.Feeds()
