@@ -22,7 +22,6 @@ from simpleRec import *
 # for sensor
 import testSensor
 
-global Display
 
 '''
 <div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
@@ -46,10 +45,6 @@ effect.setColor(QColor(255,255,255))
 effect2.setBlurRadius(20)
 effect2.setColor(QColor(255,255,255))
 
-def show_google_auth_code(code):
-    global Display
-    Display.google_code = code
-    Display.show_auth_code()
 
 class Window(QWidget):
     def __init__ (self):
@@ -83,12 +78,11 @@ class Window(QWidget):
         self.prompt_asked = False
         self.launch_face_detection = False
         self.new_user_prompt = False
-        self.google_code_prompt = False
         self.leave_counter = 0
         self.curr_screen = 0    # 0: lock screen, 1: main screen, 2: groom mode, 3: prompt screen
         self.curr_user = 0
         self.face_detection_countdown = 0
-        self.google_code = 0
+        self.google_code = None
 
         self.set_lockscreen_layout()
         self.init_timer()
@@ -423,17 +417,31 @@ class Window(QWidget):
             elif child.layout() is not None:
                 self.clearLayout(child.layout())
 
+    def check_google_code(self):
+        with open('/home/pi/MirageSmartMirror/src/userCode.json') as f:
+            data = json.load(f)
+        dict = json.loads(data)
+        return dict['hasCode']
+
     def controller(self):
         # import ipdb; ipdb.set_trace()
-
-        if self.google_code_prompt is True:
-            return
 
         if self.leave_counter > 0:
             self.leave_counter = self.leave_counter - 1
             return
         else:
             self.prompt_asked = False
+
+        if self.check_google_code() == "True":
+            with open('/home/pi/MirageSmartMirror/src/userCode.json') as f:
+                data = json.load(f)
+            dict = json.loads(data)
+            self.google_code = dict['userCode']
+            self.show_auth_code()
+            self.leave_counter = 10
+            return
+        else:
+            self.google_code = None
 
         # if self.loggedIn is False:
         #     self.numberOfDetectedFaces,self.faceFrame = numberOfFaces()
