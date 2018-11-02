@@ -573,7 +573,6 @@ class Window(QWidget):
 
 if __name__ == "__main__":
 
-    global Display
     window_app = QApplication(sys.argv)
 # a_window = Window()
     Display = Window()
