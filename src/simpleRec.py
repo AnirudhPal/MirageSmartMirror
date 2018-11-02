@@ -5,6 +5,10 @@ import cv2
 import pickle
 import time
 import os
+import subprocess
+
+# for LED
+import setLed
 
 calibrationCancel = False
 
@@ -94,6 +98,8 @@ def recognize(rgb_small_frame):
 #
 #     return numberOfFaces,rgb_small_frame
 def numberOfFaces():
+	# Turn on LED
+	setLed.ledON()
 	#vs =  VideoStream(usePiCamera=True).start()
 	vs = VideoStream(usePiCamera=True)
 	vs.start()
@@ -128,9 +134,13 @@ def numberOfFaces():
 		minNeighbors=5, minSize=(30, 30),
 		flags=cv2.CASCADE_SCALE_IMAGE)
 	vs.stop()
+	# Turn off LED
+	setLed.ledOFF()
 	return len(rects),rgb
 
 def faceCalibration(name):
+    #Turn on LED
+    setLed.ledON()
     vs = VideoStream(usePiCamera=True)
 
     # camera.start_preview()
@@ -159,6 +169,13 @@ def faceCalibration(name):
         else:
             break
     vs.stop()
+    res = subprocess.run(["python3", "faceEncoding.py", "&"])
+    if res.returncode == 0:
+        print("Encoding done!")
+    else:
+        print("Encoding failed!")
+    #Turn off LED
+    setLed.ledOFF()
 #faceCalibration("Andrew0")
 def cancelCalibration():
     calibrationCancel = True

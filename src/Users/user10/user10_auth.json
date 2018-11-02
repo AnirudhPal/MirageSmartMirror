@@ -1,7 +1,0 @@
-{
-  "access_token": "ya29.GltIBs0lkklve5YJwioyHPL1FQX8vbusph8EKZ-xfrSq9VZ-oLH5dBudep24z5EHthbm-xJCf7LSfPOeLvfhUezEyT1KR5rFLo2UPJjmTuJRuaL1y_qS4Pb1Kew2",
-  "expires_in": 3600,
-  "refresh_token": "1/o8tegTClWHRqdMkyFVSForKf27-wPj320TS0f367bqQ",
-  "scope": "https://www.googleapis.com/auth/calendar.readonly",
-  "token_type": "Bearer"
-}
