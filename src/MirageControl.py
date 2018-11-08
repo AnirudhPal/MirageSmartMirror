@@ -39,16 +39,19 @@ def get_num_users():
 #		except:
 #			return "Unable to add user, please try again"
 
-@app.route('/user/add/', methods=['POST'])
+@app.route('/user/add', methods=['POST'])
 def add_user():
 	error = None
+	print(request.get_json())
 	if request.method == "POST":
 		next_user_num = get_num_users_plain()
 		dirName = M_USER_DIR + "user" + str(next_user_num)
-		filename = M_USER_DIR + request.form['user_file'] + "/" + request.form['user_file'] + ".json"
+		filename = M_USER_DIR + "user" + str(request.json['user_info']['id']) + "/" + "user" + str(request.json['user_info']['id']) + ".json"
+	else:
+		print("Method is not post")
 	with open(filename, 'w') as outfile:
 		try:
-			json.dump(request.form['user_info'], outfile, ensure_ascii=False)
+			json.dump(request.json['user_info'], outfile, ensure_ascii=False)
 			return "User successfully added"
 		except:
 			return "Unable to add user, please try again"
