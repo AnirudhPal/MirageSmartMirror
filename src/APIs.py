@@ -85,8 +85,9 @@ def get_weather(address):
     daily_summary = weather_json['daily']['data'][0]['summary']
     current_summary = weather_json['currently']['summary']
     current_temp = weather_json['currently']['temperature']
+    current_icon = weather_json['currently']['icon']
     weather_dict = {'daily': daily_summary, 'current': current_summary,
-                    'temp': current_temp}
+                    'temp': current_temp, 'icon': current_icon}
     return weather_dict
 
 

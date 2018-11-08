@@ -44,6 +44,21 @@ effect.setColor(QColor(255,255,255))
 effect2.setBlurRadius(20)
 effect2.setColor(QColor(255,255,255))
 
+icons = {
+'cloudy':'/home/pi/MirageSmartMirror/src/icons/cloudy.png',
+'partly-cloudy-day':'/home/pi/MirageSmartMirror/src/icons/cloudy.png',
+'partly-cloudy-night':'/home/pi/MirageSmartMirror/src/icons/cloudy.png',
+'fog':'/home/pi/MirageSmartMirror/src/icons/fog.png',
+'wind':'/home/pi/MirageSmartMirror/src/icons/wind.png',
+'sleet':'/home/pi/MirageSmartMirror/src/icons/sleet.png',
+'snow':'/home/pi/MirageSmartMirror/src/icons/snow.png',
+'rain':'/home/pi/MirageSmartMirror/src/icons/raining.png',
+'clear-day':'/home/pi/MirageSmartMirror/src/icons/sun.png',
+'clear-night':'/home/pi/MirageSmartMirror/src/icons/moon.png',
+'thunderstorm':'/home/pi/MirageSmartMirror/src/icons/storm.png',
+'hail':'/home/pi/MirageSmartMirror/src/icons/hail.png',
+'tornado':'/home/pi/MirageSmartMirror/src/icons/tornado.png'
+}
 
 class Window(QWidget):
     def __init__ (self):
@@ -98,6 +113,7 @@ class Window(QWidget):
         self.launch_face_detection = False
         self.curr_screen = 1
         self.clearLayout(self.qt.v_box)
+        self.load_user_info(self.curr_user[0])
         # self.timer.stop()
 
         # user_destinations = ["305 Swindon Way, West Lafayette, Indiana", "222 West Wood St, West Lafayette, Indiana", "West Madison Street, Chicago, Illinois"]
@@ -116,17 +132,45 @@ class Window(QWidget):
         self.appBox = QHBoxLayout()
 
         ###
-        # self.weather = weather.Weather()
+        font = QFont('Helvetica', 18)
+        font.setWeight(1)
+        self.weather = QWidget()
+        self.weather.weatherBox = QVBoxLayout()
+
+        self.weather.dailySummary = QLabel()
+        self.weather.dailySummary.setAlignment(Qt.AlignLeft)
+        self.weather.dailySummary.setFont(font)
+
+        self.weather.currently = QLabel()
+        self.weather.currently.setAlignment(Qt.AlignLeft)
+        self.weather.currently.setFont(font)
+
+        self.weather.temp = QLabel()
+        self.weather.temp.setAlignment(Qt.AlignLeft)
+        self.weather.temp.setFont(font)
+
+        self.weather.icon = QLabel()
+        self.weather.icon.setAlignment(Qt.AlignLeft)
+
+        self.weather.weatherBox.addWidget(self.weather.dailySummary)
+        self.weather.weatherBox.addWidget(self.weather.currently)
+        self.weather.weatherBox.addWidget(self.weather.icon)
+        self.weather.weatherBox.addWidget(self.weather.temp)
         self.weather.weatherBox.setAlignment(Qt.AlignLeft)
+
+        self.weather.setLayout(self.weather.weatherBox)
+
+
         self.weather.setFixedHeight(150)
         self.TimeWeatherBox.addWidget(self.weather)
+        self.weather_info()
 
         self.datetime = DateTime.DateTime()
         self.datetime.setFixedHeight(150)
         self.TimeWeatherBox.addWidget(self.datetime)
 
         ###
-        self.welcomeLabel = QLabel("<font color='white'>" + "Welcome, %s!"%(self.curr_user['name']) + "</font")
+        self.welcomeLabel = QLabel("<font color='white'>" + "Welcome, %s!"%(self.curr_user[1]['name']) + "</font")
         self.welcomeLabel.setAlignment(Qt.AlignCenter)
         self.welcomeLabel.setFixedHeight(100)
         self.welcomeBox.addWidget(self.welcomeLabel)
@@ -214,27 +258,19 @@ class Window(QWidget):
         prompt_box.addWidget(self.prompt)
         self.qt.layout().addLayout(prompt_box)
 
-    def load_user_info(self, user_dict):
+    def load_user_info(self, user_name):
         # os.system('nohup python3 APIs.py &')
         # user_destinations = ["305 Swindon Way, West Lafayette, Indiana", "222 West Wood St, West Lafayette, Indiana", "West Madison Street, Chicago, Illinois"]
-        self.rt = maps.Maps(user_dict["address"], user_dict['freqDests'])
-        self.calendarEvents = googleCalendar.Calendar(user_dict['id']) # fix to take in user id and get user's token
-        self.weather = weather.Weather(user_dict["address"])
+        file_path = "/home/pi/MirageSmartMirror/src/Users/%s/%sAPI.json" %(user_name, user_name)
+        with open(file_path) as f:
+            user_dict = json.load(f)
+
+        self.rt = user_dict['map']
+        self.calendarEvents = user_dict['events']
+        self.weather_dict = user_dict['weather']
         self.datetime = DateTime.DateTime()
         self.feed = feeds.Feeds()
-        # Init
-        newsapi = NewsApiClient(api_key='33ff7834a7ee40928e7bb90746c8b6e5')
-        # top_headlines = newsapi.get_top_headlines(category=user_dict["newsCategories"][0]
-        #                                         language='en',
-        #                                           country='us')
-        news_sources = newsapi.get_sources()
-        news_url = ('https://newsapi.org/v2/top-headlines?'
-               'category=%s&'
-               'country=us&'
-               'apiKey=33ff7834a7ee40928e7bb90746c8b6e5' %(user_dict["newsCategories"][0]))
-        # print(news_url)
-        news_response = requests.get(news_url)
-        self.news_data = news_response.json()
+        self.news_data = user_dict['news']
 
 
 
@@ -337,15 +373,15 @@ class Window(QWidget):
         self.feed.title.setFont(font)
         self.feed.title.setText("<font color='white'>" + "Routes Info" + "</font")
 
-        for route in self.rt.routes:
+        for route in self.rt:
             temp1 = QLabel("<font color='white'>" + route[1] + "</font")
             temp1.setFont(news_source_font)
-             # + news_data['articles'][i]['source']['name']
+             # + self.news_data['articles'][i]['source']['name']
             temp2 = QLabel("<font color='white'>" + route[0] + "</font")
             temp2.setFont(news_headline_font)
             temp3 = QLabel()
             temp3.setFont(news_space_font)
-            # news_data['articles'][i]['source']['name']
+            # self.news_data['articles'][i]['source']['name']
             temp1.setAlignment(Qt.AlignLeft)
             self.feed.feedForm.addRow(temp2, temp1)
             self.feed.feedForm.addRow(temp3)
@@ -360,23 +396,40 @@ class Window(QWidget):
         self.feed.title.setFont(font)
         self.feed.title.setText("<font color='white'>" + "Calendar Events" + "</font")
 
-        if self.calendarEvents.events == None:
+        if self.calendarEvents == None:
             self.feed.title.setText("<font color='white'>" + "No upcoming events!" + "</font")
         else:
             for i in range(6):
-                event = self.calendarEvents.events[i]
+                event = self.calendarEvents[i]
                 temp1 = QLabel("<font color='white'>" + event['summary'] + "</font")
                 temp1.setFont(news_headline_font)
-                 # + news_data['articles'][i]['source']['name']
+                 # + self.news_data['articles'][i]['source']['name']
                 temp2 = QLabel("<font color='white'>" + event['start'] + "</font")
                 temp2.setFont(news_source_font)
                 temp3 = QLabel()
                 temp3.setFont(news_space_font)
-                # news_data['articles'][i]['source']['name']
+                # self.news_data['articles'][i]['source']['name']
                 temp1.setAlignment(Qt.AlignLeft)
                 self.feed.feedForm.addRow(temp2, temp1)
                 self.feed.feedForm.addRow(temp3)
 
+
+    def weather_info(self):
+        icon = icons[self.weather_dict['icon']]
+        image = cv2.imread(icon)
+        image = cv2.resize(image, (50, 50), interpolation=cv2.INTER_CUBIC)
+        image = QImage(image, image.shape[1], image.shape[0], image.strides[0], QImage.Format_RGB888)
+
+        # self.weather.daily = self.weather_dict['daily']['data'][0]['summary']
+        self.weather.dailySummary.setText("<font color='white'>" + self.weather_dict['daily'] + "</font")
+
+        # self.weather.curr = "Currently " + self.weather_dict['currently']['summary']
+        self.weather.currently.setText("<font color='white'>" + self.weather_dict['current'] + "</font")
+
+        # self.weather.fahrenheit = self.weather_dict['currently']['temperature']
+        self.weather.temp.setText("<font color='white'> %d" %self.weather_dict['temp'] + u'\N{DEGREE SIGN}' + "</font")
+
+        self.weather.icon.setPixmap(QPixmap.fromImage(image))
 
     def init_timer(self):
         self.timer = QTimer()
@@ -495,10 +548,10 @@ class Window(QWidget):
                 with open('/home/pi/MirageSmartMirror/src/Users/%s/%s.json' %(name, name)) as f:
                     data = json.load(f)
 
-                # print("user info:")
-                self.curr_user = json.loads(data)
+                dict = json.loads(data)
+                self.curr_user = (name, dict)
                 # print(self.curr_user["id"])
-                self.load_user_info(self.curr_user)
+                # self.load_user_info(self.curr_user[0])
                 self.msd()
                 self.loggedIn = True
 
@@ -561,7 +614,7 @@ class Window(QWidget):
                 #please one person in front
         if self.proximity > 50 and self.loggedIn is True:
             if self.curr_screen == 2:
-                self.load_user_info(self.curr_user)
+                # self.load_user_info(self.curr_user[0])
                 self.msd()
         if self.proximity > 250 and self.loggedIn is True:
             if self.curr_screen == 1:
