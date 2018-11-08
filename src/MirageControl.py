@@ -1,4 +1,5 @@
 from flask import Flask
+from flask import request
 import subprocess
 import os
 import json
@@ -25,21 +26,29 @@ def get_num_users():
 	return str(numUsers)
 
 # Add a new user
-@app.route('/user/add/<user_file>/<user_info>')
-def add_user(user_file, user_info):
-	next_user_num = get_num_users_plain()
-	dirName = M_USER_DIR + "user" + str(next_user_num)
-#	filename = M_USER_DIR + "user" + str(next_user_num) + "/" + "user" + str(next_user_num) + ".json"
-	filename = M_USER_DIR + user_file + "/" + user_file + ".json"
+#@app.route('/user/add/<user_file>/<user_info>')
+#def add_user(user_file, user_info):
+#	next_user_num = get_num_users_plain()
+#	dirName = M_USER_DIR + "user" + str(next_user_num)
+#	filename = M_USER_DIR + user_file + "/" + user_file + ".json"
+#
+#	with open(filename, 'w') as outfile:
+#		try:
+#			json.dump(user_info, outfile, ensure_ascii=False)
+#			return "User successfully added"
+#		except:
+#			return "Unable to add user, please try again"
 
-#	try:
-#		os.mkdir(dirName)
-#	except OSError:
-#		print("Creation of the directory %s failed" % dirName)
-#	else:
+@app.route('/user/add/', methods=['POST'])
+def add_user():
+	error = None
+	if request.method == "POST":
+		next_user_num = get_num_users_plain()
+		dirName = M_USER_DIR + "user" + str(next_user_num)
+		filename = M_USER_DIR + request.form['user_file'] + "/" + request.form['user_file'] + ".json"
 	with open(filename, 'w') as outfile:
 		try:
-			json.dump(user_info, outfile, ensure_ascii=False)
+			json.dump(request.form['user_info'], outfile, ensure_ascii=False)
 			return "User successfully added"
 		except:
 			return "Unable to add user, please try again"
