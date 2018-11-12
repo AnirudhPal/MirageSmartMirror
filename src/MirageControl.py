@@ -42,7 +42,7 @@ def get_num_users():
 @app.route('/user/add', methods=['POST'])
 def add_user():
 	error = None
-	print(request.get_json())
+	#print(request.get_json())
 	if request.method == "POST":
 		next_user_num = get_num_users_plain()
 		dirName = M_USER_DIR + "user" + str(next_user_num)
@@ -68,12 +68,19 @@ def get_user(user_number):
 			return "Unable to access user, might not exist"
 
 # Update user by number
-@app.route('/user/update/<user_number>/<user_info>')
-def update_user(user_number, user_info):
-	filename = M_USER_DIR + "user" + user_number + "/user" + user_number + ".json"
+@app.route('/user/update', methods=['POST'])
+def update_user():
+	error = None
+	#print(request.get_json())
+	if request.method == "POST":
+		next_user_num = get_num_users_plain()
+		dirName = M_USER_DIR + "user" + str(next_user_num)
+		filename = M_USER_DIR + "user" + str(request.json['user_info']['id']) + "/" + "user" + str(request.json['user_info']['id']) + ".json"
+	else:
+		print("Method is not post")
 	with open(filename, 'w') as outfile:
 		try:
-			json.dump(user_info, outfile, ensure_ascii=False)
+			json.dump(request.json['user_info'], outfile, ensure_ascii=False)
 			return "User successfully updated"
 		except:
 			return "User could not be updated"
