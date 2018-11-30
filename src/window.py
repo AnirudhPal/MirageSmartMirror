@@ -20,7 +20,7 @@ from PyQt5.QtGui import *#QFont, QPalette, QColor, QPainter, QPolygon
 from PyQt5.QtCore import *
 from simpleRec import *
 # for sensor
-import testSensor
+#import testSensor
 
 '''
 <div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
@@ -520,7 +520,7 @@ class Window(QWidget):
             self.curr_screen = 0
             self.set_lockscreen_layout()
 
-        self.proximity = testSensor.getProximity()
+        self.proximity = 70 #testSensor.getProximity()
         print("Proximity value: %d" %self.proximity)
 
         if self.proximity > 50:
