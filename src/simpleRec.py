@@ -65,6 +65,8 @@ def recognize(rgb_small_frame):
             name = max(counts, key=counts.get)
         if name is None:
             name = "Unknown"
+        print("In recognize:")
+        print(name)
         return name
 
     # Release handle to the webcam

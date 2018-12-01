@@ -507,21 +507,23 @@ class Window(QWidget):
         # sensor.self.proximity()
         # self.proximity = 300
         if self.new_user_prompt is True:
-            time.sleep(5)
+            time.sleep(3)
             self.set_lockscreen_layout()
             self.new_user_prompt = False
             self.launch_face_detection = False
-            self.leave_counter = 5
+            self.leave_counter = 3
             return
 
 
         if self.launch_face_detection is True and self.face_detection_countdown > 0:
             self.numberOfDetectedFaces,self.faceFrame = numberOfFaces()
+            print(self.numberOfDetectedFaces)
             self.face_detection_countdown = self.face_detection_countdown - 1
             self.launch_face_detection = False
-        elif self.loggedIn is False:
-            self.curr_screen = 0
-            self.set_lockscreen_layout()
+            return
+        #elif self.loggedIn is False:
+            #self.curr_screen = 0
+            #self.set_lockscreen_layout()
 
         self.proximity = 70 #testSensor.getProximity()
         print("Proximity value: %d" %self.proximity)
@@ -566,6 +568,7 @@ class Window(QWidget):
             print("one person only")
         else:
             #self.launch_face_detection = True
+            print(self.loggedIn)
             print("no one is here")
             self.ExpirationTimerCount=self.ExpirationTimerCount+1
 

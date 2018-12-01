@@ -250,8 +250,9 @@ if __name__ == '__main__':
         print('Start time: ', stime)
 
         for i in range(num_of_users):
-            file_path = '/home/pi/MirageSmartMirror/src/Users/user%d/user%d.json' % (i, i)
-            calendar_path = '/home/pi/MirageSmartMirror/src/Users/user%d/user%d_auth.json' % (i, i)
+            j = num_of_users - i - 1
+            file_path = '/home/pi/MirageSmartMirror/src/Users/user%d/user%d.json' % (j, j)
+            calendar_path = '/home/pi/MirageSmartMirror/src/Users/user%d/user%d_auth.json' % (j, j)
             with open(file_path) as f:
                 data = json.load(f)
 
@@ -264,7 +265,7 @@ if __name__ == '__main__':
                     'weather': get_weather(user_dict['address']),
                     'news': get_news(user_dict['newsCategories']),
                     'events': get_events_list(calendar_path)}
-            file_path = '/home/pi/MirageSmartMirror/src/Users/user%d/user%dAPI.json' % (i, i)
+            file_path = '/home/pi/MirageSmartMirror/src/Users/user%d/user%dAPI.json' % (j, j)
             with open(file_path, 'w') as outfile:
                 json.dump(dict, outfile)
                 print('JSON Dumped!')
