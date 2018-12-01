@@ -399,7 +399,10 @@ class Window(QWidget):
         if self.calendarEvents == None:
             self.feed.title.setText("<font color='white'>" + "No upcoming events!" + "</font")
         else:
-            for i in range(6):
+            num_of_events = len(self.calendarEvents)
+            if num_of_events > 6:
+                num_of_events = 6
+            for i in range(num_of_events):
                 event = self.calendarEvents[i]
                 temp1 = QLabel("<font color='white'>" + event['summary'] + "</font")
                 temp1.setFont(news_headline_font)
@@ -439,7 +442,7 @@ class Window(QWidget):
     def init_controller(self):
         self.cTimer = QTimer()
         self.cTimer.timeout.connect(self.controller)
-        self.cTimer.start(3000)
+        self.cTimer.start(1000)
 
     def update_time(self):
         datetime = QDateTime.currentDateTime()
@@ -512,7 +515,7 @@ class Window(QWidget):
             return
 
 
-        if self.launch_face_detection is True or self.face_detection_countdown > 0:
+        if self.launch_face_detection is True and self.face_detection_countdown > 0:
             self.numberOfDetectedFaces,self.faceFrame = numberOfFaces()
             self.face_detection_countdown = self.face_detection_countdown - 1
             self.launch_face_detection = False
