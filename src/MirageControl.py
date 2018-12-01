@@ -116,6 +116,7 @@ def delete_user(user_number):
 def start_face_calibration(filename):
 	faceCalibration(filename)
 	print("Done")
+	subprocess.call("python3 /home/pi/MirageSmartMirror/src/faceEncoding.py &", shell=True)
 	return "Done"
 
 # Cancel face calibration
