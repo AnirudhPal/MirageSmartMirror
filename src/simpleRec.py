@@ -165,11 +165,14 @@ def faceCalibration(name):
             frame = cv2.rotate(frame, rotateCode=cv2.ROTATE_180) # Tried to rotate image - Amjad
             pathImage = '/home/pi/MirageSmartMirror/src/Users/%s/image%s.jpg' % (name , i)
             cv2.imwrite( pathImage,frame );
+            print("photo taken")
     # camera.stop_preview()
         else:
             break
     vs.stop()
+    print("finished taking photos")
     subprocess.run(["python3", "/home/pi/MirageSmartMirror/src/faceEncoding.py", "&"])
+    print("returned")
     return
     # if res.returncode == 0:
     #     print("Encoding done!")
