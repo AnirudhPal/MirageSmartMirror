@@ -170,12 +170,13 @@ def faceCalibration(name):
             break
     vs.stop()
     res = subprocess.run(["python3", "/home/pi/MirageSmartMirror/src/faceEncoding.py", "&"])
-    if res.returncode == 0:
-        print("Encoding done!")
-    else:
-        print("Encoding failed!")
-    #Turn off LED
-    setLed.ledOFF()
+    return
+    # if res.returncode == 0:
+    #     print("Encoding done!")
+    # else:
+    #     print("Encoding failed!")
+    # #Turn off LED
+    # setLed.ledOFF()
 #faceCalibration("Andrew0")
 def cancelCalibration():
     calibrationCancel = True
