@@ -45,7 +45,7 @@ def get_map(address, user_destinations):
     maps_key = '&key=AIzaSyDKTb75-vuAvnWxO2Wfm_1DWlyr4BadgJc'
     maps_url = 'https://maps.googleapis.com/maps/api/directions/json?'
     routes = []
-
+    print(address)
     origin = geolocator.geocode(address)
     maps_origin = 'origin=%f,%f' % (origin.latitude, origin.longitude)
 
@@ -242,7 +242,7 @@ def get_events_list(user_path):
 
 if __name__ == '__main__':
     while True:
-        num_of_users = len(os.listdir('/home/pi/MirageSmartMirror/src/Users')) - 1
+        num_of_users = len(os.listdir('/home/pi/MirageSmartMirror/src/Users'))
 
         # print(num_of_users)
 

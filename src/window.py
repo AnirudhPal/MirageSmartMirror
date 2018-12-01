@@ -439,7 +439,7 @@ class Window(QWidget):
     def init_controller(self):
         self.cTimer = QTimer()
         self.cTimer.timeout.connect(self.controller)
-        self.cTimer.start(1000)
+        self.cTimer.start(3000)
 
     def update_time(self):
         datetime = QDateTime.currentDateTime()

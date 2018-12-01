@@ -169,7 +169,7 @@ def faceCalibration(name):
         else:
             break
     vs.stop()
-    res = subprocess.run(["python3", "/home/pi/MirageSmartMirror/src/faceEncoding.py", "&"])
+    subprocess.run(["python3", "/home/pi/MirageSmartMirror/src/faceEncoding.py", "&"])
     return
     # if res.returncode == 0:
     #     print("Encoding done!")
