@@ -1,11 +1,16 @@
 import face_recognition
-from imutils.video import VideoStream
 import imutils
 import cv2
 import pickle
 import time
 import os
 import subprocess
+
+import time
+import picamera
+import numpy as np
+
+
 
 # for LED
 import setLed
@@ -105,8 +110,16 @@ def detectFace():
 
 
 	#vs =  VideoStream(usePiCamera=True).start()
-	vs = VideoStream(usePiCamera=True)
-	vs.start()
+	# vs = VideoStream(usePiCamera=True)
+	# vs.start()
+    with picamera.PiCamera() as camera:
+        camera.resolution = (320, 240)
+        camera.framerate = 24
+        time.sleep(2)
+        frame = np.empty((240, 320, 3), dtype=np.uint8)
+        camera.capture(output, 'rgb')
+    	# Turn off LED
+    	setLed.ledOFF()
 
 	#wite to file to signal that Camera is on
 	data['status'] = [{
@@ -121,34 +134,30 @@ def detectFace():
 	# cascade for face detection
 	detector = cv2.CascadeClassifier("/home/pi/MirageSmartMirror/src/haar_face_cascade.xml")
 	# initialize the video stream and allow the camera sensor to warm up
-	print("[INFO] starting video stream...")
 	#vs = VideoStream(src=0).start()
 	#vs = VideoStream(usePiCamera=True).start()
-	time.sleep(2.0)
 
 	# start the FPS counter
 
 	# loop over frames from the video file stream
 		# grab the frame from the threaded video stream and resize it
 		# to 500px (to speedup processing)
-	frame = vs.read()
-	frame = cv2.rotate(frame, rotateCode=cv2.ROTATE_180) # Tried to rotate image - Amjad
+
+	rgb = cv2.rotate(frame, rotateCode=cv2.ROTATE_180) # Tried to rotate image - Amjad
 	# print(frame)
 	#cv2.imshow('video', frame)
-	frame = imutils.resize(frame, width=500)
+	# frame = imutils.resize(frame, width=500)
 
 	# convert the input frame from (1) BGR to grayscale (for face
 	# detection) and (2) from BGR to RGB (for face recognition)
-	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-	rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+	# gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+	# rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
 	# detect faces in the grayscale frame
 	rects = detector.detectMultiScale(gray, scaleFactor=1.1,
 		minNeighbors=5, minSize=(30, 30),
 		flags=cv2.CASCADE_SCALE_IMAGE)
-	vs.stop()
-	# Turn off LED
-	setLed.ledOFF()
+
 	if (len(rects)== 0):
 		data['status'] = [{
 			'username':None,
