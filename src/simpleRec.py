@@ -113,14 +113,14 @@ def detectFace():
 	#vs =  VideoStream(usePiCamera=True).start()
 	# vs = VideoStream(usePiCamera=True)
 	# vs.start()
-    with picamera.PiCamera() as camera:
-        camera.resolution = (320, 240)
-        camera.framerate = 24
-        time.sleep(2)
-        frame = np.empty((240, 320, 3), dtype=np.uint8)
-        camera.capture(output, 'rgb')
-    	# Turn off LED
-    	setLed.ledOFF()
+	with picamera.PiCamera() as camera:
+		camera.resolution = (320, 240)
+		camera.framerate = 24
+		time.sleep(2)
+		frame = np.empty((240, 320, 3), dtype=np.uint8)
+		camera.capture(output, 'rgb')
+		# Turn off LED
+		setLed.ledOFF()
 
 	#wite to file to signal that Camera is on
 	jsonData = {
@@ -253,36 +253,36 @@ def faceCalibration(name):
 	else:
 		print ("Successfully created the directory %s " % path)
 
-    #Turn on LED
+	#Turn on LED
 	setLed.ledON()
-    with open('faceDetectStatus.json') as json_file:
-    jsonData = json.load(json_file)
-    jsonData['error'] = "faceCalibration"
-    jsonData['cameraOn'] = True
+	with open('faceDetectStatus.json') as json_file:
+		jsonData = json.load(json_file)
+		jsonData['error'] = "faceCalibration"
+		jsonData['cameraOn'] = True
 	with open('faceDetectStatus.json', 'w') as outfile:
 		json.dump(jsonData, outfile)
 	with picamera.PiCamera() as camera:
-        camera.resolution = (320, 240)
-        camera.framerate = 24
-        time.sleep(2)
-        frame = np.empty((240, 320, 3), dtype=np.uint8)
-        for i in range(5):
-    		if not (calibrationCancel):
-    			time.sleep(2)
-    			# camera.capture('/home/pi/MirageSmartMirror/src/Faces/%s/image%s.jpg' % (name , i))
-    			camera.capture(frame, 'rgb')
-    			frame = cv2.rotate(frame, rotateCode=cv2.ROTATE_180) # Tried to rotate image - Amjad
-    			pathImage = '/home/pi/MirageSmartMirror/src/Users/%s/image%s.jpg' % (name , i)
-    			cv2.imwrite( pathImage,frame );
-    	# camera.stop_preview()
-    		else:
-    			break
-    	# Turn off LED
-    	setLed.ledOFF()
-        jsonData['cameraOn'] = False
-        jsonData['error'] = ""
-    	with open('faceDetectStatus.json', 'w') as outfile:
-    		json.dump(jsonData, outfile)
+		camera.resolution = (320, 240)
+		camera.framerate = 24
+		time.sleep(2)
+		frame = np.empty((240, 320, 3), dtype=np.uint8)
+		for i in range(5):
+			if not (calibrationCancel):
+				time.sleep(2)
+				# camera.capture('/home/pi/MirageSmartMirror/src/Faces/%s/image%s.jpg' % (name , i))
+				camera.capture(frame, 'rgb')
+				frame = cv2.rotate(frame, rotateCode=cv2.ROTATE_180) # Tried to rotate image - Amjad
+				pathImage = '/home/pi/MirageSmartMirror/src/Users/%s/image%s.jpg' % (name , i)
+				cv2.imwrite( pathImage,frame );
+		# camera.stop_preview()
+			else:
+				break
+		# Turn off LED
+		setLed.ledOFF()
+		jsonData['cameraOn'] = False
+		jsonData['error'] = ""
+		with open('faceDetectStatus.json', 'w') as outfile:
+			json.dump(jsonData, outfile)
 
 
 	#subprocess.call("python3 /home/pi/MirageSmartMirror/src/faceEncoding.py &", shell=True)
