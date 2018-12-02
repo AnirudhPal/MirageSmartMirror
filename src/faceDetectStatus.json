@@ -1,1 +1,1 @@
-{"status": [{"cameraOn": "False", "username": null, "error": "no face detected"}]}
+{"cameraOn": false, "error": "no face detected", "username": null}

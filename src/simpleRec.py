@@ -118,7 +118,7 @@ def detectFace():
 		camera.framerate = 24
 		time.sleep(2)
 		frame = np.empty((240, 320, 3), dtype=np.uint8)
-		camera.capture(output, 'rgb')
+		camera.capture(frame, 'rgb')
 		# Turn off LED
 		setLed.ledOFF()
 
@@ -151,7 +151,7 @@ def detectFace():
 
 	# convert the input frame from (1) BGR to grayscale (for face
 	# detection) and (2) from BGR to RGB (for face recognition)
-	# gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 	# rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
 	# detect faces in the grayscale frame
