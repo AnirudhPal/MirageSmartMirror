@@ -6,7 +6,7 @@ import pickle
 import time
 import os
 import subprocess
-
+import json
 # for LED
 import setLed
 
@@ -102,10 +102,13 @@ calibrationCancel = False
 def detectFace():
 	# Turn on LED
 	setLed.ledON()
-
+	data = {}
 
 	#vs =  VideoStream(usePiCamera=True).start()
 	vs = VideoStream(usePiCamera=True)
+
+	time.sleep(5.0)
+
 	vs.start()
 
 	#wite to file to signal that Camera is on
@@ -124,7 +127,6 @@ def detectFace():
 	print("[INFO] starting video stream...")
 	#vs = VideoStream(src=0).start()
 	#vs = VideoStream(usePiCamera=True).start()
-	time.sleep(2.0)
 
 	# start the FPS counter
 
@@ -273,5 +275,6 @@ def cancelCalibration():
 
 
 if __name__ == "__main__":
-	detectFace()
+	while(True):
+		detectFace()
 	nothing = 0
