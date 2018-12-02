@@ -117,9 +117,11 @@ def detectFace():
 		camera.resolution = (320, 240)
 		camera.framerate = 24
 		time.sleep(2)
+		camera.start_preview()
 		frame = np.empty((240, 320, 3), dtype=np.uint8)
 		camera.capture(frame, 'rgb')
 		# Turn off LED
+		camera.stop_preview()
 		setLed.ledOFF()
 
 	#wite to file to signal that Camera is on
