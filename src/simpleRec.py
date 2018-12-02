@@ -108,7 +108,7 @@ calibrationCancel = False
 def detectFace():
 	# Turn on LED
 	setLed.ledON()
-	data = {}
+	jsonData = {}
 
 	#vs =  VideoStream(usePiCamera=True).start()
 	# vs = VideoStream(usePiCamera=True)
@@ -123,13 +123,13 @@ def detectFace():
     	setLed.ledOFF()
 
 	#wite to file to signal that Camera is on
-	data['status'] = [{
+	jsonData = {
 		'username':None,
 		'error':'no face detected',
 		'cameraOn':True
-	}]
+	}
 	with open('faceDetectStatus.json', 'w') as outfile:
-		json.dump(data, outfile)
+		json.dump(jsonData, outfile)
 # construct the argument parser and parse the arguments
 	# load the known faces and embeddings along with OpenCV's Haar
 	# cascade for face detection
@@ -160,22 +160,22 @@ def detectFace():
 		flags=cv2.CASCADE_SCALE_IMAGE)
 
 	if (len(rects)== 0):
-		data['status'] = [{
+		jsonData = {
 			'username':None,
 			'error':'no face detected',
 			'cameraOn':False
-		}]
+		}
 		with open('faceDetectStatus.json', 'w') as outfile:
-			json.dump(data, outfile)
+			json.dump(jsonData, outfile)
 		return
 	elif (len(rects) > 1):
-		data['status'] = [{
+		jsonData = {
 			'username':None,
 			'error':'To many faces',
 			'cameraOn':False
-		}]
+		}
 		with open('faceDetectStatus.json', 'w') as outfile:
-			json.dump(data, outfile)
+			json.dump(jsonData, outfile)
 		return
 
 	data = pickle.loads(open("/home/pi/MirageSmartMirror/src/faceRecognitionEncodings/encodings", "rb").read())
@@ -220,22 +220,22 @@ def detectFace():
 			# select first entry in the dictionary)
 			name = max(counts, key=counts.get)
 		if name is None:
-			data['status'] = [{
+			jsonData = {
 				'username':None,
 				'error':'Face unknown',
 				'cameraOn':False
-			}]
+			}
 			with open('faceDetectStatus.json', 'w') as outfile:
 				json.dump(data, outfile)
 			return
 
-		data['status'] = [{
+		jsonData = {
 			'username':name,
 			'error':'Found',
 			'cameraOn':False
-		}]
+		}
 		with open('faceDetectStatus.json', 'w') as outfile:
-			json.dump(data, outfile)
+			json.dump(jsonData, outfile)
 		return
 
 def faceCalibration(name):
@@ -256,11 +256,11 @@ def faceCalibration(name):
     #Turn on LED
 	setLed.ledON()
     with open('faceDetectStatus.json') as json_file:
-    data = json.load(json_file)
-    data['error'] = "faceCalibration"
-    data['cameraOn'] = True
+    jsonData = json.load(json_file)
+    jsonData['error'] = "faceCalibration"
+    jsonData['cameraOn'] = True
 	with open('faceDetectStatus.json', 'w') as outfile:
-		json.dump(data, outfile)
+		json.dump(jsonData, outfile)
 	with picamera.PiCamera() as camera:
         camera.resolution = (320, 240)
         camera.framerate = 24
@@ -279,10 +279,10 @@ def faceCalibration(name):
     			break
     	# Turn off LED
     	setLed.ledOFF()
-        data['cameraOn'] = False
-        data['error'] = ""
+        jsonData['cameraOn'] = False
+        jsonData['error'] = ""
     	with open('faceDetectStatus.json', 'w') as outfile:
-    		json.dump(data, outfile)
+    		json.dump(jsonData, outfile)
 
 
 	#subprocess.call("python3 /home/pi/MirageSmartMirror/src/faceEncoding.py &", shell=True)
