@@ -1,5 +1,6 @@
 import face_recognition
 import imutils
+from imutils.video import VideoStream
 import cv2
 import pickle
 import time
@@ -111,18 +112,18 @@ def detectFace():
 	jsonData = {}
 
 	#vs =  VideoStream(usePiCamera=True).start()
-	# vs = VideoStream(usePiCamera=True)
-	# vs.start()
-	with picamera.PiCamera() as camera:
-		camera.resolution = (320, 240)
-		camera.framerate = 24
-		time.sleep(2)
-		camera.start_preview()
-		frame = np.empty((240, 320, 3), dtype=np.uint8)
-		camera.capture(frame, 'rgb')
-		# Turn off LED
-		camera.stop_preview()
-		setLed.ledOFF()
+	vs = VideoStream(usePiCamera=True)
+	vs.start()
+	time.sleep(2.0)
+	# with picamera.PiCamera() as camera:
+	# 	camera.resolution = (320, 240)
+	# 	camera.framerate = 24
+	# 	time.sleep(2)
+	# 	camera.start_preview()
+	# 	frame = np.empty((240, 320, 3), dtype=np.uint8)
+	# 	camera.capture(frame, 'rgb')
+	# 	# Turn off LED
+	# 	camera.stop_preview()
 
 	#wite to file to signal that Camera is on
 	jsonData = {
@@ -145,21 +146,22 @@ def detectFace():
 	# loop over frames from the video file stream
 		# grab the frame from the threaded video stream and resize it
 		# to 500px (to speedup processing)
-
+	frame = vs.read()
 	rgb = cv2.rotate(frame, rotateCode=cv2.ROTATE_180) # Tried to rotate image - Amjad
 	# print(frame)
 	#cv2.imshow('video', frame)
-	# frame = imutils.resize(frame, width=500)
+	frame = imutils.resize(frame, width=500)
 
 	# convert the input frame from (1) BGR to grayscale (for face
 	# detection) and (2) from BGR to RGB (for face recognition)
 	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-	# rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-
+	rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 	# detect faces in the grayscale frame
 	rects = detector.detectMultiScale(gray, scaleFactor=1.1,
 		minNeighbors=5, minSize=(30, 30),
 		flags=cv2.CASCADE_SCALE_IMAGE)
+
+	vs.stop()
 
 	if (len(rects)== 0):
 		jsonData = {
