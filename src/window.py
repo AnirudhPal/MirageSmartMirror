@@ -756,10 +756,12 @@ class Window(QWidget):
 
     def signalHandler1(self):
         # We got signal!
+        self.welcomeLabel.setText("<font color='white'>" + "Welcome, leftie!" + "</font")
         print('Go left!')
 
     def signalHandler2(self):
         # We got signal!
+        self.welcomeLabel.setText("<font color='white'>" + "Welcome, rightie!" + "</font")
         print('Go right!')
 
 class keyboardListner(QThread):
