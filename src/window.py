@@ -279,6 +279,9 @@ class Window(QWidget):
         self.feed = feeds.Feeds()
         self.news_data = user_dict['news']
 
+    def changePrompt(self, message):
+        self.prompt.setText("<font color='green'>" + message + "</font>")
+
 
 
     def set_lockscreen_layout(self):
@@ -291,12 +294,16 @@ class Window(QWidget):
         font.setWeight(1)
         effect = QGraphicsDropShadowEffect()
         effect2 = QGraphicsDropShadowEffect()
+        effect3 = QGraphicsDropShadowEffect()
         effect.setOffset(1, 1)
         effect2.setOffset(1, 1)
+        effect3.setOffset(1, 1)
         effect.setBlurRadius(30)
-        effect.setColor(QColor(255,255,255))
         effect2.setBlurRadius(20)
+        effect3.setBlurRadius(50)
+        effect.setColor(QColor(255,255,255))
         effect2.setColor(QColor(255,255,255))
+        effect3.setColor(QColor(255,255,255))
 
         datetime = QDateTime.currentDateTime()
         self.qt.time = QLabel("<font color='white'>" + datetime.toString("MMM d, yyyy hh:mm:ss AP") + "</font")
@@ -322,6 +329,7 @@ class Window(QWidget):
         self.prompt.setFixedHeight(30)
         self.prompt.setAlignment(Qt.AlignCenter)
         # self.prompt.setGraphicsEffect(effect2)
+        self.prompt.setText("<font color='black'>" + "Blank" + "</font>")
         prompt_box.addWidget(self.prompt)
 
 
@@ -332,6 +340,7 @@ class Window(QWidget):
             self.qt.layout().addLayout(self.qt.analogclock)
             self.qt.layout().addLayout(self.qt.digitaltime)
             self.qt.layout().addLayout(prompt_box)
+            self.qt.layout().addSpacing(50)
             self.init_timer()
         else:
             self.qt.v_box = QVBoxLayout()
@@ -340,6 +349,7 @@ class Window(QWidget):
             self.qt.v_box.addLayout(self.qt.analogclock)
             self.qt.v_box.addLayout(self.qt.digitaltime)
             self.qt.v_box.addLayout(prompt_box)
+            self.qt.v_box.addSpacing(50)
             self.qt.setLayout(self.qt.v_box)
             self.init_timer()
 
@@ -572,6 +582,7 @@ class Window(QWidget):
                     nothing = 0
                 elif self.errorMessage == "No face detected":
                     #TODO: Display help tip
+                    self.changePrompt(self.errorMessage)
                     print("\"No face detected\" will be displayed")
                     nothing = 0
 
