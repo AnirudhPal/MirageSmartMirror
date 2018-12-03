@@ -280,7 +280,10 @@ class Window(QWidget):
         self.news_data = user_dict['news']
 
     def changePrompt(self, message):
+        font = QFont('Helvetica', 18)
+        font.setWeight(1)
         self.prompt.setText("<font color='green'>" + message + "</font>")
+        self.prompt.setFont(font)
 
 
 
@@ -574,10 +577,12 @@ class Window(QWidget):
                 # Check error message
                 if self.errorMessage == "Too many faces":
                     #TODO: Display help tip
+                    self.changePrompt(self.errorMessage)
                     print("\"Too many faces\" will be displayed")
                     nothing = 0
                 elif self.errorMessage == "Face unknown":
                     #TODO: Display new user prompt
+                    self.changePrompt(self.errorMessage)
                     print("\"New user\" will be displayed")
                     nothing = 0
                 elif self.errorMessage == "No face detected":
@@ -603,6 +608,7 @@ class Window(QWidget):
                 #TODO: Increment timer (give camera time to try again)
                 if self.errorMessage == "Face calibration":
                     #TODO: Display calibration prompt, control LED?
+                    self.changePrompt(self.errorMessage)
                     print("\"Face calibration is running now\" will be displayed")
                     nothing = 0
                 return
