@@ -1,1 +1,1 @@
-{"username": "user0", "error": "Found", "cameraOn": false, "detectCalled": false}
+{"error": "No face detected", "cameraOn": false, "detectCalled": false, "username": null}

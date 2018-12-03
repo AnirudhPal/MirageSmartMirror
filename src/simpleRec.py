@@ -116,6 +116,11 @@ def detectFace():
 	setLed.ledON()
 	jsonData = {}
 
+	with open('faceDetectStatus.json', 'r') as testData:
+		jsonData = json.load(testData)
+		if jsonData['username'] is not None:
+			return
+
 	#vs =  VideoStream(usePiCamera=True).start()
 	jsonData = {
 		'username':None,
@@ -215,9 +220,9 @@ def detectFace():
 
 	# Create arrays of known face encodings and their names
 	known_face_encodings = data['encodings']
-	print("Number of Known Face Encodings: " + str(len(known_face_encodings)))
+#	print("Number of Known Face Encodings: " + str(len(known_face_encodings)))
 	known_face_names = data['names']
-	print("Number of Known Encoded Names: " + str(len(known_face_names)) + ": " + str(known_face_names))
+#	print("Number of Known Encoded Names: " + str(len(known_face_names)) + ": " + str(known_face_names))
 
 	# Initialize some variables
 	face_locations = []
@@ -227,11 +232,11 @@ def detectFace():
 
 	# Find all the faces and face encodings in the current frame of video
 	face_locations = face_recognition.face_locations(rgb)
-	print("Face Locations: " + str(face_locations))
+#	print("Face Locations: " + str(face_locations))
 	face_encodings = face_recognition.face_encodings(rgb, face_locations)
 
 	face_names = []
-	print("Number of Face Encodings: " + str(len(face_encodings)))
+#	print("Number of Face Encodings: " + str(len(face_encodings)))
 	for face_encoding in face_encodings:
 		print("Found an encoding")
 		# See if the face is a match for the known face(s)

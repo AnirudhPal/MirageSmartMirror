@@ -539,14 +539,17 @@ class Window(QWidget):
             return  # Displaying google code, so wait for timer to finish
 
         # Step 2: Read face detection status file
-        acquired = sema.acquire(blocking=True, timeout=1)
-        if acquired is True:
-            with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json') as f:
-                data = json.load(f)
-                sema.release()
-            detectionStatusDictionary = data
-        else:
-            return
+        #acquired = sema.acquire(blocking=True, timeout=1)
+        #if acquired is True:
+        with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json') as f:
+            try:
+                detectionStatusDictionary = json.load(f)
+            except ValueError:
+                return
+         #       sema.release()
+#        detectionStatusDictionary = data
+        #else:
+         #   return
         # Parse status dictionary
         if detectionStatusDictionary['username'] is None:
             self.loggedIn = False   # No face detected(reason unknown)
@@ -614,16 +617,16 @@ class Window(QWidget):
                 # with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json') as f:
                 #     data = json.load(f)
                 #     if data['detectCalled'] is False:
-                if not self.detectCalled:
+                if not self.detectCalled and not self.loggedIn:
                     t = threading.Thread(target=detectFace)
                     t.start()
                     print("Detecting face now")
-                elif not self.isDetectingFace and not self.userName:
-                    detectionStatusDictionary['detectCalled'] = False
-                    sema.acquire(blocking=True)
-                    with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json', 'w') as jsonFile:
-                        json.dump(detectionStatusDictionary, jsonFile)
-                        sema.release()
+#                elif not self.isDetectingFace and not self.userName and not self.loggedIn:
+ #                   detectionStatusDictionary['detectCalled'] = False
+  #                  sema.acquire(blocking=True)
+   #                 with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json', 'w') as jsonFile:
+    #                    json.dump(detectionStatusDictionary, jsonFile)
+     #                   sema.release()
                 #subprocess.Popen("python3 simpleRec.py &", shell=True) #This creates multiple processes and overloads the pi
 
             # If fetection is finished and user logged in
