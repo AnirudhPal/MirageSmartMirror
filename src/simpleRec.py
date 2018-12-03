@@ -279,6 +279,16 @@ def detectFace():
 			print("User Found: " + jsonData)
 			sema.release()
 			return
+	jsonData = {
+		'username':None,
+		'error':None,
+		'cameraOn':False,
+		'detectCalled':False
+	}
+	sema.acquire(blocking=True)
+	with open('faceDetectStatus.json', 'w') as outfile:
+		json.dump(jsonData, outfile)
+		sema.release()
 
 def faceCalibration(name):
 
