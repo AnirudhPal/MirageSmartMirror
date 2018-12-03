@@ -781,9 +781,9 @@ if __name__ == "__main__":
     window_app = QApplication(sys.argv)
 # a_window = Window()
     Display = Window()
-    thread = keyboard(Display)
-    thread.start()
-# t = threading.Thread(target = lambda: Display.controller())
+#     thread = keyboard(Display)
+#     thread.start()
+# # t = threading.Thread(target = lambda: Display.controller())
 # t.daemon = True
 # t.start()
     sys.exit(window_app.exec_())
