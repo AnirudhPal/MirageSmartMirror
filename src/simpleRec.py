@@ -172,6 +172,8 @@ def detectFace():
 	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 	rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 	# detect faces in the grayscale frame
+	print("Detecting faces in greyscale frame: " + str(time.asctime(time.localtime(time.time()))))
+
 	rects = detector.detectMultiScale(gray, scaleFactor=1.1,
 		minNeighbors=5, minSize=(30, 30),
 		flags=cv2.CASCADE_SCALE_IMAGE)
@@ -216,6 +218,8 @@ def detectFace():
 			return
 
 	print("faceDetected")
+	print("Face detected at: " + str(time.asctime(time.localtime(time.time()))))
+
 	data = pickle.loads(open("/home/pi/MirageSmartMirror/src/faceRecognitionEncodings/encodings", "rb").read())
 
 	# Create arrays of known face encodings and their names
@@ -231,12 +235,16 @@ def detectFace():
 	process_this_frame = True
 
 	# Find all the faces and face encodings in the current frame of video
+	print("Getting face_locations: " + str(time.asctime(time.localtime(time.time()))))
 	face_locations = face_recognition.face_locations(rgb)
 #	print("Face Locations: " + str(face_locations))
+	print("Getting face encodings: " + str(time.asctime(time.localtime(time.time()))))
+
 	face_encodings = face_recognition.face_encodings(rgb, face_locations)
 
 	face_names = []
 #	print("Number of Face Encodings: " + str(len(face_encodings)))
+	print("Going into face recognition loop: " + str(time.asctime(time.localtime(time.time()))))
 	for face_encoding in face_encodings:
 		print("Found an encoding")
 		# See if the face is a match for the known face(s)
@@ -284,7 +292,8 @@ def detectFace():
 		sema.acquire(blocking=True)
 		with open('faceDetectStatus.json', 'w') as outfile:
 			json.dump(jsonData, outfile)
-			print("User Found: " + str(jsonData))
+			print("User Found: " + str(jsonData) + " at time " + time.asctime(time.localtime(time.time())))
+			print(str(threading.get_ident()))
 			sema.release()
 			return
 	jsonData = {

@@ -68,6 +68,7 @@ class Window(QWidget):
         super().__init__()
         self.qt = QWidget()
         self.init_ui()
+        print(str(threading.get_ident()))
         # self.currentWidget = None
 
     def init_ui(self):
@@ -555,6 +556,7 @@ class Window(QWidget):
             self.loggedIn = False   # No face detected(reason unknown)
         else:
             self.loggedIn = True
+            print("Now logged in at: " + str(time.asctime(time.localtime(time.time()))))
 
         self.userName = detectionStatusDictionary['username']
 
