@@ -7,6 +7,7 @@ import time
 import os
 import subprocess
 import json
+import threading
 
 import time
 import picamera
@@ -106,7 +107,11 @@ calibrationCancel = False
 #
 #
 #	 return numberOfFaces,rgb_small_frame
+
+sema = threading.Semaphore()
+
 def detectFace():
+	global sema
 	# Turn on LED
 	setLed.ledON()
 	jsonData = {}
@@ -118,8 +123,10 @@ def detectFace():
 		'cameraOn':True,
 		'detectCalled':True
 	}
+	sema.acquire(blocking=True)
 	with open('faceDetectStatus.json', 'w') as outfile:
 		json.dump(jsonData, outfile)
+		sema.release()
 	vs = VideoStream(usePiCamera=True)
 	vs.start()
 	time.sleep(1)
@@ -171,8 +178,10 @@ def detectFace():
 		'cameraOn':False,
 		'detectCalled':True
 	}
+	sema.acquire(blocking=True)
 	with open('faceDetectStatus.json', 'w') as outfile:
 		json.dump(jsonData, outfile)
+		sema.release()
 
 	if (len(rects)== 0):
 		jsonData = {
@@ -181,11 +190,12 @@ def detectFace():
 			'cameraOn':False,
 			'detectCalled':False
 		}
+		sema.acquire(blocking=True)
 		with open('faceDetectStatus.json', 'w') as outfile:
 			json.dump(jsonData, outfile)
 			print(jsonData)
-
-		return
+			sema.release()
+			return
 	elif (len(rects) > 1):
 		jsonData = {
 			'username':None,
@@ -193,10 +203,12 @@ def detectFace():
 			'cameraOn':False,
 			'detectCalled':False
 		}
+		sema.acquire(blocking=True)
 		with open('faceDetectStatus.json', 'w') as outfile:
 			json.dump(jsonData, outfile)
 			print(jsonData)
-		return
+			sema.release()
+			return
 
 	print("faceDetected")
 	data = pickle.loads(open("/home/pi/MirageSmartMirror/src/faceRecognitionEncodings/encodings", "rb").read())
@@ -217,6 +229,7 @@ def detectFace():
 	face_encodings = face_recognition.face_encodings(rgb, face_locations)
 
 	face_names = []
+	print("Number of Face Encodings: " + str(len(face_encodings)))
 	for face_encoding in face_encodings:
 		# See if the face is a match for the known face(s)
 		matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
@@ -246,10 +259,13 @@ def detectFace():
 				'cameraOn':False,
 				'detectCalled':False
 			}
+
+			sema.acquire(blocking=True)
 			with open('faceDetectStatus.json', 'w') as outfile:
 				json.dump(jsonData, outfile)
 				print(jsonData)
-			return
+				sema.release()
+				return
 
 		jsonData = {
 			'username':name,
@@ -257,10 +273,12 @@ def detectFace():
 			'cameraOn':False,
 			'detectCalled':False
 		}
+		sema.acquire(blocking=True)
 		with open('faceDetectStatus.json', 'w') as outfile:
 			json.dump(jsonData, outfile)
-			print(jsonData)
-		return
+			print("User Found: " + jsonData)
+			sema.release()
+			return
 
 def faceCalibration(name):
 

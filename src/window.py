@@ -538,8 +538,10 @@ class Window(QWidget):
             return  # Displaying google code, so wait for timer to finish
 
         # Step 2: Read face detection status file
+        sema.acquire(blocking=True)
         with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json') as f:
             data = json.load(f)
+            sema.release()
         detectionStatusDictionary = data
 
         # Parse status dictionary
@@ -554,6 +556,7 @@ class Window(QWidget):
 
         self.errorMessage = detectionStatusDictionary['error']
 
+        self.detectCalled = detectionStatusDictionary['detectCalled']
         ##TODO:Check logout timer if done
 
 
@@ -607,7 +610,16 @@ class Window(QWidget):
                 # with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json') as f:
                 #     data = json.load(f)
                 #     if data['detectCalled'] is False:
-                detectFace()
+                if not self.detectCalled:
+                    t = threading.Thread(target=detectFace)
+                    t.start()
+                    print("Detecting face now")
+                elif not self.isDetectingFace and not self.userName:
+                    detectionStatusDictionary['detectCalled'] = False
+                    sema.acquire(blocking=True)
+                    with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json', 'w') as jsonFile:
+                        json.dump(detectionStatusDictionary, jsonFile)
+                        sema.release()
                 #subprocess.Popen("python3 simpleRec.py &", shell=True) #This creates multiple processes and overloads the pi
 
             # If fetection is finished and user logged in
