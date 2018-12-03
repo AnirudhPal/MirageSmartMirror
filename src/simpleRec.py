@@ -112,6 +112,13 @@ def detectFace():
 	jsonData = {}
 
 	#vs =  VideoStream(usePiCamera=True).start()
+	jsonData = {
+		'username':None,
+		'error':None,
+		'cameraOn':True
+	}
+	with open('faceDetectStatus.json', 'w') as outfile:
+		json.dump(jsonData, outfile)
 	vs = VideoStream(usePiCamera=True)
 	vs.start()
 	time.sleep(2.0)
@@ -126,13 +133,7 @@ def detectFace():
 	# 	camera.stop_preview()
 
 	#wite to file to signal that Camera is on
-	jsonData = {
-		'username':None,
-		'error':None,
-		'cameraOn':True
-	}
-	with open('faceDetectStatus.json', 'w') as outfile:
-		json.dump(jsonData, outfile)
+
 		#print(jsonData)
 	# construct the argument parser and parse the arguments
 	# load the known faces and embeddings along with OpenCV's Haar
