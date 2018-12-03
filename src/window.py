@@ -523,7 +523,7 @@ class Window(QWidget):
 
     # Function that takes a message and displays it on lockscreen. Keep for 5? seconds..
     def promptController(self):
-        if self.promptTimeout == 0:
+        if self.loggedIn is False and self.promptTimeout == 0:
             self.prompt.setText("<font color='black'>" + "Blank" + "</font>")
         elif self.promptTimeout > 0:
             self.promptTimeout = self.promptTimeout - 1
