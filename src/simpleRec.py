@@ -177,7 +177,7 @@ def detectFace():
 	rects = detector.detectMultiScale(gray, scaleFactor=1.1,
 		minNeighbors=5, minSize=(30, 30),
 		flags=cv2.CASCADE_SCALE_IMAGE)
-
+	boxes = [(y, x + w, y + h, x) for (x, y, w, h) in rects]
 	vs.stop()
 	jsonData = {
 		'username':None,
@@ -236,11 +236,11 @@ def detectFace():
 
 	# Find all the faces and face encodings in the current frame of video
 	print("Getting face_locations: " + str(time.asctime(time.localtime(time.time()))))
-	face_locations = face_recognition.face_locations(rgb)
+	#face_locations = face_recognition.face_locations(rgb)
 #	print("Face Locations: " + str(face_locations))
 	print("Getting face encodings: " + str(time.asctime(time.localtime(time.time()))))
 
-	face_encodings = face_recognition.face_encodings(rgb, face_locations)
+	face_encodings = face_recognition.face_encodings(rgb, boxes)
 
 	face_names = []
 #	print("Number of Face Encodings: " + str(len(face_encodings)))
