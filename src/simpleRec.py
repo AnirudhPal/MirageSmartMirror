@@ -157,7 +157,7 @@ def detectFace():
 		# grab the frame from the threaded video stream and resize it
 		# to 500px (to speedup processing)
 	frame = vs.read()
-	rgb = cv2.rotate(frame, rotateCode=cv2.ROTATE_180) # Tried to rotate image - Amjad
+	#rgb = cv2.rotate(frame, rotateCode=cv2.ROTATE_180) # Tried to rotate image - Amjad
 	# print(frame)
 	#cv2.imshow('video', frame)
 	frame = imutils.resize(frame, width=500)
@@ -215,8 +215,9 @@ def detectFace():
 
 	# Create arrays of known face encodings and their names
 	known_face_encodings = data['encodings']
-
+	print("Number of Known Face Encodings: " + str(len(known_face_encodings)))
 	known_face_names = data['names']
+	print("Number of Known Encoded Names: " + str(len(known_face_names)) + ": " + str(known_face_names))
 
 	# Initialize some variables
 	face_locations = []
@@ -226,11 +227,13 @@ def detectFace():
 
 	# Find all the faces and face encodings in the current frame of video
 	face_locations = face_recognition.face_locations(rgb)
+	print("Face Locations: " + str(face_locations))
 	face_encodings = face_recognition.face_encodings(rgb, face_locations)
 
 	face_names = []
 	print("Number of Face Encodings: " + str(len(face_encodings)))
 	for face_encoding in face_encodings:
+		print("Found an encoding")
 		# See if the face is a match for the known face(s)
 		matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
 		name = None
@@ -276,7 +279,7 @@ def detectFace():
 		sema.acquire(blocking=True)
 		with open('faceDetectStatus.json', 'w') as outfile:
 			json.dump(jsonData, outfile)
-			print("User Found: " + jsonData)
+			print("User Found: " + str(jsonData))
 			sema.release()
 			return
 	jsonData = {

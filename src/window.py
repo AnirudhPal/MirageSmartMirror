@@ -21,6 +21,7 @@ from PyQt5.QtWidgets import *#QApplication, QWidget, QLabel, QFormLayout, QVBoxL
 from PyQt5.QtGui import *#QFont, QPalette, QColor, QPainter, QPolygon
 from PyQt5.QtCore import *
 from simpleRec import *
+from pynput.keyboard import Key, Listener
 # for sensor
 #import testSensor
 
@@ -538,12 +539,14 @@ class Window(QWidget):
             return  # Displaying google code, so wait for timer to finish
 
         # Step 2: Read face detection status file
-        sema.acquire(blocking=True)
-        with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json') as f:
-            data = json.load(f)
-            sema.release()
-        detectionStatusDictionary = data
-
+        acquired = sema.acquire(blocking=True, timeout=1)
+        if acquired is True:
+            with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json') as f:
+                data = json.load(f)
+                sema.release()
+            detectionStatusDictionary = data
+        else:
+            return
         # Parse status dictionary
         if detectionStatusDictionary['username'] is None:
             self.loggedIn = False   # No face detected(reason unknown)
@@ -571,9 +574,10 @@ class Window(QWidget):
             detectionStatusDictionary['error'] = None
             detectionStatusDictionary['cameraOn'] = False
             detectionStatusDictionary['detectCalled'] = False
+            sema.acquire(blocking=True)
             with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json', 'w') as jsonFile:
                 json.dump(detectionStatusDictionary, jsonFile)
-
+                sema.release()
             self.set_lockscreen_layout()
 
         # User steps away (proximity >= 80)
