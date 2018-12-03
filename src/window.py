@@ -569,13 +569,13 @@ class Window(QWidget):
                     #TODO: Display new user prompt
                     print("\"New user\" will be displayed")
                     nothing = 0
-                elif self.errorMessage == "No face":
+                elif self.errorMessage == "No face detected":
                     #TODO: Display help tip
                     print("\"No face detected\" will be displayed")
                     nothing = 0
 
                 #TODO: Start timer to remove hint message after 10 seconds
-                
+
                 # Call face detection again
                 detectFace()
 
