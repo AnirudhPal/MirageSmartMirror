@@ -102,7 +102,7 @@ class Window(QWidget):
         self.promptTimeout = 0
 
 # Creating new blank face detection status JSON file..
-        statDict = {'username': None, 'error': None, 'cameraOn': False}
+        statDict = {'username': None, 'error': None, 'cameraOn': False, 'detectCalled':False}
         with open("/home/pi/MirageSmartMirror/src/faceDetectStatus.json", 'w') as statFile:
             json.dump(statDict, statFile)
 
@@ -567,6 +567,7 @@ class Window(QWidget):
             detectionStatusDictionary['username'] = None
             detectionStatusDictionary['error'] = None
             detectionStatusDictionary['cameraOn'] = False
+            detectionStatusDictionary['detectCalled'] = False
             with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json', 'w') as jsonFile:
                 json.dump(detectionStatusDictionary, jsonFile)
 
@@ -603,7 +604,10 @@ class Window(QWidget):
                 #TODO: Start timer to remove hint message after 10 seconds
 
                 # Call face detection again
-                detectFace()
+                with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json') as f:
+                    data = json.load(f)
+                    if data['detectCalled'] is False:
+                        detectFace()
                 #subprocess.Popen("python3 simpleRec.py &", shell=True) #This creates multiple processes and overloads the pi
 
             # If fetection is finished and user logged in

@@ -115,7 +115,8 @@ def detectFace():
 	jsonData = {
 		'username':None,
 		'error':None,
-		'cameraOn':True
+		'cameraOn':True,
+		'detectCalled':True
 	}
 	with open('faceDetectStatus.json', 'w') as outfile:
 		json.dump(jsonData, outfile)
@@ -167,7 +168,8 @@ def detectFace():
 	jsonData = {
 		'username':None,
 		'error':None,
-		'cameraOn':False
+		'cameraOn':False,
+		'detectCalled':True
 	}
 	with open('faceDetectStatus.json', 'w') as outfile:
 		json.dump(jsonData, outfile)
@@ -176,7 +178,8 @@ def detectFace():
 		jsonData = {
 			'username':None,
 			'error':'No face detected',
-			'cameraOn':False
+			'cameraOn':False,
+			'detectCalled':False
 		}
 		with open('faceDetectStatus.json', 'w') as outfile:
 			json.dump(jsonData, outfile)
@@ -187,7 +190,8 @@ def detectFace():
 		jsonData = {
 			'username':None,
 			'error':'Too many faces',
-			'cameraOn':False
+			'cameraOn':False,
+			'detectCalled':False
 		}
 		with open('faceDetectStatus.json', 'w') as outfile:
 			json.dump(jsonData, outfile)
@@ -239,7 +243,8 @@ def detectFace():
 			jsonData = {
 				'username':None,
 				'error':'Face unknown',
-				'cameraOn':False
+				'cameraOn':False,
+				'detectCalled':False
 			}
 			with open('faceDetectStatus.json', 'w') as outfile:
 				json.dump(jsonData, outfile)
@@ -249,7 +254,8 @@ def detectFace():
 		jsonData = {
 			'username':name,
 			'error':'Found',
-			'cameraOn':False
+			'cameraOn':False,
+			'detectCalled':False
 		}
 		with open('faceDetectStatus.json', 'w') as outfile:
 			json.dump(jsonData, outfile)
