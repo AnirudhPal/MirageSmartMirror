@@ -121,7 +121,7 @@ def detectFace():
 		json.dump(jsonData, outfile)
 	vs = VideoStream(usePiCamera=True)
 	vs.start()
-	time.sleep(2.0)
+	time.sleep(1.0)
 	# with picamera.PiCamera() as camera:
 	# 	camera.resolution = (320, 240)
 	# 	camera.framerate = 24
@@ -195,7 +195,6 @@ def detectFace():
 		return
 
 	print("faceDetected")
-	print(len(rects))
 	data = pickle.loads(open("/home/pi/MirageSmartMirror/src/faceRecognitionEncodings/encodings", "rb").read())
 
 	# Create arrays of known face encodings and their names
@@ -322,3 +321,4 @@ if __name__ == "__main__":
 	#	detectFace()
 	#	time.sleep(3)
 	nothing = 0
+	#detectFace()
