@@ -219,7 +219,6 @@ def detectFace():
 			# was matched
 			matchedIdxs = [i for (i, b) in enumerate(matches) if b]
 			counts = {}
-
 			# loop over the matched indexes and maintain a count for
 			# each recognized face face
 			for i in matchedIdxs:
