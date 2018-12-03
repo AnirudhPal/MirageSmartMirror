@@ -171,7 +171,7 @@ class Window(QWidget):
         self.weather.setLayout(self.weather.weatherBox)
 
 
-        self.weather.setFixedHeight(150)
+        self.weather.setFixedHeight(200)
         self.TimeWeatherBox.addWidget(self.weather)
         self.weather_info()
 
@@ -445,7 +445,7 @@ class Window(QWidget):
     def weather_info(self):
         icon = icons[self.weather_dict['icon']]
         image = cv2.imread(icon)
-        image = cv2.resize(image, (50, 50), interpolation=cv2.INTER_CUBIC)
+        image = cv2.resize(image, (80, 80), interpolation=cv2.INTER_CUBIC)
         image = QImage(image, image.shape[1], image.shape[0], image.strides[0], QImage.Format_RGB888)
 
         # self.weather.daily = self.weather_dict['daily']['data'][0]['summary']
