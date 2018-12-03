@@ -122,7 +122,7 @@ def detectFace():
 		json.dump(jsonData, outfile)
 	vs = VideoStream(usePiCamera=True)
 	vs.start()
-	time.sleep(0.1)
+	time.sleep(1)
 	# with picamera.PiCamera() as camera:
 	# 	camera.resolution = (320, 240)
 	# 	camera.framerate = 24
