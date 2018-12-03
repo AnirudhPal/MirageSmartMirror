@@ -20,7 +20,7 @@ from PyQt5.QtGui import *#QFont, QPalette, QColor, QPainter, QPolygon
 from PyQt5.QtCore import *
 from simpleRec import *
 # for sensor
-#import testSensor
+import testSensor
 
 '''
 <div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
@@ -79,25 +79,22 @@ class Window(QWidget):
         self.darkPalette.setColor(QPalette.Background, Qt.black)
         self.qt.setPalette(self.darkPalette)
 
-        # self.load_user_info(0)
-        # self.load_user_info(0)
-        # self.load_user_info(0)
-        # self.load_user_info(0)
 
         self.loggedIn = False
-        self.ExpirationTimerCount = 0
-        self.numberOfDetectedFaces = 0
-        self.faceFrame = 0
-        self.proximity = 1
-        self.prompt_asked = False
-        self.launch_face_detection = False
+        self.errorMessage = ""
+        # self.ExpirationTimerCount = 0
+        # self.numberOfDetectedFaces = 0
+        # self.faceFrame = 0
+        self.proximity = 100
+        self.isDetectingFace = False
+        # self.prompt_asked = False
+        # self.launch_face_detection = False
         self.new_user_prompt = False
-        self.leave_counter = 0
+        # self.googleCodeTimeout = 0
         self.curr_screen = 0    # 0: lock screen, 1: main screen, 2: groom mode, 3: prompt screen
-        self.curr_user = 0
-        self.face_detection_countdown = 0
+        # self.curr_user = 0
+        # self.face_detection_countdown = 0
         self.google_code = None
-        self.google_prompt = False
 
         self.set_lockscreen_layout()
         self.init_timer()
@@ -113,7 +110,7 @@ class Window(QWidget):
         self.launch_face_detection = False
         self.curr_screen = 1
         self.clearLayout(self.qt.v_box)
-        self.load_user_info(self.curr_user[0])
+        self.load_user_info(self.userName)
         # self.timer.stop()
 
         # user_destinations = ["305 Swindon Way, West Lafayette, Indiana", "222 West Wood St, West Lafayette, Indiana", "West Madison Street, Chicago, Illinois"]
@@ -170,7 +167,7 @@ class Window(QWidget):
         self.TimeWeatherBox.addWidget(self.datetime)
 
         ###
-        self.welcomeLabel = QLabel("<font color='white'>" + "Welcome, %s!"%(self.curr_user[1]['name']) + "</font")
+        self.welcomeLabel = QLabel("<font color='white'>" + "Welcome, name here!" + "</font")
         self.welcomeLabel.setAlignment(Qt.AlignCenter)
         self.welcomeLabel.setFixedHeight(100)
         self.welcomeBox.addWidget(self.welcomeLabel)
@@ -479,159 +476,223 @@ class Window(QWidget):
         dict = json.loads(data)
         return dict['hasCode']
 
-    def controller(self):
-        # import ipdb; ipdb.set_trace()
-
-        if self.leave_counter > 0:
-            self.leave_counter = self.leave_counter - 1
-            return
-        else:
-            self.prompt_asked = False
+    # Return False if timer still running, return True if timed out
+    def googleCodeController(self):
+        if self.googleCodeTimeout > 0:
+            self.googleCodeTimeout = self.googleCodeTimeout - 1
+            return False
 
         if self.check_google_code() == "True":
             with open('/home/pi/MirageSmartMirror/src/userCode.json') as f:
                 data = json.load(f)
             dict = json.loads(data)
             self.google_code = dict['userCode']
-            self.google_prompt = True
             self.show_auth_code()
-            self.leave_counter = 10
-            return
+            self.googleCodeTimeout = 10
+            return False
         elif self.google_prompt is True:
             self.google_code = None
-            self.google_prompt = False
             self.set_lockscreen_layout()
+        return True
 
-        # if self.loggedIn is False:
-        #     self.numberOfDetectedFaces,self.faceFrame = numberOfFaces()
-        # sensor.self.proximity()
-        # self.proximity = 300
-        if self.new_user_prompt is True:
-            time.sleep(3)
-            self.set_lockscreen_layout()
-            self.new_user_prompt = False
-            self.launch_face_detection = False
-            self.leave_counter = 3
-            return
+    # Function that takes a message and displays it on lockscreen. Keep for 5? seconds..
+    def hintMessageController(self, message):
+        return
 
+    def controller(self):
 
-        if self.launch_face_detection is True and self.face_detection_countdown > 0:
-            self.numberOfDetectedFaces,self.faceFrame = numberOfFaces()
-            print(self.numberOfDetectedFaces)
-            self.face_detection_countdown = self.face_detection_countdown - 1
-            self.launch_face_detection = False
-            return
-        #elif self.loggedIn is False:
-            #self.curr_screen = 0
-            #self.set_lockscreen_layout()
+        # Step 1: Check google code controller. Displays lock screen if done!
+        if self.googleCodeController() is False:
+            return  # Displaying google code, so wait for timer to finish
 
-        self.proximity = 70 #testSensor.getProximity()
-        print("Proximity value: %d" %self.proximity)
+        # Step 2: Read face detection status file
+        with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json') as f:
+            data = json.load(f)
+        detectionStatusDictionary = json.loads(data)
 
-        if self.proximity > 50:
-            if self.loggedIn is False:
-                if self.prompt_asked is False:
-                    self.prompt.setText("<font color='white'>" + "Please stand still and wait for your profile to load." + "</font")
-                    self.prompt_asked = True
-                    self.set_buffering_screen()
-                # self.numberOfDetectedFaces,self.faceFrame = numberOfFaces()
-                    self.launch_face_detection = True
-                    self.face_detection_countdown = 3
-                # self.set_buffering_screen()
-
-
-        if self.numberOfDetectedFaces == 1 and not self.loggedIn:
-            print("one face Detected")
-            self.launch_face_detection = False
-            self.face_detection_countdown = 0
-            name = recognize(self.faceFrame)
-            print(name) #login
-            if(name == "Unknown" or name is None):
-                self.set_new_user_screen()
-                self.new_user_prompt = True
-            else:
-                with open('/home/pi/MirageSmartMirror/src/Users/%s/%s.json' %(name, name)) as f:
-                    data = json.load(f)
-
-                dict = json.loads(data)
-                self.curr_user = (name, dict)
-                # print(self.curr_user["id"])
-                # self.load_user_info(self.curr_user[0])
-                self.msd()
-                self.loggedIn = True
-
-        elif self.numberOfDetectedFaces == 1 and self.loggedIn:
-            print("one face and you are logged in")
-            #if another user, start timer (5 sec) and switch to new profile
-
-        elif self.numberOfDetectedFaces > 1:
-            print("one person only")
+        # Parse status dictionary
+        if detectionStatusDictionary['username'] is None:
+            self.loggedIn = False   # No face detected(reason unknown)
         else:
-            #self.launch_face_detection = True
-            print(self.loggedIn)
-            print("no one is here")
-            self.ExpirationTimerCount=self.ExpirationTimerCount+1
+            self.loggedIn = True
 
-            # if self.numberOfDetectedFaces == 1 and not self.loggedIn:
-            #     print("one face Detected")
-            #     self.launch_face_detection = False
-            #     self.face_detection_countdown = 0
-            #     name = recognize(self.faceFrame)
-            #     print(name) #login
-            #     if(name == "Unknown"):
-            #         self.set_new_user_screen()
-            #         self.new_user_prompt = True
-            #         # self.launch_face_detection = True
-            #         # self.prompt_asked = False
-            #         # time.sleep(6)
-            #         # self.set_lockscreen_layout()
-            #     else:
-            #         with open('/home/pi/MirageSmartMirror/src/Users/%s/%s.json' %(name, name)) as f:
-            #             data = json.load(f)
-            #
-            #         # print("user info:")
-            #         self.curr_user = json.loads(data)
-            #         # print(self.curr_user["id"])
-            #         self.load_user_info(self.curr_user)
-            #         self.msd()
-            #         self.loggedIn = True
-            #
-            #     #if unknown ask if user wants to setup a new profile
-            #         #setup profile Protocal
-            #
-            #     #if recognize retuned a name login
-            #         #loggedIn = True
-            #         #diSplAY
-            # elif self.numberOfDetectedFaces == 1 and self.loggedIn:
-            #     print("one face and you are logged in")
-            #     #if another user, start timer (5 sec) and switch to new profile
-            #
-            # elif self.numberOfDetectedFaces > 1:
-            #     print("one person only")
-            # else :
-            #     self.launch_face_detection = True
-            #     print("no one is here")
-            #     self.ExpirationTimerCount=self.ExpirationTimerCount+1
+        self.userName = detectionStatusDictionary['username']
 
-                    #change ui to lock screen
-        # elif self.curr_screen == 3:
-        #     self.curr_screen = 0
-        #     self.set_lockscreen_layout()
-                #please one person in front
-        if self.proximity > 50 and self.loggedIn is True:
-            if self.curr_screen == 2:
-                # self.load_user_info(self.curr_user[0])
-                self.msd()
-        if self.proximity > 250 and self.loggedIn is True:
-            if self.curr_screen == 1:
-                self.set_lockscreen_layout()
+        self.isDetectingFace = detectionStatusDictionary['cameraOn']
 
-        if self.ExpirationTimerCount >= 10:
-            print("Time expired")
+        self.errorMessage = detectionStatusDictionary['error']
+
+        ##TODO:Check logout timer if done
+
+
+        # Step 3: Check proximity value
+
+        self.proximity = getProximity()
+
+        # Manual logout (proximity <= 10)
+        if self.proximity <= 10:
+            detectionStatusDictionary['username'] = None
+            detectionStatusDictionary['error'] = ""
+            detectionStatusDictionary['cameraOn'] = False
+            with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json', 'w') as jsonFile:
+                json.dump(detectionStatusDictionary, jsonFile)
+
             self.set_lockscreen_layout()
-            self.new_user_prompt = False
-            self.launch_face_detection = False
-            self.ExpirationTimerCount = 0
+
+        # User steps away (proximity >= 80)
+        elif self.proximity >= 80:
+            if self.loggedIn is True:
+                #TODO: start timer to log out user after 1? min
+                nothing = 0
+
+
+        # User in proximity(10 < proximity < 80)
+        else:
+            # If detection is finished and no user logged in..
+            if self.isDetectingFace is False and self.loggedIn is False:
+                # Check error message
+                if self.error == "Too many faces":
+                    #TODO: Display help tip
+                    print("\"Too many faces\" will be displayed")
+                    nothing = 0
+                elif self.error == "Face unknown":
+                    #TODO: Display new user prompt
+                    print("\"New user\" will be displayed")
+                    nothing = 0
+                elif self.error == "No face":
+                    #TODO: Display help tip
+                    print("\"No face detected\" will be displayed")
+                    nothing = 0
+
+                #TODO: Start timer to remove hint message after 10 seconds
+                
+                # Call face detection again
+                detectFace()
+
+            # If fetection is finished and user logged in
+            elif self.isDetectingFace is False and self.loggedIn is True:
+                #Display main screen
+                self.msd()
+                return
+
+            # Camera is in use
+            elif self.isDetectingFace is True
+                #TODO: Increment timer (give camera time to try again)
+                if self.error == "Face calibration":
+                    #TODO: Display calibration prompt, control LED?
+                    print("\"Face calibration is running now\" will be displayed")
+                    nothing = 0
+                return
+
+
+
+
+
+
+        # if self.googleCodeTimeout > 0:
+        #     self.googleCodeTimeout = self.googleCodeTimeout - 1
+        #     return
+        # else:
+        #     self.prompt_asked = False
+        #
+        # if self.check_google_code() == "True":
+        #     with open('/home/pi/MirageSmartMirror/src/userCode.json') as f:
+        #         data = json.load(f)
+        #     dict = json.loads(data)
+        #     self.google_code = dict['userCode']
+        #     self.google_prompt = True
+        #     self.show_auth_code()
+        #     self.googleCodeTimeout = 10
+        #     return
+        # elif self.google_prompt is True:
+        #     self.google_code = None
+        #     self.google_prompt = False
+        #     self.set_lockscreen_layout()
+        #
+        # # if self.loggedIn is False:
+        # #     self.numberOfDetectedFaces,self.faceFrame = numberOfFaces()
+        # # sensor.self.proximity()
+        # # self.proximity = 300
+        # if self.new_user_prompt is True:
+        #     time.sleep(3)
+        #     self.set_lockscreen_layout()
+        #     self.new_user_prompt = False
+        #     self.launch_face_detection = False
+        #     self.googleCodeTimeout = 3
+        #     return
+        #
+        #
+        # if self.launch_face_detection is True and self.face_detection_countdown > 0:
+        #     self.numberOfDetectedFaces,self.faceFrame = numberOfFaces()
+        #     print(self.numberOfDetectedFaces)
+        #     self.face_detection_countdown = self.face_detection_countdown - 1
+        #     self.launch_face_detection = False
+        #     return
+        # #elif self.loggedIn is False:
+        #     #self.curr_screen = 0
+        #     #self.set_lockscreen_layout()
+        #
+        # self.proximity = 70 #testSensor.getProximity()
+        # print("Proximity value: %d" %self.proximity)
+        #
+        # if self.proximity > 50:
+        #     if self.loggedIn is False:
+        #         if self.prompt_asked is False:
+        #             self.prompt.setText("<font color='white'>" + "Please stand still and wait for your profile to load." + "</font")
+        #             self.prompt_asked = True
+        #             self.set_buffering_screen()
+        #         # self.numberOfDetectedFaces,self.faceFrame = numberOfFaces()
+        #             self.launch_face_detection = True
+        #             self.face_detection_countdown = 3
+        #         # self.set_buffering_screen()
+        #
+        #
+        # if self.numberOfDetectedFaces == 1 and not self.loggedIn:
+        #     print("one face Detected")
+        #     self.launch_face_detection = False
+        #     self.face_detection_countdown = 0
+        #     name = recognize(self.faceFrame)
+        #     print(name) #login
+        #     if(name == "Unknown" or name is None):
+        #         self.set_new_user_screen()
+        #         self.new_user_prompt = True
+        #     else:
+        #         with open('/home/pi/MirageSmartMirror/src/Users/%s/%s.json' %(name, name)) as f:
+        #             data = json.load(f)
+        #
+        #         dict = json.loads(data)
+        #         self.curr_user = (name, dict)
+        #         # print(self.curr_user["id"])
+        #         # self.load_user_info(self.curr_user[0])
+        #         self.msd()
+        #         self.loggedIn = True
+        #
+        # elif self.numberOfDetectedFaces == 1 and self.loggedIn:
+        #     print("one face and you are logged in")
+        #     #if another user, start timer (5 sec) and switch to new profile
+        #
+        # elif self.numberOfDetectedFaces > 1:
+        #     print("one person only")
+        # else:
+        #     #self.launch_face_detection = True
+        #     print(self.loggedIn)
+        #     print("no one is here")
+        #     self.ExpirationTimerCount=self.ExpirationTimerCount+1
+        #
+        # if self.proximity > 50 and self.loggedIn is True:
+        #     if self.curr_screen == 2:
+        #         # self.load_user_info(self.curr_user[0])
+        #         self.msd()
+        # if self.proximity > 250 and self.loggedIn is True:
+        #     if self.curr_screen == 1:
+        #         self.set_lockscreen_layout()
+        #
+        # if self.ExpirationTimerCount >= 10:
+        #     print("Time expired")
+        #     self.set_lockscreen_layout()
+        #     self.new_user_prompt = False
+        #     self.launch_face_detection = False
+        #     self.ExpirationTimerCount = 0
 
 if __name__ == "__main__":
 
