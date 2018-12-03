@@ -577,7 +577,7 @@ class Window(QWidget):
         # We got signal!
         print('Go right!')
 
-class DoSomething(QThread):
+class keyboard(QThread):
     trigger1 = pyqtSignal()
     trigger2 = pyqtSignal()
     def on_press(self,key):
@@ -625,7 +625,7 @@ if __name__ == "__main__":
 
 
     # Create new thread object.
-    d = DoSomething(Display)
+    d = keyboard(Display)
 
     # Connect signalHandler function with some_signal which
     # will be emited by d thread object.
