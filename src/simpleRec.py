@@ -164,6 +164,13 @@ def detectFace():
 		flags=cv2.CASCADE_SCALE_IMAGE)
 
 	vs.stop()
+	jsonData = {
+		'username':None,
+		'error':None,
+		'cameraOn':False
+	}
+	with open('faceDetectStatus.json', 'w') as outfile:
+		json.dump(jsonData, outfile)
 
 	if (len(rects)== 0):
 		jsonData = {
