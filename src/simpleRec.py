@@ -188,6 +188,7 @@ def detectFace():
 		return
 
 	print("faceDetected")
+	print(len(rects))
 	data = pickle.loads(open("/home/pi/MirageSmartMirror/src/faceRecognitionEncodings/encodings", "rb").read())
 
 	# Create arrays of known face encodings and their names
@@ -236,7 +237,7 @@ def detectFace():
 				'cameraOn':False
 			}
 			with open('faceDetectStatus.json', 'w') as outfile:
-				json.dump(data, outfile)
+				json.dump(jsonData, outfile)
 				print(jsonData)
 			return
 
