@@ -638,49 +638,6 @@ class Window(QWidget):
                     nothing = 0
                 return
 
-        def signalHandler1(self):
-            # We got signal!
-            print('Go left!')
-
-        def signalHandler2(self):
-            # We got signal!
-            print('Go right!')
-
-class keyboard(QThread):
-    trigger1 = pyqtSignal()
-    trigger2 = pyqtSignal()
-    def on_press(self,key):
-        if key == Key.left:
-            self.trigger1.emit()
-        if key == Key.right:
-            self.trigger2.emit()
-        # print('{0} pressed'.format(
-            # key))
-
-    def on_release(self,key):
-        # print('{0} release'.format(
-        #     key))
-        if key == Key.esc:
-            # Stop listener
-            return False
-
-    # Collect events until released
-
-    def __init__(self, display):
-        QThread.__init__(self)
-        self.disp = display
-
-    def run(self):
-        self.trigger1.connect(self.disp.signalHandler1)
-        self.trigger2.connect(self.disp.signalHandler2)
-        with Listener(
-                on_press=self.on_press,
-                on_release=self.on_release) as listener:
-            listener.join()
-
-
-
-
 
 
         # if self.googleCodeTimeout > 0:
@@ -788,14 +745,70 @@ class keyboard(QThread):
         #     self.launch_face_detection = False
         #     self.ExpirationTimerCount = 0
 
-if __name__ == "__main__":
+    def signalHandler1(self):
+        # We got signal!
+        print('Go left!')
 
+    def signalHandler2(self):
+        # We got signal!
+        print('Go right!')
+
+class keyboardListner(QThread):
+    trigger1 = pyqtSignal()
+    trigger2 = pyqtSignal()
+    def on_press(self,key):
+        if key == Key.left:
+            self.trigger1.emit()
+        if key == Key.right:
+            self.trigger2.emit()
+        # print('{0} pressed'.format(
+            # key))
+
+    def on_release(self,key):
+        # print('{0} release'.format(
+        #     key))
+        if key == Key.esc:
+            # Stop listener
+            return False
+
+    # Collect events until released
+
+    def __init__(self, display):
+        QThread.__init__(self)
+        self.disp = display
+
+    def run(self):
+        self.trigger1.connect(self.disp.signalHandler1)
+        self.trigger2.connect(self.disp.signalHandler2)
+        print("connected")
+        with Listener(
+                on_press=self.on_press,
+                on_release=self.on_release) as listener:
+            listener.join()
+        # self.trigger.emit()
+
+    # def signalHandler1(self):
+    #     # We got signal!
+    #     print('Go left!')
+    #
+    # def signalHandler2(self):
+    #     # We got signal!
+    #     print('Go right!')
+
+
+if __name__ == "__main__":
     window_app = QApplication(sys.argv)
-# a_window = Window()
     Display = Window()
-#     thread = keyboard(Display)
-#     thread.start()
-# # t = threading.Thread(target = lambda: Display.controller())
-# t.daemon = True
-# t.start()
+
+
+    # Create new thread object.
+    thread = keyboardListner(Display)
+
+    # Connect signalHandler function with some_signal which
+    # will be emited by d thread object.
+
+    # Start new thread.
+    thread.start()
+
+
     sys.exit(window_app.exec_())
