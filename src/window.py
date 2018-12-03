@@ -607,7 +607,7 @@ class Window(QWidget):
                 # with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json') as f:
                 #     data = json.load(f)
                 #     if data['detectCalled'] is False:
-                    detectFace()
+                detectFace()
                 #subprocess.Popen("python3 simpleRec.py &", shell=True) #This creates multiple processes and overloads the pi
 
             # If fetection is finished and user logged in
