@@ -133,7 +133,8 @@ def detectFace():
 	}
 	with open('faceDetectStatus.json', 'w') as outfile:
 		json.dump(jsonData, outfile)
-# construct the argument parser and parse the arguments
+		#print(jsonData)
+	# construct the argument parser and parse the arguments
 	# load the known faces and embeddings along with OpenCV's Haar
 	# cascade for face detection
 	detector = cv2.CascadeClassifier("/home/pi/MirageSmartMirror/src/haar_face_cascade.xml")
@@ -166,22 +167,26 @@ def detectFace():
 	if (len(rects)== 0):
 		jsonData = {
 			'username':None,
-			'error':'no face detected',
+			'error':'no face detected - 0',
 			'cameraOn':False
 		}
 		with open('faceDetectStatus.json', 'w') as outfile:
 			json.dump(jsonData, outfile)
+			print(jsonData)
+
 		return
 	elif (len(rects) > 1):
 		jsonData = {
 			'username':None,
-			'error':'To many faces',
+			'error':'Too many faces',
 			'cameraOn':False
 		}
 		with open('faceDetectStatus.json', 'w') as outfile:
 			json.dump(jsonData, outfile)
+			print(jsonData)
 		return
 
+	print("faceDetected")
 	data = pickle.loads(open("/home/pi/MirageSmartMirror/src/faceRecognitionEncodings/encodings", "rb").read())
 
 	# Create arrays of known face encodings and their names
@@ -203,7 +208,7 @@ def detectFace():
 	for face_encoding in face_encodings:
 		# See if the face is a match for the known face(s)
 		matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
-		name = "Unknown"
+		name = None
 
 		# If a match was found in known_face_encodings, just use the first one.
 		if True in matches:
@@ -231,6 +236,7 @@ def detectFace():
 			}
 			with open('faceDetectStatus.json', 'w') as outfile:
 				json.dump(data, outfile)
+				print(jsonData)
 			return
 
 		jsonData = {
@@ -240,6 +246,7 @@ def detectFace():
 		}
 		with open('faceDetectStatus.json', 'w') as outfile:
 			json.dump(jsonData, outfile)
+			print(jsonData)
 		return
 
 def faceCalibration(name):
@@ -303,6 +310,7 @@ def cancelCalibration():
 
 
 if __name__ == "__main__":
-	while(True):
-		detectFace()
+	#while(True):
+	#	detectFace()
+	#	time.sleep(3)
 	nothing = 0
