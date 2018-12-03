@@ -128,7 +128,7 @@ def detectFace():
 	#wite to file to signal that Camera is on
 	jsonData = {
 		'username':None,
-		'error':'no face detected',
+		'error':None,
 		'cameraOn':True
 	}
 	with open('faceDetectStatus.json', 'w') as outfile:
@@ -167,7 +167,7 @@ def detectFace():
 	if (len(rects)== 0):
 		jsonData = {
 			'username':None,
-			'error':'no face detected - 0',
+			'error':'No face detected',
 			'cameraOn':False
 		}
 		with open('faceDetectStatus.json', 'w') as outfile:
@@ -268,7 +268,7 @@ def faceCalibration(name):
 	setLed.ledON()
 	with open('faceDetectStatus.json') as json_file:
 		jsonData = json.load(json_file)
-		jsonData['error'] = "faceCalibration"
+		jsonData['error'] = "Face calibration"
 		jsonData['cameraOn'] = True
 	with open('faceDetectStatus.json', 'w') as outfile:
 		json.dump(jsonData, outfile)
@@ -291,7 +291,7 @@ def faceCalibration(name):
 		# Turn off LED
 		setLed.ledOFF()
 		jsonData['cameraOn'] = False
-		jsonData['error'] = ""
+		jsonData['error'] = None
 		with open('faceDetectStatus.json', 'w') as outfile:
 			json.dump(jsonData, outfile)
 

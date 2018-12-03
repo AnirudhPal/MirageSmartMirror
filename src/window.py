@@ -14,13 +14,14 @@ import threading
 from newsapi import NewsApiClient
 import requests
 import json
+import coProcessor
 #
 from PyQt5.QtWidgets import *#QApplication, QWidget, QLabel, QFormLayout, QVBoxLayout, QHBoxLayout, QPushButton, QGraphicsDropShadowEffect, QSpacerItem, QGridLayout, QFormLayout
 from PyQt5.QtGui import *#QFont, QPalette, QColor, QPainter, QPolygon
 from PyQt5.QtCore import *
 from simpleRec import *
 # for sensor
-import testSensor
+#import testSensor
 
 '''
 <div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
@@ -81,7 +82,8 @@ class Window(QWidget):
 
 
         self.loggedIn = False
-        self.errorMessage = ""
+        self.errorMessage = None
+        self.userName = None
         # self.ExpirationTimerCount = 0
         # self.numberOfDetectedFaces = 0
         # self.faceFrame = 0
@@ -95,7 +97,14 @@ class Window(QWidget):
         # self.curr_user = 0
         # self.face_detection_countdown = 0
         self.google_code = None
+        self.googleCodeTimeout = 0
 
+# Creating new blank face detection status JSON file..
+        statDict = {'username': None, 'error': None, 'cameraOn': False}
+        with open("/home/pi/MirageSmartMirror/src/faceDetectStatus.json", 'w') as statFile:
+            json.dump(statDict, statFile)
+
+        coProcessor.initProximity()
         self.set_lockscreen_layout()
         self.init_timer()
         self.init_controller()
@@ -490,9 +499,9 @@ class Window(QWidget):
             self.show_auth_code()
             self.googleCodeTimeout = 10
             return False
-        elif self.google_prompt is True:
-            self.google_code = None
-            self.set_lockscreen_layout()
+       # elif self.google_prompt is True:
+        #    self.google_code = None
+         #   self.set_lockscreen_layout()
         return True
 
     # Function that takes a message and displays it on lockscreen. Keep for 5? seconds..
@@ -508,7 +517,7 @@ class Window(QWidget):
         # Step 2: Read face detection status file
         with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json') as f:
             data = json.load(f)
-        detectionStatusDictionary = json.loads(data)
+        detectionStatusDictionary = data
 
         # Parse status dictionary
         if detectionStatusDictionary['username'] is None:
@@ -527,12 +536,13 @@ class Window(QWidget):
 
         # Step 3: Check proximity value
 
-        self.proximity = getProximity()
-
+        self.proximity = coProcessor.getProximity()
+        print(self.proximity)
+        print(detectionStatusDictionary)
         # Manual logout (proximity <= 10)
         if self.proximity <= 10:
             detectionStatusDictionary['username'] = None
-            detectionStatusDictionary['error'] = ""
+            detectionStatusDictionary['error'] = None
             detectionStatusDictionary['cameraOn'] = False
             with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json', 'w') as jsonFile:
                 json.dump(detectionStatusDictionary, jsonFile)
@@ -551,15 +561,15 @@ class Window(QWidget):
             # If detection is finished and no user logged in..
             if self.isDetectingFace is False and self.loggedIn is False:
                 # Check error message
-                if self.error == "Too many faces":
+                if self.errorMessage == "Too many faces":
                     #TODO: Display help tip
                     print("\"Too many faces\" will be displayed")
                     nothing = 0
-                elif self.error == "Face unknown":
+                elif self.errorMessage == "Face unknown":
                     #TODO: Display new user prompt
                     print("\"New user\" will be displayed")
                     nothing = 0
-                elif self.error == "No face":
+                elif self.errorMessage == "No face":
                     #TODO: Display help tip
                     print("\"No face detected\" will be displayed")
                     nothing = 0
@@ -576,9 +586,9 @@ class Window(QWidget):
                 return
 
             # Camera is in use
-            elif self.isDetectingFace is True
+            elif self.isDetectingFace is True:
                 #TODO: Increment timer (give camera time to try again)
-                if self.error == "Face calibration":
+                if self.errorMessage == "Face calibration":
                     #TODO: Display calibration prompt, control LED?
                     print("\"Face calibration is running now\" will be displayed")
                     nothing = 0
