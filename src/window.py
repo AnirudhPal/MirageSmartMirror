@@ -526,7 +526,7 @@ class Window(QWidget):
         if self.promptTimeout == 0:
             self.prompt.setText("<font color='black'>" + "Blank" + "</font>")
         elif self.promptTimeout > 0:
-            self.promptTimeout = self.promptController - 1
+            self.promptTimeout = self.promptTimeout - 1
         return
 
     def controller(self):
