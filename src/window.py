@@ -99,6 +99,7 @@ class Window(QWidget):
         # self.face_detection_countdown = 0
         self.google_code = None
         self.googleCodeTimeout = 0
+        self.promptTimeout = 0
 
 # Creating new blank face detection status JSON file..
         statDict = {'username': None, 'error': None, 'cameraOn': False}
@@ -284,6 +285,8 @@ class Window(QWidget):
         font.setWeight(1)
         self.prompt.setText("<font color='green'>" + message + "</font>")
         self.prompt.setFont(font)
+        self.promptTimeout = 5
+        return
 
 
 
@@ -519,11 +522,16 @@ class Window(QWidget):
         return True
 
     # Function that takes a message and displays it on lockscreen. Keep for 5? seconds..
-    def hintMessageController(self, message):
-        return
+    def promptController(self):
+        if self.promptTimeout == 0:
+            self.prompt.setText("<font color='black'>" + "Blank" + "</font>")
+        elif self.promptTimeout > 0:
+            self.promptTimeout--
 
     def controller(self):
 
+        # Check prompt message timeout
+        self.promptController()
         # Step 1: Check google code controller. Displays lock screen if done!
         if self.googleCodeController() is False:
             return  # Displaying google code, so wait for timer to finish
