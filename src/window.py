@@ -579,7 +579,7 @@ class Window(QWidget):
 
                 # Call face detection again
                 detectFace()
-                #subprocess.call("python3 simpleRec.py &", shell=True) This creates multiple processes and overloads the pi
+                #subprocess.Popen("python3 simpleRec.py &", shell=True) #This creates multiple processes and overloads the pi
 
             # If fetection is finished and user logged in
             elif self.isDetectingFace is False and self.loggedIn is True:
