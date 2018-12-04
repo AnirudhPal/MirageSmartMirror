@@ -445,11 +445,12 @@ class Window(QWidget):
     def weather_info(self):
         icon = icons[self.weather_dict['icon']]
         image = cv2.imread(icon)
-        image = cv2.resize(image, (80, 80), interpolation=cv2.INTER_CUBIC)
+        image = cv2.resize(image, (75, 75), interpolation=cv2.INTER_CUBIC)
         image = QImage(image, image.shape[1], image.shape[0], image.strides[0], QImage.Format_RGB888)
 
         # self.weather.daily = self.weather_dict['daily']['data'][0]['summary']
         self.weather.dailySummary.setText("<font color='white'>" + self.weather_dict['daily'] + "</font")
+        print(self.weather_dict['daily'])
 
         # self.weather.curr = "Currently " + self.weather_dict['currently']['summary']
         self.weather.currently.setText("<font color='white'>" + self.weather_dict['current'] + "</font")
