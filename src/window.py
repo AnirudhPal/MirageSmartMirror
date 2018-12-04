@@ -774,6 +774,8 @@ class Window(QWidget):
                 #Display main screen
                 if self.curr_screen != 1:
                     print("Going to main screen")
+                    print(self.isDetectingFace)
+                    print(self.loggedIn)
                     self.msd()
                 return
 
