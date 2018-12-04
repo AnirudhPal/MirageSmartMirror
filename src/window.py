@@ -339,12 +339,15 @@ class Window(QWidget):
     def gmd(self):
         self.curr_screen = 2
         self.curr_app = 4
-        self.timer.stop()
-        self.clearLayout(self.qt.v_box)
+        # self.timer.stop()
+        # self.clearLayout(self.qt.v_box)
+        self.clearLayout(self.feed.feedForm)
+        self.clearLayout(self.welcomeBox)
+        # Turn on LED
 
         #self.qt.v_box.addWidget(self.qt.lsb)
-        self.qt.v_box.addWidget(groom.Groom().frame)
-        self.qt.v_box.setContentsMargins(0,0,0,0)
+        # self.qt.v_box.addWidget(groom.Groom().frame)
+        # self.qt.v_box.setContentsMargins(0,0,0,0)
 
     def set_buffering_screen(self):
         self.clearLayout(self.qt.v_box)
