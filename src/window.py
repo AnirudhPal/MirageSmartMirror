@@ -891,6 +891,16 @@ class Window(QWidget):
         self.curr_app = (self.curr_app - 1) % 5
         current_app = self.appList[self.curr_app]
         current_app.graphicsEffect().setEnabled(True)
+        if self.curr_app == 0:
+            self.msd()
+        elif self.curr_app == 1:
+            self.calendar_events()
+        elif self.curr_app == 2:
+            self.routes_info()
+        elif self.curr_app == 3:
+            self.news_headlines()
+        elif self.curr_app == 4:
+            self.gmd()
         print('Go left!')
 
     def signalHandler2(self):
@@ -901,6 +911,16 @@ class Window(QWidget):
         self.curr_app = (self.curr_app + 1) % 5
         current_app = self.appList[self.curr_app]
         current_app.graphicsEffect().setEnabled(True)
+        if self.curr_app == 0:
+            self.msd()
+        elif self.curr_app == 1:
+            self.calendar_events()
+        elif self.curr_app == 2:
+            self.routes_info()
+        elif self.curr_app == 3:
+            self.news_headlines()
+        elif self.curr_app == 4:
+            self.gmd()
         print('Go right!')
 
 class keyboardListner(QThread):
