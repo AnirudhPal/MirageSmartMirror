@@ -464,6 +464,7 @@ class Window(QWidget):
         # self.weather.fahrenheit = self.weather_dict['currently']['temperature']
         self.weather.temp.setText("<font color='white'> %d" %self.weather_dict['temp'] + u'\N{DEGREE SIGN}' + "</font>")
 
+        self.weather.icon.setFixedWidth(75)
         self.weather.icon.setPixmap(QPixmap.fromImage(image))
         self.weather.icon.frame = QFrame()
         self.weather.icon.setFrameShape(QFrame.Box)
