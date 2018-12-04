@@ -341,6 +341,7 @@ class Window(QWidget):
         self.curr_app = 4
         # self.timer.stop()
         # self.clearLayout(self.qt.v_box)
+        self.feed.title.setText("<font color='black'>" + "Blank" + "</font>")
         self.clearLayout(self.feed.feedForm)
         self.clearLayout(self.welcomeBox)
         # Turn on LED
