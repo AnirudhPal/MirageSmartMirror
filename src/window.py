@@ -467,7 +467,10 @@ class Window(QWidget):
         self.weather.icon.setFixedWidth(75)
         self.weather.icon.setPixmap(QPixmap.fromImage(image))
         self.weather.icon.frame = QFrame()
-        self.weather.icon.setFrameShape(QFrame.Box)
+        self.weather.icon.frame.setFrameShape(QFrame.Box)
+        self.weather.icon.frame.setFrameShadow(QFrame.Raised)
+        self.weather.icon.frame.setLineWidth(1)
+        self.weather.icon.frame.setMidLineWidth(2)
         self.weather.icon.setGraphicsEffect(effect)
 
     def init_timer(self):
