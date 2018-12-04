@@ -330,7 +330,7 @@ class Window(QWidget):
 
         self.qt.v_box.addLayout(self.appBox)
         self.qt.v_box.addLayout(self.welcomeBox)
-        self.qt.v_box.addSpacing(200)
+        self.qt.v_box.addSpacing(150)
         self.qt.v_box.addLayout(self.appListBox)
 
         # temp = DateTime.DateTime()
@@ -338,6 +338,7 @@ class Window(QWidget):
 
     def gmd(self):
         self.curr_screen = 2
+        self.curr_app = 4
         self.timer.stop()
         self.clearLayout(self.qt.v_box)
 
@@ -475,6 +476,7 @@ class Window(QWidget):
 
 
     def news_headlines(self):
+        self.curr_app = 3
         self.clearLayout(self.feed.feedForm)
         self.clearLayout(self.welcomeBox)
         self.calendar.setEnabled(True)
@@ -498,6 +500,7 @@ class Window(QWidget):
             self.feed.feedForm.addRow(temp3)
 
     def routes_info(self):
+        self.curr_app = 2
         self.clearLayout(self.feed.feedForm)
         self.clearLayout(self.welcomeBox)
         self.routes.setEnabled(False)
@@ -521,6 +524,7 @@ class Window(QWidget):
             self.feed.feedForm.addRow(temp3)
 
     def calendar_events(self):
+        self.curr_app = 1
         self.clearLayout(self.feed.feedForm)
         self.clearLayout(self.welcomeBox)
         self.calendar.setEnabled(False)
@@ -881,13 +885,21 @@ class Window(QWidget):
     def signalHandler1(self):
         # We got signal!
         self.welcomeLabel.setText("<font color='white'>" + "Welcome, leftie!" + "</font>")
-#        self.weather.icon.graphicsEffect().setEnabled(False)
+        current_app = self.appList[self.curr_app]
+        current_app.graphicsEffect().setEnabled(False)
+        self.curr_app = (self.curr_app - 1) % 5
+        current_app = self.appList[self.curr_app]
+        current_app.graphicsEffect().setEnabled(True)
         print('Go left!')
 
     def signalHandler2(self):
         # We got signal!
         self.welcomeLabel.setText("<font color='white'>" + "Welcome, rightie!" + "</font>")
-#        self.weather.icon.graphicsEffect().setEnabled(True)
+        current_app = self.appList[self.curr_app]
+        current_app.graphicsEffect().setEnabled(False)
+        self.curr_app = (self.curr_app + 1) % 5
+        current_app = self.appList[self.curr_app]
+        current_app.graphicsEffect().setEnabled(True)
         print('Go right!')
 
 class keyboardListner(QThread):
