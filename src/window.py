@@ -298,7 +298,7 @@ class Window(QWidget):
         self.main.setLineWidth(1)
         self.main.setMidLineWidth(2)
         self.main.setGraphicsEffect(main_effect)
-        self.main.graphicsEffect().setEnabled(False)
+        self.main.graphicsEffect().setEnabled(True)
 
 
 
@@ -762,7 +762,8 @@ class Window(QWidget):
             # If fetection is finished and user logged in
             elif self.isDetectingFace is False and self.loggedIn is True:
                 #Display main screen
-                self.msd()
+                if self.curr_screen != 1:
+                    self.msd()
                 return
 
             # Camera is in use
