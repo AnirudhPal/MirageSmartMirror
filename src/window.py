@@ -479,9 +479,9 @@ class Window(QWidget):
         self.curr_app = 3
         self.clearLayout(self.feed.feedForm)
         self.clearLayout(self.welcomeBox)
-        self.calendar.setEnabled(True)
-        self.news.setEnabled(False)
-        self.routes.setEnabled(True)
+        # self.calendar.setEnabled(True)
+        # self.news.setEnabled(False)
+        # self.routes.setEnabled(True)
 
         self.feed.title.setFont(font)
         self.feed.title.setText("<font color='white'>" + "News Headlines" + "</font>")
@@ -503,12 +503,14 @@ class Window(QWidget):
         self.curr_app = 2
         self.clearLayout(self.feed.feedForm)
         self.clearLayout(self.welcomeBox)
-        self.routes.setEnabled(False)
-        self.calendar.setEnabled(True)
-        self.news.setEnabled(True)
+        # self.routes.setEnabled(False)
+        # self.calendar.setEnabled(True)
+        # self.news.setEnabled(True)
 
         self.feed.title.setFont(font)
         self.feed.title.setText("<font color='white'>" + "Routes Info" + "</font>")
+
+        counter = 0
 
         for route in self.rt:
             temp1 = QLabel("<font color='white'>" + route[1] + "</font>")
@@ -523,13 +525,17 @@ class Window(QWidget):
             self.feed.feedForm.addRow(temp2, temp1)
             self.feed.feedForm.addRow(temp3)
 
+            counter = counter + 1
+            if counter > 5:
+                return
+
     def calendar_events(self):
         self.curr_app = 1
         self.clearLayout(self.feed.feedForm)
         self.clearLayout(self.welcomeBox)
-        self.calendar.setEnabled(False)
-        self.news.setEnabled(True)
-        self.routes.setEnabled(True)
+        # self.calendar.setEnabled(False)
+        # self.news.setEnabled(True)
+        # self.routes.setEnabled(True)
 
         self.feed.title.setFont(font)
         self.feed.title.setText("<font color='white'>" + "Calendar Events" + "</font>")
