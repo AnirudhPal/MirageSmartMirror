@@ -453,7 +453,6 @@ class Window(QWidget):
         image = cv2.imread(icon)
         image = cv2.resize(image, (75, 75), interpolation=cv2.INTER_CUBIC)
         image = QImage(image, image.shape[1], image.shape[0], image.strides[0], QImage.Format_RGB888)
-        image.setGraphicsEffect(effect)
 
         # self.weather.daily = self.weather_dict['daily']['data'][0]['summary']
         self.weather.dailySummary.setText("<font color='white'>" + parseApiText(self.weather_dict['daily']) + "</font>")
@@ -466,6 +465,7 @@ class Window(QWidget):
         self.weather.temp.setText("<font color='white'> %d" %self.weather_dict['temp'] + u'\N{DEGREE SIGN}' + "</font>")
 
         self.weather.icon.setPixmap(QPixmap.fromImage(image))
+        self.weather.icon.setGraphicsEffect(effect)
 
     def init_timer(self):
         self.timer = QTimer()
