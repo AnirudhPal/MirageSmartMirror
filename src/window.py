@@ -97,6 +97,7 @@ class Window(QWidget):
         self.new_user_prompt = False
         # self.googleCodeTimeout = 0
         self.curr_screen = 0    # 0: lock screen, 1: main screen, 2: groom mode, 3: prompt screen
+        self.curr_app = 0
         # self.curr_user = 0
         # self.face_detection_countdown = 0
         self.google_code = None
@@ -120,8 +121,8 @@ class Window(QWidget):
         if self.curr_screen == 0:
             self.timer.stop()
         self.loggedIn = True
-        self.launch_face_detection = False
         self.curr_screen = 1
+        self.curr_app = 0
         self.clearLayout(self.qt.v_box)
         self.load_user_info(self.userName)
         # self.timer.stop()
@@ -443,10 +444,16 @@ class Window(QWidget):
 
 
     def weather_info(self):
+        effect = QGraphicsDropShadowEffect()
+        effect.setOffset(1, 1)
+        effect.setBlurRadius(30)
+        effect.setColor(QColor(255,255,255))
+
         icon = icons[self.weather_dict['icon']]
         image = cv2.imread(icon)
         image = cv2.resize(image, (75, 75), interpolation=cv2.INTER_CUBIC)
         image = QImage(image, image.shape[1], image.shape[0], image.strides[0], QImage.Format_RGB888)
+        image.setGraphicsEffect(effect)
 
         # self.weather.daily = self.weather_dict['daily']['data'][0]['summary']
         self.weather.dailySummary.setText("<font color='white'>" + parseApiText(self.weather_dict['daily']) + "</font>")
