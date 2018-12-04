@@ -148,7 +148,7 @@ class Window(QWidget):
         self.weather.weatherBox = QVBoxLayout()
 
         self.weather.dailySummary = QLabel()
-        self.weather.dailySummary.setFixedWidth(40)
+        self.weather.dailySummary.setFixedWidth(400)
         self.weather.dailySummary.setAlignment(Qt.AlignLeft)
         self.weather.dailySummary.setFont(font)
 
