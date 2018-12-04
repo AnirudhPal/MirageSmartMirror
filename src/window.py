@@ -465,6 +465,8 @@ class Window(QWidget):
         self.weather.temp.setText("<font color='white'> %d" %self.weather_dict['temp'] + u'\N{DEGREE SIGN}' + "</font>")
 
         self.weather.icon.setPixmap(QPixmap.fromImage(image))
+        self.weather.icon.frame = QFrame()
+        self.weather.icon.setFrameShape(QFrame.Box)
         self.weather.icon.setGraphicsEffect(effect)
 
     def init_timer(self):
