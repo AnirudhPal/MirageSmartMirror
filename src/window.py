@@ -465,13 +465,15 @@ class Window(QWidget):
         self.weather.temp.setText("<font color='white'> %d" %self.weather_dict['temp'] + u'\N{DEGREE SIGN}' + "</font>")
 
         self.weather.icon.setFixedWidth(75)
+        self.weather.icon.setFixedHeight(75)
+        self.weather.icon.setAlignment(Qt.AlignCenter)
         self.weather.icon.setPixmap(QPixmap.fromImage(image))
-        self.weather.icon.frame = QFrame()
-        self.weather.icon.frame.setFrameShape(QFrame.Box)
-        self.weather.icon.frame.setFrameShadow(QFrame.Raised)
-        self.weather.icon.frame.setLineWidth(1)
-        self.weather.icon.frame.setMidLineWidth(2)
-        self.weather.icon.setGraphicsEffect(effect)
+#        self.weather.icon.frame = QFrame()
+#        self.weather.icon.setFrameShape(QFrame.Box)
+#        self.weather.icon.setFrameShadow(QFrame.Raised)
+#        self.weather.icon.setLineWidth(1)
+#        self.weather.icon.setMidLineWidth(2)
+#        self.weather.icon.setGraphicsEffect(effect)
 
     def init_timer(self):
         self.timer = QTimer()
@@ -771,11 +773,13 @@ class Window(QWidget):
     def signalHandler1(self):
         # We got signal!
         self.welcomeLabel.setText("<font color='white'>" + "Welcome, leftie!" + "</font>")
+#        self.weather.icon.graphicsEffect().setEnabled(False)
         print('Go left!')
 
     def signalHandler2(self):
         # We got signal!
         self.welcomeLabel.setText("<font color='white'>" + "Welcome, rightie!" + "</font>")
+#        self.weather.icon.graphicsEffect().setEnabled(True)
         print('Go right!')
 
 class keyboardListner(QThread):
