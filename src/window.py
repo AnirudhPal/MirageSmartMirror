@@ -891,7 +891,7 @@ class Window(QWidget):
 
     def signalHandler1(self):
         # We got signal!
-        self.welcomeLabel.setText("<font color='white'>" + "Welcome, leftie!" + "</font>")
+        # self.welcomeLabel.setText("<font color='white'>" + "Welcome, leftie!" + "</font>")
         current_app = self.appList[self.curr_app]
         current_app.graphicsEffect().setEnabled(False)
         self.curr_app = (self.curr_app - 1) % 5
@@ -911,7 +911,7 @@ class Window(QWidget):
 
     def signalHandler2(self):
         # We got signal!
-        self.welcomeLabel.setText("<font color='white'>" + "Welcome, rightie!" + "</font>")
+        # self.welcomeLabel.setText("<font color='white'>" + "Welcome, rightie!" + "</font>")
         current_app = self.appList[self.curr_app]
         current_app.graphicsEffect().setEnabled(False)
         self.curr_app = (self.curr_app + 1) % 5
