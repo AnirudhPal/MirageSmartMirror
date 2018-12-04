@@ -60,7 +60,11 @@ icons = {
 'clear-night':'/home/pi/MirageSmartMirror/src/icons/moon.png',
 'thunderstorm':'/home/pi/MirageSmartMirror/src/icons/storm.png',
 'hail':'/home/pi/MirageSmartMirror/src/icons/hail.png',
-'tornado':'/home/pi/MirageSmartMirror/src/icons/tornado.png'
+'maps':'/home/pi/MirageSmartMirror/src/icons/maps.png',
+'news':'/home/pi/MirageSmartMirror/src/icons/news.png',
+'main':'/home/pi/MirageSmartMirror/src/icons/main.png',
+'groom':'/home/pi/MirageSmartMirror/src/icons/groom.png',
+'calendar':'/home/pi/MirageSmartMirror/src/icons/calendar.png'
 }
 
 class Window(QWidget):
@@ -131,10 +135,10 @@ class Window(QWidget):
         # self.rt = maps.Maps("250 Sheetz Street, West Lafayette, Indiana", user_destinations)
         # self.calendarEvents = googleCalendar.Calendar() # fix to take in user id and get user's token
 
-        self.qt.msb = QPushButton('Main screen')
-        self.qt.gmb = QPushButton('Groom mode')
-        self.qt.lsb = QPushButton('Lock screen')
-        self.qt.l = QLabel()
+        # self.qt.msb = QPushButton('Main screen')
+        # self.qt.gmb = QPushButton('Groom mode')
+        # self.qt.lsb = QPushButton('Lock screen')
+        # self.qt.l = QLabel()
 
         # Main screen layout
         self.TimeWeatherBox = QHBoxLayout()
@@ -193,30 +197,134 @@ class Window(QWidget):
 
         ###
         self.appList = []
-        self.news = QPushButton('News')
-        self.calendar = QPushButton('Calendar')
-        self.routes = QPushButton('Routes')
-        self.appList.append(self.news)
+        # self.news = QPushButton('News')
+        # self.calendar = QPushButton('Calendar')
+        # self.routes = QPushButton('Routes')
+        self.news = QLabel()
+        news_effect = QGraphicsDropShadowEffect()
+        news_effect.setOffset(1, 1)
+        news_effect.setBlurRadius(30)
+        news_effect.setColor(QColor(255,255,255))
+        news_icon = icons['news']
+        news_image = cv2.imread(news_icon)
+        news_image = cv2.resize(news_image, (60, 60), interpolation=cv2.INTER_CUBIC)
+        news_image = QImage(news_image, news_image.shape[1], news_image.shape[0], news_image.strides[0], QImage.Format_RGB888)
+        self.news.setFixedWidth(75)
+        self.news.setFixedHeight(75)
+        self.news.setAlignment(Qt.AlignCenter)
+        self.news.setPixmap(QPixmap.fromImage(news_image))
+        self.news.setFrameShape(QFrame.Box)
+        self.news.setFrameShadow(QFrame.Raised)
+        self.news.setLineWidth(1)
+        self.news.setMidLineWidth(2)
+        self.news.setGraphicsEffect(news_effect)
+        self.news.graphicsEffect().setEnabled(False)
+
+        self.calendar = QLabel()
+        calendar_effect = QGraphicsDropShadowEffect()
+        calendar_effect.setOffset(1, 1)
+        calendar_effect.setBlurRadius(30)
+        calendar_effect.setColor(QColor(255,255,255))
+        calendar_icon = icons['calendar']
+        calendar_image = cv2.imread(calendar_icon)
+        calendar_image = cv2.resize(calendar_image, (60, 60), interpolation=cv2.INTER_CUBIC)
+        calendar_image = QImage(calendar_image, calendar_image.shape[1], calendar_image.shape[0], calendar_image.strides[0], QImage.Format_RGB888)
+        self.calendar.setFixedWidth(75)
+        self.calendar.setFixedHeight(75)
+        self.calendar.setAlignment(Qt.AlignCenter)
+        self.calendar.setPixmap(QPixmap.fromImage(calendar_image))
+        self.calendar.setFrameShape(QFrame.Box)
+        self.calendar.setFrameShadow(QFrame.Raised)
+        self.calendar.setLineWidth(1)
+        self.calendar.setMidLineWidth(2)
+        self.calendar.setGraphicsEffect(calendar_effect)
+        self.calendar.graphicsEffect().setEnabled(False)
+
+        self.maps = QLabel()
+        maps_effect = QGraphicsDropShadowEffect()
+        maps_effect.setOffset(1, 1)
+        maps_effect.setBlurRadius(30)
+        maps_effect.setColor(QColor(255,255,255))
+        maps_icon = icons['maps']
+        maps_image = cv2.imread(maps_icon)
+        maps_image = cv2.resize(maps_image, (60, 60), interpolation=cv2.INTER_CUBIC)
+        maps_image = QImage(maps_image, maps_image.shape[1], maps_image.shape[0], maps_image.strides[0], QImage.Format_RGB888)
+        self.maps.setFixedWidth(75)
+        self.maps.setFixedHeight(75)
+        self.maps.setAlignment(Qt.AlignCenter)
+        self.maps.setPixmap(QPixmap.fromImage(maps_image))
+        self.maps.setFrameShape(QFrame.Box)
+        self.maps.setFrameShadow(QFrame.Raised)
+        self.maps.setLineWidth(1)
+        self.maps.setMidLineWidth(2)
+        self.maps.setGraphicsEffect(maps_effect)
+        self.maps.graphicsEffect().setEnabled(False)
+
+        self.groom = QLabel()
+        groom_effect = QGraphicsDropShadowEffect()
+        groom_effect.setOffset(1, 1)
+        groom_effect.setBlurRadius(30)
+        groom_effect.setColor(QColor(255,255,255))
+        groom_icon = icons['groom']
+        groom_image = cv2.imread(groom_icon)
+        groom_image = cv2.resize(groom_image, (60, 60), interpolation=cv2.INTER_CUBIC)
+        groom_image = QImage(groom_image, groom_image.shape[1], groom_image.shape[0], groom_image.strides[0], QImage.Format_RGB888)
+        self.groom.setFixedWidth(75)
+        self.groom.setFixedHeight(75)
+        self.groom.setAlignment(Qt.AlignCenter)
+        self.groom.setPixmap(QPixmap.fromImage(groom_image))
+        self.groom.setFrameShape(QFrame.Box)
+        self.groom.setFrameShadow(QFrame.Raised)
+        self.groom.setLineWidth(1)
+        self.groom.setMidLineWidth(2)
+        self.groom.setGraphicsEffect(groom_effect)
+        self.groom.graphicsEffect().setEnabled(False)
+
+        self.main = QLabel()
+        main_effect = QGraphicsDropShadowEffect()
+        main_effect.setOffset(1, 1)
+        main_effect.setBlurRadius(30)
+        main_effect.setColor(QColor(255,255,255))
+        main_icon = icons['main']
+        main_image = cv2.imread(main_icon)
+        main_image = cv2.resize(main_image, (60, 60), interpolation=cv2.INTER_CUBIC)
+        main_image = QImage(main_image, main_image.shape[1], main_image.shape[0], main_image.strides[0], QImage.Format_RGB888)
+        self.main.setFixedWidth(75)
+        self.main.setFixedHeight(75)
+        self.main.setAlignment(Qt.AlignCenter)
+        self.main.setPixmap(QPixmap.fromImage(main_image))
+        self.main.setFrameShape(QFrame.Box)
+        self.main.setFrameShadow(QFrame.Raised)
+        self.main.setLineWidth(1)
+        self.main.setMidLineWidth(2)
+        self.main.setGraphicsEffect(main_effect)
+        self.main.graphicsEffect().setEnabled(False)
+
+
+
+        self.appList.append(self.main)
         self.appList.append(self.calendar)
-        self.appList.append(self.routes)
-        self.appList.append(self.qt.gmb)
+        self.appList.append(self.maps)
+        self.appList.append(self.news)
+        self.appList.append(self.groom)
+        # self.appList.append(self.qt.gmb)
 
 
         for app in self.appList:
             self.appListBox.addWidget(app)
 
-        self.qt.msb.clicked.connect(self.msd)
-        self.qt.gmb.clicked.connect(self.gmd)
-        self.qt.lsb.clicked.connect(self.set_lockscreen_layout)
-        self.news.clicked.connect(self.news_headlines)
-        self.calendar.clicked.connect(self.calendar_events)
-        self.routes.clicked.connect(self.routes_info)
+        # self.qt.msb.clicked.connect(self.msd)
+        # self.qt.gmb.clicked.connect(self.gmd)
+        # self.qt.lsb.clicked.connect(self.set_lockscreen_layout)
+        # self.news.clicked.connect(self.news_headlines)
+        # self.calendar.clicked.connect(self.calendar_events)
+        # self.routes.clicked.connect(self.routes_info)
 
         # self.clearLayout(self.qt.v_box)
 
         self.qt.setWindowTitle('Main screen')
-        self.qt.lsb = QPushButton('Lock screen')
-        self.qt.lsb.clicked.connect(self.set_lockscreen_layout)
+        # self.qt.lsb = QPushButton('Lock screen')
+        # self.qt.lsb.clicked.connect(self.set_lockscreen_layout)
         #self.qt.v_box.addWidget(self.qt.lsb)
         self.qt.v_box.addLayout(self.TimeWeatherBox)
 
@@ -456,7 +564,7 @@ class Window(QWidget):
 
         # self.weather.daily = self.weather_dict['daily']['data'][0]['summary']
         self.weather.dailySummary.setText("<font color='white'>" + parseApiText(self.weather_dict['daily']) + "</font>")
-        print(self.weather_dict['daily'])
+        # print(self.weather_dict['daily'])
 
         # self.weather.curr = "Currently " + self.weather_dict['currently']['summary']
         self.weather.currently.setText("<font color='white'>" + parseApiText(self.weather_dict['current']) + "</font>")
@@ -468,7 +576,7 @@ class Window(QWidget):
         self.weather.icon.setFixedHeight(75)
         self.weather.icon.setAlignment(Qt.AlignCenter)
         self.weather.icon.setPixmap(QPixmap.fromImage(image))
-#        self.weather.icon.frame = QFrame()
+#        self.weather.icon.frame = QFrame() # Not needed
 #        self.weather.icon.setFrameShape(QFrame.Box)
 #        self.weather.icon.setFrameShadow(QFrame.Raised)
 #        self.weather.icon.setLineWidth(1)
