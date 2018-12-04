@@ -337,7 +337,7 @@ class Window(QWidget):
         # self.qt.v_box = temp
 
     def gmd(self):
-        self.curr_screen = 2
+        # self.curr_screen = 2
         self.curr_app = 4
         # self.timer.stop()
         # self.clearLayout(self.qt.v_box)
