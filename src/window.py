@@ -148,7 +148,6 @@ class Window(QWidget):
         self.weather.weatherBox = QVBoxLayout()
 
         self.weather.dailySummary = QLabel()
-        self.weather.dailySummary.setFixedWidth(400)
         self.weather.dailySummary.setAlignment(Qt.AlignLeft)
         self.weather.dailySummary.setFont(font)
 
@@ -290,6 +289,13 @@ class Window(QWidget):
         self.prompt.setFont(font)
         self.promptTimeout = 5
         return
+
+    def parseApiText(str):
+        index = str.find('(')
+        if index >= 0:
+            return str[:index]
+        else:
+            return str
 
 
 
@@ -450,11 +456,11 @@ class Window(QWidget):
         image = QImage(image, image.shape[1], image.shape[0], image.strides[0], QImage.Format_RGB888)
 
         # self.weather.daily = self.weather_dict['daily']['data'][0]['summary']
-        self.weather.dailySummary.setText("<font color='white'>" + self.weather_dict['daily'] + "</font>")
+        self.weather.dailySummary.setText("<font color='white'>" + parseApiText(self.weather_dict['daily']) + "</font>")
         print(self.weather_dict['daily'])
 
         # self.weather.curr = "Currently " + self.weather_dict['currently']['summary']
-        self.weather.currently.setText("<font color='white'>" + self.weather_dict['current'] + "</font>")
+        self.weather.currently.setText("<font color='white'>" + parseApiText(self.weather_dict['current']) + "</font>")
 
         # self.weather.fahrenheit = self.weather_dict['currently']['temperature']
         self.weather.temp.setText("<font color='white'> %d" %self.weather_dict['temp'] + u'\N{DEGREE SIGN}' + "</font>")
