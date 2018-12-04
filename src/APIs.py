@@ -240,6 +240,29 @@ def get_events_list(user_path):
                 # print(dict)
     return events_list
 
+# Call this after writing the user0.json file... Example: pullApi("user0")
+# Might need to put semaphores here...
+# TODO: Check if google calendar information is available
+def pullApi(userName):
+    file_path = '/home/pi/MirageSmartMirror/src/Users/%s/%s.json' % (userName, userName)
+    calendar_path = '/home/pi/MirageSmartMirror/src/Users/%s/%s_auth.json' % (userName, userName)
+    with open(file_path) as f:
+        data = json.load(f)
+
+    user_dict = json.loads(data)
+
+    # print(user_dict['freqDests'])
+
+    dict = {'map': get_map(user_dict['address'],
+            user_dict['freqDests']),
+            'weather': get_weather(user_dict['address']),
+            'news': get_news(user_dict['newsCategories']),
+            'events': get_events_list(calendar_path)}
+    file_path = '/home/pi/MirageSmartMirror/src/Users/%s/%sAPI.json' % (userName, userName)
+    with open(file_path, 'w') as outfile:
+        json.dump(dict, outfile)
+        print('JSON Dumped!')
+
 if __name__ == '__main__':
     while True:
         num_of_users = len(os.listdir('/home/pi/MirageSmartMirror/src/Users'))
