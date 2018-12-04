@@ -148,6 +148,7 @@ class Window(QWidget):
         self.weather.weatherBox = QVBoxLayout()
 
         self.weather.dailySummary = QLabel()
+        self.weather.dailySummary.setFixedWidth(40)
         self.weather.dailySummary.setAlignment(Qt.AlignLeft)
         self.weather.dailySummary.setFont(font)
 
@@ -180,7 +181,7 @@ class Window(QWidget):
         self.TimeWeatherBox.addWidget(self.datetime)
 
         ###
-        self.welcomeLabel = QLabel("<font color='white'>" + "Welcome, name here!" + "</font")
+        self.welcomeLabel = QLabel("<font color='white'>" + "Welcome, name here!" + "</font>")
         self.welcomeLabel.setAlignment(Qt.AlignCenter)
         self.welcomeLabel.setFixedHeight(100)
         self.welcomeBox.addWidget(self.welcomeLabel)
@@ -241,7 +242,7 @@ class Window(QWidget):
         self.timer.stop()
         self.curr_screen = 3
         prompt_box = QHBoxLayout()
-        self.prompt = QLabel("<font color='white'>" + "Please stand still while we detect your face and load your profile." + "</font")
+        self.prompt = QLabel("<font color='white'>" + "Please stand still while we detect your face and load your profile." + "</font>")
         self.prompt.setAlignment(Qt.AlignCenter)
         prompt_box.addWidget(self.prompt)
         self.qt.layout().addLayout(prompt_box)
@@ -252,7 +253,7 @@ class Window(QWidget):
         # self.timer.stop()
         self.curr_screen = 3
         prompt_box = QHBoxLayout()
-        self.prompt = QLabel("<font color='white'>" + "Face not recognized! Please download our MirageCompanion iPhone App to set up a new profile." + "</font")
+        self.prompt = QLabel("<font color='white'>" + "Face not recognized! Please download our MirageCompanion iPhone App to set up a new profile." + "</font>")
         self.prompt.setAlignment(Qt.AlignCenter)
         prompt_box.addWidget(self.prompt)
         self.qt.layout().addLayout(prompt_box)
@@ -314,7 +315,7 @@ class Window(QWidget):
         effect3.setColor(QColor(255,255,255))
 
         datetime = QDateTime.currentDateTime()
-        self.qt.time = QLabel("<font color='white'>" + datetime.toString("MMM d, yyyy hh:mm:ss AP") + "</font")
+        self.qt.time = QLabel("<font color='white'>" + datetime.toString("MMM d, yyyy hh:mm:ss AP") + "</font>")
         self.qt.time.setFont(font)
         self.qt.time.setGraphicsEffect(effect2)
 
@@ -376,10 +377,10 @@ class Window(QWidget):
         self.feed.title.setText("<font color='white'>" + "News Headlines" + "</font>")
 
         for i in range(6):
-            temp1 = QLabel("<font color='white'>" + self.news_data['articles'][i]['title'] + "." + "</font")
+            temp1 = QLabel("<font color='white'>" + self.news_data['articles'][i]['title'] + "." + "</font>")
             temp1.setFont(news_headline_font)
              # + self.news_data['articles'][i]['source']['name']
-            temp2 = QLabel("<font color='white'>" + self.news_data['articles'][i]['source']['name'] + "</font")
+            temp2 = QLabel("<font color='white'>" + self.news_data['articles'][i]['source']['name'] + "</font>")
             temp2.setFont(news_source_font)
             temp3 = QLabel()
             temp3.setFont(news_space_font)
@@ -396,13 +397,13 @@ class Window(QWidget):
         self.news.setEnabled(True)
 
         self.feed.title.setFont(font)
-        self.feed.title.setText("<font color='white'>" + "Routes Info" + "</font")
+        self.feed.title.setText("<font color='white'>" + "Routes Info" + "</font>")
 
         for route in self.rt:
-            temp1 = QLabel("<font color='white'>" + route[1] + "</font")
+            temp1 = QLabel("<font color='white'>" + route[1] + "</font>")
             temp1.setFont(news_source_font)
              # + self.news_data['articles'][i]['source']['name']
-            temp2 = QLabel("<font color='white'>" + route[0] + "</font")
+            temp2 = QLabel("<font color='white'>" + route[0] + "</font>")
             temp2.setFont(news_headline_font)
             temp3 = QLabel()
             temp3.setFont(news_space_font)
@@ -419,20 +420,20 @@ class Window(QWidget):
         self.routes.setEnabled(True)
 
         self.feed.title.setFont(font)
-        self.feed.title.setText("<font color='white'>" + "Calendar Events" + "</font")
+        self.feed.title.setText("<font color='white'>" + "Calendar Events" + "</font>")
 
         if self.calendarEvents == None:
-            self.feed.title.setText("<font color='white'>" + "No upcoming events!" + "</font")
+            self.feed.title.setText("<font color='white'>" + "No upcoming events!" + "</font>")
         else:
             num_of_events = len(self.calendarEvents)
             if num_of_events > 6:
                 num_of_events = 6
             for i in range(num_of_events):
                 event = self.calendarEvents[i]
-                temp1 = QLabel("<font color='white'>" + event['summary'] + "</font")
+                temp1 = QLabel("<font color='white'>" + event['summary'] + "</font>")
                 temp1.setFont(news_headline_font)
                  # + self.news_data['articles'][i]['source']['name']
-                temp2 = QLabel("<font color='white'>" + event['start'] + "</font")
+                temp2 = QLabel("<font color='white'>" + event['start'] + "</font>")
                 temp2.setFont(news_source_font)
                 temp3 = QLabel()
                 temp3.setFont(news_space_font)
@@ -449,14 +450,14 @@ class Window(QWidget):
         image = QImage(image, image.shape[1], image.shape[0], image.strides[0], QImage.Format_RGB888)
 
         # self.weather.daily = self.weather_dict['daily']['data'][0]['summary']
-        self.weather.dailySummary.setText("<font color='white'>" + self.weather_dict['daily'] + "</font")
+        self.weather.dailySummary.setText("<font color='white'>" + self.weather_dict['daily'] + "</font>")
         print(self.weather_dict['daily'])
 
         # self.weather.curr = "Currently " + self.weather_dict['currently']['summary']
-        self.weather.currently.setText("<font color='white'>" + self.weather_dict['current'] + "</font")
+        self.weather.currently.setText("<font color='white'>" + self.weather_dict['current'] + "</font>")
 
         # self.weather.fahrenheit = self.weather_dict['currently']['temperature']
-        self.weather.temp.setText("<font color='white'> %d" %self.weather_dict['temp'] + u'\N{DEGREE SIGN}' + "</font")
+        self.weather.temp.setText("<font color='white'> %d" %self.weather_dict['temp'] + u'\N{DEGREE SIGN}' + "</font>")
 
         self.weather.icon.setPixmap(QPixmap.fromImage(image))
 
@@ -474,7 +475,7 @@ class Window(QWidget):
         datetime = QDateTime.currentDateTime()
         if self.qt.digitaltime != None:
             if self.qt.time != None:
-                self.qt.time.setText("<font color='white'>" + datetime.toString("MMM d, yyyy hh:mm:ss AP") + "</font")
+                self.qt.time.setText("<font color='white'>" + datetime.toString("MMM d, yyyy hh:mm:ss AP") + "</font>")
 
     # def fade(self):
     #     self.fadeTimer = QTimer()
@@ -757,12 +758,12 @@ class Window(QWidget):
 
     def signalHandler1(self):
         # We got signal!
-        self.welcomeLabel.setText("<font color='white'>" + "Welcome, leftie!" + "</font")
+        self.welcomeLabel.setText("<font color='white'>" + "Welcome, leftie!" + "</font>")
         print('Go left!')
 
     def signalHandler2(self):
         # We got signal!
-        self.welcomeLabel.setText("<font color='white'>" + "Welcome, rightie!" + "</font")
+        self.welcomeLabel.setText("<font color='white'>" + "Welcome, rightie!" + "</font>")
         print('Go right!')
 
 class keyboardListner(QThread):
