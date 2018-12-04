@@ -290,13 +290,6 @@ class Window(QWidget):
         self.promptTimeout = 5
         return
 
-    def parseApiText(str):
-        index = str.find('(')
-        if index >= 0:
-            return str[:index]
-        else:
-            return str
-
 
 
     def set_lockscreen_layout(self):
@@ -813,6 +806,12 @@ class keyboardListner(QThread):
     # def signalHandler2(self):
     #     # We got signal!
     #     print('Go right!')
+def parseApiText(str):
+    index = str.find('(')
+    if index >= 0:
+        return str[:index]
+    else:
+        return str
 
 
 if __name__ == "__main__":
