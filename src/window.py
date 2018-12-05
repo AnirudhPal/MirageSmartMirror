@@ -345,7 +345,7 @@ class Window(QWidget):
         self.clearLayout(self.feed.feedForm)
         self.clearLayout(self.welcomeBox)
         # Turn on LED
-
+        coProcessor.setLedWhiteFadeIn()
         #self.qt.v_box.addWidget(self.qt.lsb)
         # self.qt.v_box.addWidget(groom.Groom().frame)
         # self.qt.v_box.setContentsMargins(0,0,0,0)
@@ -901,6 +901,8 @@ class Window(QWidget):
         # self.welcomeLabel.setText("<font color='white'>" + "Welcome, leftie!" + "</font>")
         current_app = self.appList[self.curr_app]
         current_app.graphicsEffect().setEnabled(False)
+        if self.curr_app == 4:
+            coProcessor.setLedWhiteFadeOut()
         self.curr_app = (self.curr_app - 1) % 5
         current_app = self.appList[self.curr_app]
         current_app.graphicsEffect().setEnabled(True)
@@ -921,6 +923,8 @@ class Window(QWidget):
         # self.welcomeLabel.setText("<font color='white'>" + "Welcome, rightie!" + "</font>")
         current_app = self.appList[self.curr_app]
         current_app.graphicsEffect().setEnabled(False)
+        if self.curr_app == 4:
+            coProcessor.setLedWhiteFadeOut()
         self.curr_app = (self.curr_app + 1) % 5
         current_app = self.appList[self.curr_app]
         current_app.graphicsEffect().setEnabled(True)

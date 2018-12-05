@@ -5,6 +5,7 @@ import time
 # Global Var
 avr = None
 dly = 2
+adly = 0.25
 
 # Functions
 def initProximity():
@@ -19,12 +20,22 @@ def getProximity():
 
 def setLedWhiteFadeIn():
 	avr.write(b'A')
+	time.sleep(adly)
 
 def setLedWhiteFadeOut():
 	avr.write(b'B')
+	time.sleep(adly)
+
+def setLedGreenFadeIn():
+	avr.write(b'C')
+	time.sleep(adly)
+
+def setLedGreenFadeOut():
+	avr.write(b'D')
+	time.sleep(adly)
 
 
 # Test Code
 #initProximity()
-#while(1):
-#	getProximity()
+#setLedWhiteFadeIn()
+

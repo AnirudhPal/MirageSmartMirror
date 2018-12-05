@@ -8,7 +8,7 @@ import os
 import subprocess
 import json
 import threading
-
+import coProcessor
 import time
 import picamera
 import numpy as np
@@ -113,7 +113,7 @@ sema = threading.Semaphore()
 def detectFace():
 	global sema
 	# Turn on LED
-	setLed.ledON()
+	#setLed.ledON()
 	jsonData = {}
 
 	with open('faceDetectStatus.json', 'r') as testData:
@@ -132,6 +132,9 @@ def detectFace():
 	with open('faceDetectStatus.json', 'w') as outfile:
 		json.dump(jsonData, outfile)
 		sema.release()
+
+	# Set Green LED on
+	coProcessor.setLedGreenFadeIn()
 	vs = VideoStream(usePiCamera=True)
 	vs.start()
 	time.sleep(1)
@@ -179,6 +182,9 @@ def detectFace():
 		flags=cv2.CASCADE_SCALE_IMAGE)
 	boxes = [(y, x + w, y + h, x) for (x, y, w, h) in rects]
 	vs.stop()
+	# Set green LED off
+	coProcessor.setLedGreenFadeOut()
+
 	jsonData = {
 		'username':None,
 		'error':None,
