@@ -463,7 +463,7 @@ class Window(QWidget):
 
         prompt_box = QHBoxLayout()
         self.prompt = QLabel()
-        self.prompt.setFixedHeight(30)
+        self.prompt.setFixedHeight(50)
         self.prompt.setAlignment(Qt.AlignCenter)
         # self.prompt.setGraphicsEffect(effect2)
         self.prompt.setText("<font color='black'>" + "Blank" + "</font>")
@@ -477,7 +477,7 @@ class Window(QWidget):
             self.qt.layout().addLayout(self.qt.analogclock)
             self.qt.layout().addLayout(self.qt.digitaltime)
             self.qt.layout().addLayout(prompt_box)
-            self.qt.layout().addSpacing(150)
+            self.qt.layout().addSpacing(200)
             self.init_timer()
         else:
             self.qt.v_box = QVBoxLayout()
@@ -486,7 +486,7 @@ class Window(QWidget):
             self.qt.v_box.addLayout(self.qt.analogclock)
             self.qt.v_box.addLayout(self.qt.digitaltime)
             self.qt.v_box.addLayout(prompt_box)
-            self.qt.v_box.addSpacing(150)
+            self.qt.v_box.addSpacing(200)
             self.qt.setLayout(self.qt.v_box)
             self.init_timer()
 
@@ -722,7 +722,6 @@ class Window(QWidget):
         self.errorMessage = detectionStatusDictionary['error']
 
         self.detectCalled = detectionStatusDictionary['detectCalled']
-        ##TODO:Check logout timer if done
 
 
         # Step 3: Check proximity value
@@ -745,7 +744,7 @@ class Window(QWidget):
         # User steps away (proximity >= 80)
         elif self.proximity >= 78:
             if self.loggedIn is True:
-                #TODO: start timer to log out user after 1? min
+                # Start timer when user walks away for 10 seconds?
                 if self.walkAwayTimeout == 0:
                     # Log the user out and reset timer
                     detectionStatusDictionary['username'] = None
@@ -770,23 +769,19 @@ class Window(QWidget):
             # If detection is finished and no user logged in..
             if self.isDetectingFace is False and self.loggedIn is False:
                 # Check error message
-                if self.errorMessage == "Too many faces":
-                    #TODO: Display help tip
+                if self.errorMessage == "Too many faces!":
                     self.changePrompt(self.errorMessage)
                     print("\"Too many faces\" will be displayed")
                     nothing = 0
-                elif self.errorMessage == "Face unknown":
-                    #TODO: Display new user prompt
+                elif self.errorMessage == "Face not recognized!":
                     self.changePrompt(self.errorMessage)
                     print("\"New user\" will be displayed")
                     nothing = 0
-                elif self.errorMessage == "No face detected":
-                    #TODO: Display help tip
+                elif self.errorMessage == "No face detected!":
                     self.changePrompt(self.errorMessage)
                     print("\"No face detected\" will be displayed")
                     nothing = 0
 
-                #TODO: Start timer to remove hint message after 10 seconds
 
                 # Call face detection again
                 # with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json') as f:
