@@ -199,7 +199,7 @@ def detectFace():
 	if (len(rects)== 0):
 		jsonData = {
 			'username':None,
-			'error':'No face detected',
+			'error':'No face detected!',
 			'cameraOn':False,
 			'detectCalled':False
 		}
@@ -212,7 +212,7 @@ def detectFace():
 	elif (len(rects) > 1):
 		jsonData = {
 			'username':None,
-			'error':'Too many faces',
+			'error':'Too many faces!',
 			'cameraOn':False,
 			'detectCalled':False
 		}
@@ -277,7 +277,7 @@ def detectFace():
 		if name is None:
 			jsonData = {
 				'username':None,
-				'error':'Face unknown',
+				'error':'Face not recognized!',
 				'cameraOn':False,
 				'detectCalled':False
 			}

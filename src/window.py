@@ -411,7 +411,7 @@ class Window(QWidget):
         self.curr_user_name = user_dict['name']
 
     def changePrompt(self, message):
-        font = QFont('Helvetica', 18)
+        font = QFont('Helvetica', 28)
         font.setWeight(1)
         self.prompt.setText("<font color='white'>" + message + "</font>")
         self.prompt.setFont(font)
@@ -465,7 +465,7 @@ class Window(QWidget):
 
         prompt_box = QHBoxLayout()
         self.prompt = QLabel()
-        self.prompt.setFixedHeight(30)
+        self.prompt.setFixedHeight(50)
         self.prompt.setAlignment(Qt.AlignCenter)
         # self.prompt.setGraphicsEffect(effect2)
         self.prompt.setText("<font color='white'>" + "Blank" + "</font>")
@@ -479,7 +479,7 @@ class Window(QWidget):
             self.qt.layout().addLayout(self.qt.analogclock)
             self.qt.layout().addLayout(self.qt.digitaltime)
             self.qt.layout().addLayout(prompt_box)
-            self.qt.layout().addSpacing(100)
+            self.qt.layout().addSpacing(150)
             self.init_timer()
         else:
             self.qt.v_box = QVBoxLayout()
@@ -488,7 +488,7 @@ class Window(QWidget):
             self.qt.v_box.addLayout(self.qt.analogclock)
             self.qt.v_box.addLayout(self.qt.digitaltime)
             self.qt.v_box.addLayout(prompt_box)
-            self.qt.v_box.addSpacing(100)
+            self.qt.v_box.addSpacing(150)
             self.qt.setLayout(self.qt.v_box)
             self.init_timer()
 
@@ -690,7 +690,6 @@ class Window(QWidget):
     # Function that takes a message and displays it on lockscreen. Keep for 5? seconds..
     def promptController(self):
         if self.loggedIn is False and self.promptTimeout == 0:
-            print("Wtf!")
             self.prompt.setText("<font color='black'>" + "Blank" + "</font>")
         elif self.promptTimeout > 0:
             self.promptTimeout = self.promptTimeout - 1
@@ -772,9 +771,6 @@ class Window(QWidget):
 
         # User in proximity(10 < proximity < 80)
         else:
-            print(self.loggedIn)
-            print(self.isDetectingFace)
-            print(self.errorMessage)
             # Reset walk away timer
             self.walkAwayTimeout = -1
             # If detection is finished and no user logged in..
