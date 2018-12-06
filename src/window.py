@@ -463,7 +463,7 @@ class Window(QWidget):
 
         prompt_box = QHBoxLayout()
         self.prompt = QLabel()
-        self.prompt.setFixedHeight(50)
+        self.prompt.setFixedHeight(40)
         self.prompt.setAlignment(Qt.AlignCenter)
         # self.prompt.setGraphicsEffect(effect2)
         self.prompt.setText("<font color='black'>" + "Blank" + "</font>")
