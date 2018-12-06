@@ -477,7 +477,7 @@ class Window(QWidget):
             self.qt.layout().addLayout(self.qt.analogclock)
             self.qt.layout().addLayout(self.qt.digitaltime)
             self.qt.layout().addLayout(prompt_box)
-            self.qt.layout().addSpacing(200)
+            self.qt.layout().addSpacing(150)
             self.init_timer()
         else:
             self.qt.v_box = QVBoxLayout()
@@ -486,7 +486,7 @@ class Window(QWidget):
             self.qt.v_box.addLayout(self.qt.analogclock)
             self.qt.v_box.addLayout(self.qt.digitaltime)
             self.qt.v_box.addLayout(prompt_box)
-            self.qt.v_box.addSpacing(200)
+            self.qt.v_box.addSpacing(150)
             self.qt.setLayout(self.qt.v_box)
             self.init_timer()
 
