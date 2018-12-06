@@ -37,9 +37,11 @@ def add_user():
 		filename = M_USER_DIR + "user" + str(request.json['user_info']['id']) + "/" + "user" + str(request.json['user_info']['id']) + ".json"
 	else:
 		print("Method is not post")
+	with open(filename, 'w') as f:
+		f.write("\"" + str(request.json['user_info']).replace('\'', '\\"') + '\"')
 
-	f = open(filename, "w")
-	f.write("\"" + str(request.json['user_info']).replace('\'', '\\"') + '\"')
+#	f = open(filename, "w")
+#	f.write("\"" + str(request.json['user_info']).replace('\'', '\\"') + '\"')
 	APIs.pullApi("user" + str(request.json['user_info']['id']))
 	return "User successfully added"
 
@@ -66,8 +68,11 @@ def update_user():
 	else:
 		print("Method is not post")
 
-	f = open(filename, "w")
-	f.write("\"" + str(request.json['user_info']).replace('\'','\\"') + '\"')
+	with open(filename, 'w') as f:
+		f.write("\"" + str(request.json['user_info']).replace('\'', '\\"') + '\"')
+
+#	f = open(filename, "w")
+#	f.write("\"" + str(request.json['user_info']).replace('\'','\\"') + '\"')
 	pullApi("user" + str(request.json['user_info']['id']))
 	return "User successfully updated"
 
