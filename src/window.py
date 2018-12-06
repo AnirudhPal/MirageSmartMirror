@@ -341,8 +341,9 @@ class Window(QWidget):
 
         self.qt.v_box.addLayout(self.appBox)
         self.qt.v_box.addLayout(self.welcomeBox)
-        self.qt.v_box.addSpacing(150)
+        self.qt.v_box.addSpacing(50)
         self.qt.v_box.addLayout(self.appListBox)
+        self.qt.v_box.addSpacing(200)
 
         # temp = DateTime.DateTime()
         # self.qt.v_box = temp
@@ -476,7 +477,7 @@ class Window(QWidget):
             self.qt.layout().addLayout(self.qt.analogclock)
             self.qt.layout().addLayout(self.qt.digitaltime)
             self.qt.layout().addLayout(prompt_box)
-            self.qt.layout().addSpacing(50)
+            self.qt.layout().addSpacing(200)
             self.init_timer()
         else:
             self.qt.v_box = QVBoxLayout()
@@ -485,7 +486,7 @@ class Window(QWidget):
             self.qt.v_box.addLayout(self.qt.analogclock)
             self.qt.v_box.addLayout(self.qt.digitaltime)
             self.qt.v_box.addLayout(prompt_box)
-            self.qt.v_box.addSpacing(50)
+            self.qt.v_box.addSpacing(200)
             self.qt.setLayout(self.qt.v_box)
             self.init_timer()
 
