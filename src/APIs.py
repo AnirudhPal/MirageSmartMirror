@@ -264,10 +264,11 @@ def pullApi(userName):
     file_path = '/home/pi/MirageSmartMirror/src/Users/%s/%s.json' % (userName, userName)
     calendar_path = '/home/pi/MirageSmartMirror/src/Users/%s/%s_auth.json' % (userName, userName)
     with open(file_path) as f:
-        data = json.load(f)
+        user_dict = json.load(f)
 
-    user_dict = json.loads(data)
-
+    #user_dict = json.loads(data)
+    #print(user_dict['address'])
+    #print(user_dict["address"])
     # print(user_dict['freqDests'])
 
     dict = {'map': get_map(user_dict['address'],
@@ -281,7 +282,7 @@ def pullApi(userName):
         print('JSON Dumped!')
 
 if __name__ == '__main__':
-    subprocess.call("python3 /home/pi/MirageSmartMirror/src/window.py &", shell=True)
+    #subprocess.call("python3 /home/pi/MirageSmartMirror/src/window.py &", shell=True)
     while True:
         if get_wifi_status() is 0:
             continue
@@ -298,11 +299,13 @@ if __name__ == '__main__':
             calendar_path = '/home/pi/MirageSmartMirror/src/Users/user%d/user%d_auth.json' % (j, j)
             with open(file_path) as f:
                 data = json.load(f)
-
+            #    print(data[103])
+            #print(user_dict)
             user_dict = json.loads(data)
 
             # print(user_dict['freqDests'])
-
+            #print(user_dict["address"])
+            #print(user_dict['address'])
             dict = {'map': get_map(user_dict['address'],
                     user_dict['freqDests']),
                     'weather': get_weather(user_dict['address']),
