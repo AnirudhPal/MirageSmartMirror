@@ -103,7 +103,7 @@ def delete_user(user_number):
 # Setup user for face calibration
 @app.route('/setup/newuser/<filename>')
 def start_face_calibration(filename):
-	faceCalibration(filename)
+	simpleRec.faceCalibration(filename)
 	print("Done")
 	subprocess.call("python3 /home/pi/MirageSmartMirror/src/faceEncoding.py &", shell=True)
 	return "Done"
