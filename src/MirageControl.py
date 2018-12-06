@@ -25,19 +25,6 @@ def get_num_users():
 	numUsers = len(files)
 	return str(numUsers)
 
-# Add a new user
-#@app.route('/user/add/<user_file>/<user_info>')
-#def add_user(user_file, user_info):
-#	next_user_num = get_num_users_plain()
-#	dirName = M_USER_DIR + "user" + str(next_user_num)
-#	filename = M_USER_DIR + user_file + "/" + user_file + ".json"
-#
-#	with open(filename, 'w') as outfile:
-#		try:
-#			json.dump(user_info, outfile, ensure_ascii=False)
-#			return "User successfully added"
-#		except:
-#			return "Unable to add user, please try again"
 
 @app.route('/user/add', methods=['POST'])
 def add_user():
@@ -53,12 +40,6 @@ def add_user():
 	f = open(filename, "w")
 	f.write("\"" + str(request.json['user_info']).replace('\'', '\\"') + '\"')
 	return "User successfully added"
-#	with open(filename, 'w') as outfile:
-#		try:
-#			json.dump(request.json['user_info'], outfile, ensure_ascii=False)
-#			return "User successfully added"
-#		except:
-#			return "Unable to add user, please try again"
 
 # Get user by number
 @app.route('/user/get/<user_number>')
@@ -78,16 +59,21 @@ def update_user():
 	#print(request.get_json())
 	if request.method == "POST":
 		next_user_num = get_num_users_plain()
-		dirName = M_USER_DIR + "user" + str(next_user_num)
+		#dirName = M_USER_DIR + "user" + str(next_user_num)
 		filename = M_USER_DIR + "user" + str(request.json['user_info']['id']) + "/" + "user" + str(request.json['user_info']['id']) + ".json"
 	else:
 		print("Method is not post")
-	with open(filename, 'w') as outfile:
-		try:
-			json.dump(request.json['user_info'], outfile, ensure_ascii=False)
-			return "User successfully updated"
-		except:
-			return "User could not be updated"
+
+	f = open(filename, "w")
+	f.write("\"" + str(request.json['user_info']).replace('\'','\\"') + '\"')
+	return "User successfully updated"
+
+#	with open(filename, 'w') as outfile:
+#		try:
+#			json.dump(request.json['user_info'], outfile, ensure_ascii=False)
+#			return "User successfully updated"
+#		except:
+#			return "User could not be updated"
 
 # Delete user by number
 @app.route('/user/delete/<user_number>')
