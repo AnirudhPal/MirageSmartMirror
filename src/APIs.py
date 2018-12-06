@@ -281,7 +281,7 @@ def pullApi(userName):
         print('JSON Dumped!')
 
 if __name__ == '__main__':
-    subprocess.call("sudo python3 /home/pi/MirageSmartMirror/src/window.py &", shell=True)
+    subprocess.call("python3 /home/pi/MirageSmartMirror/src/window.py &", shell=True)
     while True:
         if get_wifi_status() is 0:
             continue
