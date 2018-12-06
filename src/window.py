@@ -468,7 +468,7 @@ class Window(QWidget):
         self.prompt.setFixedHeight(30)
         self.prompt.setAlignment(Qt.AlignCenter)
         # self.prompt.setGraphicsEffect(effect2)
-        self.prompt.setText("<font color='black'>" + "Blank" + "</font>")
+        self.prompt.setText("<font color='white'>" + "Blank" + "</font>")
         prompt_box.addWidget(self.prompt)
 
 
@@ -479,7 +479,7 @@ class Window(QWidget):
             self.qt.layout().addLayout(self.qt.analogclock)
             self.qt.layout().addLayout(self.qt.digitaltime)
             self.qt.layout().addLayout(prompt_box)
-            self.qt.layout().addSpacing(50)
+            self.qt.layout().addSpacing(100)
             self.init_timer()
         else:
             self.qt.v_box = QVBoxLayout()
@@ -488,7 +488,7 @@ class Window(QWidget):
             self.qt.v_box.addLayout(self.qt.analogclock)
             self.qt.v_box.addLayout(self.qt.digitaltime)
             self.qt.v_box.addLayout(prompt_box)
-            self.qt.v_box.addSpacing(50)
+            self.qt.v_box.addSpacing(100)
             self.qt.setLayout(self.qt.v_box)
             self.init_timer()
 
@@ -690,6 +690,7 @@ class Window(QWidget):
     # Function that takes a message and displays it on lockscreen. Keep for 5? seconds..
     def promptController(self):
         if self.loggedIn is False and self.promptTimeout == 0:
+            print("Wtf!")
             self.prompt.setText("<font color='black'>" + "Blank" + "</font>")
         elif self.promptTimeout > 0:
             self.promptTimeout = self.promptTimeout - 1
