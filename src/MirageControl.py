@@ -119,7 +119,7 @@ def start_google_auth(filename):
 	res = GoogleAuth.getDeviceAuthorization()
 	if res == True:
 		print("Device Successfully requested Authorization")
-		GoogleAuth.displayAuthorizationCode()
+		#GoogleAuth.displayAuthorizationCode()
 		res = GoogleAuth.pollForUserAuth(filename)
 		if res == True:
 			print("User successfully authorized device")
