@@ -316,7 +316,7 @@ def detectFace():
 def faceCalibration(name):
 
 
-	coProcessor.initProximity() # If not running thru window.py
+	# coProcessor.initProximity() # If not running thru window.py
 	# camera.start_preview()
 	#path = "./Users/%s/" % name
 	# camera = PiCamera()
@@ -381,8 +381,8 @@ if __name__ == "__main__":
 	#while(True):
 	#	detectFace()
 	#	time.sleep(3)
-	coProcessor.initProximity()
-	faceCalibration("user2")
+	# coProcessor.initProximity()
+	# faceCalibration("user0")
 
 	nothing = 0
 	#detectFace()

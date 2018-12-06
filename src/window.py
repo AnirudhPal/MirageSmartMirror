@@ -385,15 +385,12 @@ class Window(QWidget):
         self.qt.layout().addLayout(prompt_box)
 
     def show_auth_code(self):
-        self.clearLayout(self.qt.v_box)
-        self.timer.stop()
-        self.curr_screen = 3
-        prompt_box = QHBoxLayout()
-        #print("Authorization code in window.py: %s" %self.google_code)
-        self.prompt = QLabel("<font color='white'>" + "Enter this code: " + self.google_code + "</font>")
-        self.prompt.setAlignment(Qt.AlignCenter)
-        prompt_box.addWidget(self.prompt)
-        self.qt.layout().addLayout(prompt_box)
+        font = QFont('Helvetica', 28)
+        font.setWeight(1)
+        self.prompt.setText("<font color='white'>" + message + "</font>")
+        self.prompt.setFont(font)
+        self.googleCodeTimeout = 10
+        return
 
     def load_user_info(self, user_name):
         # os.system('nohup python3 APIs.py &')
@@ -675,9 +672,10 @@ class Window(QWidget):
             return False
 
         if self.check_google_code() == "True":
-            with open('/home/pi/MirageSmartMirror/src/userCode.json') as f:
-                data = json.load(f)
-            dict = json.loads(data)
+            with open('/home/pi/MirageSmartMirror/src/device_authorization.json') as f:
+                dict = json.loads(f)
+            #     data = json.load(f)
+            # dict = json.loads(data)
             self.google_code = dict['userCode']
             self.show_auth_code()
             self.googleCodeTimeout = 10
@@ -689,7 +687,7 @@ class Window(QWidget):
 
     # Function that takes a message and displays it on lockscreen. Keep for 5? seconds..
     def promptController(self):
-        if self.loggedIn is False and self.promptTimeout == 0:
+        if self.loggedIn is False and self.promptTimeout == 0 and self.googleCodeTimeout == 0:
             self.prompt.setText("<font color='black'>" + "Blank" + "</font>")
         elif self.promptTimeout > 0:
             self.promptTimeout = self.promptTimeout - 1
@@ -821,7 +819,8 @@ class Window(QWidget):
                 #TODO: Increment timer (give camera time to try again)
                 if self.errorMessage == "Face calibration":
                     #TODO: Display calibration prompt, control LED?
-                    self.changePrompt(self.errorMessage)
+                    self.set_lockscreen_layout()
+                    self.changePrompt("Face calibration in progress!")
                     print("\"Face calibration is running now\" will be displayed")
                     nothing = 0
                 return
