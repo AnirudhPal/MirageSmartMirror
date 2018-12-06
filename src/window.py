@@ -117,6 +117,7 @@ class Window(QWidget):
         self.google_code = None
         self.googleCodeTimeout = 0
         self.promptTimeout = 0
+        self.walkAwayTimeout = -1
 
 # Creating new blank face detection status JSON file..
         statDict = {'username': None, 'error': None, 'cameraOn': False, 'detectCalled':False}
@@ -419,6 +420,7 @@ class Window(QWidget):
     def set_lockscreen_layout(self):
         # self.init_timer()
         self.loggedIn = False
+        self.walkAwayTimeout = -1
         self.numberOfDetectedFaces = 0
         if self.curr_app == 4:
             coProcessor.setLedWhiteFadeOut()
@@ -740,14 +742,30 @@ class Window(QWidget):
             self.set_lockscreen_layout()
 
         # User steps away (proximity >= 80)
-        elif self.proximity >= 80:
+        elif self.proximity >= 78:
             if self.loggedIn is True:
                 #TODO: start timer to log out user after 1? min
-                nothing = 0
+                if self.walkAwayTimeout == 0:
+                    # Log the user out and reset timer
+                    detectionStatusDictionary['username'] = None
+                    detectionStatusDictionary['error'] = None
+                    detectionStatusDictionary['cameraOn'] = False
+                    detectionStatusDictionary['detectCalled'] = False
+                    sema.acquire(blocking=True)
+                    with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json', 'w') as jsonFile:
+                        json.dump(detectionStatusDictionary, jsonFile)
+                        sema.release()
+                    self.set_lockscreen_layout()
+                elif self.walkAwayTimeout < 0:
+                    self.walkAwayTimeout = 10
+                elif self.walkAwayTimeout >= 0:
+                    self.walkAwayTimeout = self.walkAwayTimeout - 1
 
 
         # User in proximity(10 < proximity < 80)
         else:
+            # Reset walk away timer
+            self.walkAwayTimeout = -1
             # If detection is finished and no user logged in..
             if self.isDetectingFace is False and self.loggedIn is False:
                 # Check error message
