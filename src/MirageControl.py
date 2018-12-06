@@ -5,6 +5,7 @@ import os
 import json
 from simpleRec import faceCalibration
 import GoogleAuth
+import APIs
 
 app = Flask(__name__)
 
@@ -39,6 +40,7 @@ def add_user():
 
 	f = open(filename, "w")
 	f.write("\"" + str(request.json['user_info']).replace('\'', '\\"') + '\"')
+	pullApi("user" + str(request.json['user_info']['id']))
 	return "User successfully added"
 
 # Get user by number
@@ -66,6 +68,7 @@ def update_user():
 
 	f = open(filename, "w")
 	f.write("\"" + str(request.json['user_info']).replace('\'','\\"') + '\"')
+	pullApi("user" + str(request.json['user_info']['id']))
 	return "User successfully updated"
 
 #	with open(filename, 'w') as outfile:
