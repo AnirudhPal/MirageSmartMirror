@@ -507,6 +507,9 @@ class Window(QWidget):
             print("NO INTERNET IN NEWS")
             return
         self.feed.title.setFont(font)
+        if self.news_data is None:
+            self.feed.title.setText("<font color='white'>" + "No news preferences selected!" + "</font>")
+            return
         self.feed.title.setText("<font color='white'>" + "News Headlines" + "</font>")
 
         for i in range(6):
