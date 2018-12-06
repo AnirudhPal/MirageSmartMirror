@@ -59,11 +59,11 @@ def get_map(address, user_destinations):
     maps_url = 'https://maps.googleapis.com/maps/api/directions/json?'
     routes = []
     print(address)
-    origin = geolocator.geocode(address)
+    origin = geolocator.geocode(address, timeout=3)
     maps_origin = 'origin=%f,%f' % (origin.latitude, origin.longitude)
 
     for dest in user_destinations:
-        destination_i = geolocator.geocode(dest['address'])
+        destination_i = geolocator.geocode(dest['address'], timeout=3)
         maps_destination = '&destination=%f,%f' \
             % (destination_i.latitude, destination_i.longitude)
         maps_request = maps_url + maps_origin + maps_destination \
@@ -85,7 +85,7 @@ def get_weather(address):
     if get_wifi_status() is 0:
         return
     geolocator = Nominatim(user_agent='MirageSmartMirror')
-    origin = geolocator.geocode(address)
+    origin = geolocator.geocode(address, timeout=3)
 
     weather_key = '50f9b96898249aa1a036886103f78788'
     weather_url = 'https://api.darksky.net/forecast/' + weather_key
