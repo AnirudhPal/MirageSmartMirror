@@ -114,7 +114,10 @@ def get_news(preferences):
     #                                           country='us')
 
     news_sources = newsapi.get_sources()
-    news_url = \
+    if len(preferences) == 0:
+        news_url = 'https://newsapi.org/v2/top-headlines?&country=us&apiKey=33ff7834a7ee40928e7bb90746c8b6e5'
+    else:
+        news_url = \
         'https://newsapi.org/v2/top-headlines?category=%s&country=us&apiKey=33ff7834a7ee40928e7bb90746c8b6e5' \
         % preferences[0]
 
@@ -207,6 +210,8 @@ def fix_event_time(str):
 
 
 def get_events_list(user_path):
+    if user_path == "Empty":
+        return None
     global access_token
 
     with open(user_path, 'r') as outfile:
@@ -262,14 +267,16 @@ def pullApi(userName):
     if get_wifi_status() is 0:
         return
     file_path = '/home/pi/MirageSmartMirror/src/Users/%s/%s.json' % (userName, userName)
-    calendar_path = '/home/pi/MirageSmartMirror/src/Users/%s/%s_auth.json' % (userName, userName)
     with open(file_path) as f:
-        user_dict = json.load(f)
+        data = json.load(f)
 
-    #user_dict = json.loads(data)
+    user_dict = json.loads(data)
     #print(user_dict['address'])
     #print(user_dict["address"])
     # print(user_dict['freqDests'])
+    calendar_path = "Empty"
+    if user_dict['googleConnected'] == "True":
+        calendar_path = '/home/pi/MirageSmartMirror/src/Users/%s/%s_auth.json' % (userName, userName)
 
     dict = {'map': get_map(user_dict['address'],
             user_dict['freqDests']),
@@ -295,26 +302,28 @@ if __name__ == '__main__':
 
         for i in range(num_of_users):
             j = num_of_users - i - 1
-            file_path = '/home/pi/MirageSmartMirror/src/Users/user%d/user%d.json' % (j, j)
-            calendar_path = '/home/pi/MirageSmartMirror/src/Users/user%d/user%d_auth.json' % (j, j)
-            with open(file_path) as f:
-                data = json.load(f)
-            #    print(data[103])
-            #print(user_dict)
-            user_dict = json.loads(data)
-
-            # print(user_dict['freqDests'])
-            #print(user_dict["address"])
-            #print(user_dict['address'])
-            dict = {'map': get_map(user_dict['address'],
-                    user_dict['freqDests']),
-                    'weather': get_weather(user_dict['address']),
-                    'news': get_news(user_dict['newsCategories']),
-                    'events': get_events_list(calendar_path)}
-            file_path = '/home/pi/MirageSmartMirror/src/Users/user%d/user%dAPI.json' % (j, j)
-            with open(file_path, 'w') as outfile:
-                json.dump(dict, outfile)
-                print('JSON Dumped!')
+            name = "user%d" %j
+            pullApi(name)
+            # file_path = '/home/pi/MirageSmartMirror/src/Users/user%d/user%d.json' % (j, j)
+            # calendar_path = '/home/pi/MirageSmartMirror/src/Users/user%d/user%d_auth.json' % (j, j)
+            # with open(file_path) as f:
+            #     data = json.load(f)
+            # #    print(data[103])
+            # #print(user_dict)
+            # user_dict = json.loads(data)
+            #
+            # # print(user_dict['freqDests'])
+            # #print(user_dict["address"])
+            # #print(user_dict['address'])
+            # dict = {'map': get_map(user_dict['address'],
+            #         user_dict['freqDests']),
+            #         'weather': get_weather(user_dict['address']),
+            #         'news': get_news(user_dict['newsCategories']),
+            #         'events': get_events_list(calendar_path)}
+            # file_path = '/home/pi/MirageSmartMirror/src/Users/user%d/user%dAPI.json' % (j, j)
+            # with open(file_path, 'w') as outfile:
+            #     json.dump(dict, outfile)
+            #     print('JSON Dumped!')
         etime = time.asctime(time.localtime(time.time()))
         print('End time: ', etime)
         time.sleep(60)

@@ -532,6 +532,8 @@ class Window(QWidget):
 
         self.feed.title.setFont(font)
         self.feed.title.setText("<font color='white'>" + "Routes Info" + "</font>")
+        if len(self.rt) == 0:
+            self.feed.title.setText("<font color='white'>" + "No favorite destinations found!" + "</font>")
 
         counter = 0
 
