@@ -3,7 +3,7 @@ from flask import request
 import subprocess
 import os
 import json
-from simpleRec import faceCalibration
+import simpleRec
 import GoogleAuth
 import APIs
 
