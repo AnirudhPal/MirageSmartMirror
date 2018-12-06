@@ -316,7 +316,7 @@ def detectFace():
 def faceCalibration(name):
 
 
-	#coProcessor.initProximity()
+	coProcessor.initProximity() # If not running thru window.py
 	# camera.start_preview()
 	#path = "./Users/%s/" % name
 	# camera = PiCamera()
@@ -331,7 +331,7 @@ def faceCalibration(name):
 
 	#Turn on LED
 	#setLed.ledON()
-	#coProcessor.setLedGreenFadeIn()
+	coProcessor.setLedGreenFadeIn()
 	with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json') as json_file:
 		jsonData = json.load(json_file)
 		jsonData['error'] = "Face calibration"
@@ -348,7 +348,7 @@ def faceCalibration(name):
 				time.sleep(2)
 				# camera.capture('/home/pi/MirageSmartMirror/src/Faces/%s/image%s.jpg' % (name , i))
 				camera.capture(frame, 'rgb')
-				#coProcessor.setLedGreenFadeIn()
+				coProcessor.setLedGreenFadeIn()
 				#frame = cv2.rotate(frame, rotateCode=cv2.ROTATE_180) # Tried to rotate image - Amjad
 				pathImage = '/home/pi/MirageSmartMirror/src/Users/%s/image%s.jpg' % (name , i)
 				cv2.imwrite( pathImage,frame );
@@ -357,7 +357,7 @@ def faceCalibration(name):
 				break
 		# Turn off LED
 		#setLed.ledOFF()
-		#coProcessor.setLedGreenFadeOut()
+		coProcessor.setLedGreenFadeOut()
 		jsonData['cameraOn'] = False
 		jsonData['error'] = None
 		with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json', 'w') as outfile:
