@@ -197,7 +197,7 @@ class Window(QWidget):
         self.TimeWeatherBox.addWidget(self.datetime)
 
         ###
-        self.welcomeLabel = QLabel("<font color='white'>" + "Welcome, %s!" %self.curr_user_name + "</font>")
+        self.welcomeLabel = QLabel("<font color='white'>" + "Welcome, " + self.curr_user_name + "!" + "</font>")
         self.welcomeLabel.setAlignment(Qt.AlignCenter)
         self.welcomeLabel.setFixedHeight(100)
         self.welcomeBox.addWidget(self.welcomeLabel)
