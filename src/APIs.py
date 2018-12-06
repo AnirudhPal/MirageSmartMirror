@@ -113,6 +113,8 @@ def get_news(preferences):
     #                                         language='en',
     #                                           country='us')
 
+    print(preferences)
+    print(len(preferences))
     news_sources = newsapi.get_sources()
     if len(preferences) == 0:
         return None
@@ -283,6 +285,7 @@ def pullApi(userName):
             'weather': get_weather(user_dict['address']),
             'news': get_news(user_dict['newsCategories']),
             'events': get_events_list(calendar_path)}
+    print(dict)
     file_path = '/home/pi/MirageSmartMirror/src/Users/%s/%sAPI.json' % (userName, userName)
     with open(file_path, 'w') as outfile:
         json.dump(dict, outfile)
