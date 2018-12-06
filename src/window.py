@@ -409,7 +409,7 @@ class Window(QWidget):
         self.news_data = user_dict['news']
 
     def changePrompt(self, message):
-        font = QFont('Helvetica', 28)
+        font = QFont('Helvetica', 18)
         font.setWeight(1)
         self.prompt.setText("<font color='white'>" + message + "</font>")
         self.prompt.setFont(font)
@@ -463,7 +463,7 @@ class Window(QWidget):
 
         prompt_box = QHBoxLayout()
         self.prompt = QLabel()
-        self.prompt.setFixedHeight(40)
+        self.prompt.setFixedHeight(30)
         self.prompt.setAlignment(Qt.AlignCenter)
         # self.prompt.setGraphicsEffect(effect2)
         self.prompt.setText("<font color='black'>" + "Blank" + "</font>")
