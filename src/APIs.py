@@ -115,7 +115,7 @@ def get_news(preferences):
 
     news_sources = newsapi.get_sources()
     if len(preferences) == 0:
-        news_url = 'https://newsapi.org/v2/top-headlines?&country=us&apiKey=33ff7834a7ee40928e7bb90746c8b6e5'
+        return None
     else:
         news_url = \
         'https://newsapi.org/v2/top-headlines?category=%s&country=us&apiKey=33ff7834a7ee40928e7bb90746c8b6e5' \
