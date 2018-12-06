@@ -329,7 +329,8 @@ def faceCalibration(name):
 		print ("Successfully created the directory %s " % path)
 
 	#Turn on LED
-	setLed.ledON()
+	#setLed.ledON()
+	coProcessor.setLedGreenFadeIn()
 	with open('faceDetectStatus.json') as json_file:
 		jsonData = json.load(json_file)
 		jsonData['error'] = "Face calibration"
@@ -346,6 +347,7 @@ def faceCalibration(name):
 				time.sleep(2)
 				# camera.capture('/home/pi/MirageSmartMirror/src/Faces/%s/image%s.jpg' % (name , i))
 				camera.capture(frame, 'rgb')
+				coProcessor.setLedGreenFadeIn()
 				frame = cv2.rotate(frame, rotateCode=cv2.ROTATE_180) # Tried to rotate image - Amjad
 				pathImage = '/home/pi/MirageSmartMirror/src/Users/%s/image%s.jpg' % (name , i)
 				cv2.imwrite( pathImage,frame );
@@ -353,7 +355,8 @@ def faceCalibration(name):
 			else:
 				break
 		# Turn off LED
-		setLed.ledOFF()
+		#setLed.ledOFF()
+		coProcessor.setLedGreenFadeOut()
 		jsonData['cameraOn'] = False
 		jsonData['error'] = None
 		with open('faceDetectStatus.json', 'w') as outfile:

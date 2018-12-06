@@ -67,6 +67,16 @@ icons = {
 'calendar':'/home/pi/MirageSmartMirror/src/icons/calendar.png'
 }
 
+def get_wifi_status():
+        # Check WiFi connectivity
+        f = os.popen('iwgetid')
+        now = f.read()
+        if not now == '':
+                return 1
+        else:
+                return 0
+
+
 class Window(QWidget):
     def __init__ (self):
         super().__init__()
@@ -410,6 +420,8 @@ class Window(QWidget):
         # self.init_timer()
         self.loggedIn = False
         self.numberOfDetectedFaces = 0
+        if self.curr_app == 4:
+            coProcessor.setLedWhiteFadeOut()
         self.curr_screen = 0
         # self.prompt_asked = False
         font = QFont('Helvetica', 18)
@@ -486,7 +498,11 @@ class Window(QWidget):
         # self.calendar.setEnabled(True)
         # self.news.setEnabled(False)
         # self.routes.setEnabled(True)
-
+        if get_wifi_status() is 0:
+            self.feed.title.setFont(font)
+            self.feed.title.setText("<font color='white'>" + "No internet connection" + "</font>")
+            print("NO INTERNET IN NEWS")
+            return
         self.feed.title.setFont(font)
         self.feed.title.setText("<font color='white'>" + "News Headlines" + "</font>")
 

@@ -31,8 +31,20 @@ access_token = ''
 refresh_token = ''
 
 
-def get_map(address, user_destinations):
+def get_wifi_status() :
+        # Check WiFi connectivity
+        f = os.popen('iwgetid')
+        now = f.read()
+        if not now == '':
+            #print("INTERNET IN API")
+            return 1
+        else:
+            #print("NO INTERNET IN API")
+            return 0
 
+def get_map(address, user_destinations):
+    if get_wifi_status() is 0:
+        return None
     # user_destinations = ["305 Swindon Way, West Lafayette, Indiana", "222 West Wood St, West Lafayette, Indiana", "West Madison Street, Chicago, Illinois"]
     # address = "250 Sheetz Street, West Lafayette, Indiana"
 
@@ -69,6 +81,8 @@ def get_map(address, user_destinations):
 
 
 def get_weather(address):
+    if get_wifi_status() is 0:
+        return
     geolocator = Nominatim(user_agent='MirageSmartMirror')
     origin = geolocator.geocode(address)
 
@@ -244,6 +258,8 @@ def get_events_list(user_path):
 # Might need to put semaphores here...
 # TODO: Check if google calendar information is available
 def pullApi(userName):
+    if get_wifi_status() is 0:
+        return
     file_path = '/home/pi/MirageSmartMirror/src/Users/%s/%s.json' % (userName, userName)
     calendar_path = '/home/pi/MirageSmartMirror/src/Users/%s/%s_auth.json' % (userName, userName)
     with open(file_path) as f:
@@ -265,6 +281,8 @@ def pullApi(userName):
 
 if __name__ == '__main__':
     while True:
+        if get_wifi_status() is 0:
+            continue
         num_of_users = len(os.listdir('/home/pi/MirageSmartMirror/src/Users'))
 
         # print(num_of_users)
