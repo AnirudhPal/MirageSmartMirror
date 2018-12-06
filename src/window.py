@@ -343,7 +343,7 @@ class Window(QWidget):
         self.qt.v_box.addLayout(self.welcomeBox)
         self.qt.v_box.addSpacing(50)
         self.qt.v_box.addLayout(self.appListBox)
-        self.qt.v_box.addSpacing(200)
+        self.qt.v_box.addSpacing(150)
 
         # temp = DateTime.DateTime()
         # self.qt.v_box = temp
@@ -409,7 +409,7 @@ class Window(QWidget):
         self.news_data = user_dict['news']
 
     def changePrompt(self, message):
-        font = QFont('Helvetica', 18)
+        font = QFont('Helvetica', 24)
         font.setWeight(1)
         self.prompt.setText("<font color='green'>" + message + "</font>")
         self.prompt.setFont(font)
