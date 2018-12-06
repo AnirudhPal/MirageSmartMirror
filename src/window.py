@@ -118,6 +118,7 @@ class Window(QWidget):
         self.googleCodeTimeout = 0
         self.promptTimeout = 0
         self.walkAwayTimeout = -1
+        self.curr_user_name = "John Doe"
 
 # Creating new blank face detection status JSON file..
         statDict = {'username': None, 'error': None, 'cameraOn': False, 'detectCalled':False}
@@ -196,7 +197,7 @@ class Window(QWidget):
         self.TimeWeatherBox.addWidget(self.datetime)
 
         ###
-        self.welcomeLabel = QLabel("<font color='white'>" + "Welcome, name here!" + "</font>")
+        self.welcomeLabel = QLabel("<font color='white'>" + "Welcome, %s!" %self.curr_user_name + "</font>")
         self.welcomeLabel.setAlignment(Qt.AlignCenter)
         self.welcomeLabel.setFixedHeight(100)
         self.welcomeBox.addWidget(self.welcomeLabel)
@@ -407,6 +408,7 @@ class Window(QWidget):
         self.datetime = DateTime.DateTime()
         self.feed = feeds.Feeds()
         self.news_data = user_dict['news']
+        self.curr_user_name = user_dict['name']
 
     def changePrompt(self, message):
         font = QFont('Helvetica', 18)
@@ -477,7 +479,7 @@ class Window(QWidget):
             self.qt.layout().addLayout(self.qt.analogclock)
             self.qt.layout().addLayout(self.qt.digitaltime)
             self.qt.layout().addLayout(prompt_box)
-            self.qt.layout().addSpacing(200)
+            self.qt.layout().addSpacing(50)
             self.init_timer()
         else:
             self.qt.v_box = QVBoxLayout()
@@ -486,7 +488,7 @@ class Window(QWidget):
             self.qt.v_box.addLayout(self.qt.analogclock)
             self.qt.v_box.addLayout(self.qt.digitaltime)
             self.qt.v_box.addLayout(prompt_box)
-            self.qt.v_box.addSpacing(200)
+            self.qt.v_box.addSpacing(50)
             self.qt.setLayout(self.qt.v_box)
             self.init_timer()
 

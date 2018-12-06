@@ -278,7 +278,8 @@ def pullApi(userName):
     if user_dict['googleConnected'] == "True":
         calendar_path = '/home/pi/MirageSmartMirror/src/Users/%s/%s_auth.json' % (userName, userName)
 
-    dict = {'map': get_map(user_dict['address'],
+    dict = {'name': user_dict['name'],
+            'map': get_map(user_dict['address'],
             user_dict['freqDests']),
             'weather': get_weather(user_dict['address']),
             'news': get_news(user_dict['newsCategories']),
