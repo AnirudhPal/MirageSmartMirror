@@ -116,7 +116,7 @@ def detectFace():
 	#setLed.ledON()
 	jsonData = {}
 
-	with open('faceDetectStatus.json', 'r') as testData:
+	with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json', 'r') as testData:
 		jsonData = json.load(testData)
 		if jsonData['username'] is not None:
 			return
@@ -129,7 +129,7 @@ def detectFace():
 		'detectCalled':True
 	}
 	sema.acquire(blocking=True)
-	with open('faceDetectStatus.json', 'w') as outfile:
+	with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json', 'w') as outfile:
 		json.dump(jsonData, outfile)
 		sema.release()
 
@@ -192,7 +192,7 @@ def detectFace():
 		'detectCalled':True
 	}
 	sema.acquire(blocking=True)
-	with open('faceDetectStatus.json', 'w') as outfile:
+	with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json', 'w') as outfile:
 		json.dump(jsonData, outfile)
 		sema.release()
 
@@ -204,7 +204,7 @@ def detectFace():
 			'detectCalled':False
 		}
 		sema.acquire(blocking=True)
-		with open('faceDetectStatus.json', 'w') as outfile:
+		with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json', 'w') as outfile:
 			json.dump(jsonData, outfile)
 			print(jsonData)
 			sema.release()
@@ -217,7 +217,7 @@ def detectFace():
 			'detectCalled':False
 		}
 		sema.acquire(blocking=True)
-		with open('faceDetectStatus.json', 'w') as outfile:
+		with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json', 'w') as outfile:
 			json.dump(jsonData, outfile)
 			print(jsonData)
 			sema.release()
@@ -283,7 +283,7 @@ def detectFace():
 			}
 
 			sema.acquire(blocking=True)
-			with open('faceDetectStatus.json', 'w') as outfile:
+			with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json', 'w') as outfile:
 				json.dump(jsonData, outfile)
 				print(jsonData)
 				sema.release()
@@ -296,7 +296,7 @@ def detectFace():
 			'detectCalled':False
 		}
 		sema.acquire(blocking=True)
-		with open('faceDetectStatus.json', 'w') as outfile:
+		with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json', 'w') as outfile:
 			json.dump(jsonData, outfile)
 			print("User Found: " + str(jsonData) + " at time " + time.asctime(time.localtime(time.time())))
 			print(str(threading.get_ident()))
@@ -309,7 +309,7 @@ def detectFace():
 		'detectCalled':False
 	}
 	sema.acquire(blocking=True)
-	with open('faceDetectStatus.json', 'w') as outfile:
+	with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json', 'w') as outfile:
 		json.dump(jsonData, outfile)
 		sema.release()
 
@@ -331,11 +331,11 @@ def faceCalibration(name):
 	#Turn on LED
 	#setLed.ledON()
 	coProcessor.setLedGreenFadeIn()
-	with open('faceDetectStatus.json') as json_file:
+	with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json') as json_file:
 		jsonData = json.load(json_file)
 		jsonData['error'] = "Face calibration"
 		jsonData['cameraOn'] = True
-	with open('faceDetectStatus.json', 'w') as outfile:
+	with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json', 'w') as outfile:
 		json.dump(jsonData, outfile)
 	with picamera.PiCamera() as camera:
 		camera.resolution = (320, 240)
@@ -359,7 +359,7 @@ def faceCalibration(name):
 		coProcessor.setLedGreenFadeOut()
 		jsonData['cameraOn'] = False
 		jsonData['error'] = None
-		with open('faceDetectStatus.json', 'w') as outfile:
+		with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json', 'w') as outfile:
 			json.dump(jsonData, outfile)
 
 
