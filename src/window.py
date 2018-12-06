@@ -409,9 +409,9 @@ class Window(QWidget):
         self.news_data = user_dict['news']
 
     def changePrompt(self, message):
-        font = QFont('Helvetica', 24)
+        font = QFont('Helvetica', 28)
         font.setWeight(1)
-        self.prompt.setText("<font color='green'>" + message + "</font>")
+        self.prompt.setText("<font color='white'>" + message + "</font>")
         self.prompt.setFont(font)
         self.promptTimeout = 5
         return
