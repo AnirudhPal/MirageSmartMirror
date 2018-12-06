@@ -40,7 +40,7 @@ def add_user():
 
 	f = open(filename, "w")
 	f.write("\"" + str(request.json['user_info']).replace('\'', '\\"') + '\"')
-	pullApi("user" + str(request.json['user_info']['id']))
+	APIs.pullApi("user" + str(request.json['user_info']['id']))
 	return "User successfully added"
 
 # Get user by number
