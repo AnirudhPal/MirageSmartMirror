@@ -772,6 +772,9 @@ class Window(QWidget):
 
         # User in proximity(10 < proximity < 80)
         else:
+            print(self.loggedIn)
+            print(self.isDetectingFace)
+            print(self.errorMessage)
             # Reset walk away timer
             self.walkAwayTimeout = -1
             # If detection is finished and no user logged in..
