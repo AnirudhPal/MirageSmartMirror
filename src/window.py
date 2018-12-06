@@ -15,7 +15,7 @@ import subprocess
 from newsapi import NewsApiClient
 import requests
 import json
-import coProcessor
+# import coProcessor
 #
 from PyQt5.QtWidgets import *#QApplication, QWidget, QLabel, QFormLayout, QVBoxLayout, QHBoxLayout, QPushButton, QGraphicsDropShadowEffect, QSpacerItem, QGridLayout, QFormLayout
 from PyQt5.QtGui import *#QFont, QPalette, QColor, QPainter, QPolygon
@@ -355,7 +355,7 @@ class Window(QWidget):
         self.clearLayout(self.feed.feedForm)
         self.clearLayout(self.welcomeBox)
         # Turn on LED
-        coProcessor.setLedWhiteFadeIn()
+        #coProcessor.setLedWhiteFadeIn()
         #self.qt.v_box.addWidget(self.qt.lsb)
         # self.qt.v_box.addWidget(groom.Groom().frame)
         # self.qt.v_box.setContentsMargins(0,0,0,0)
@@ -421,7 +421,7 @@ class Window(QWidget):
         self.loggedIn = False
         self.numberOfDetectedFaces = 0
         if self.curr_app == 4:
-            coProcessor.setLedWhiteFadeOut()
+            # coProcessor.setLedWhiteFadeOut()
         self.curr_screen = 0
         # self.prompt_asked = False
         font = QFont('Helvetica', 18)
@@ -918,7 +918,7 @@ class Window(QWidget):
         current_app = self.appList[self.curr_app]
         current_app.graphicsEffect().setEnabled(False)
         if self.curr_app == 4:
-            coProcessor.setLedWhiteFadeOut()
+            # coProcessor.setLedWhiteFadeOut()
         self.curr_app = (self.curr_app - 1) % 5
         current_app = self.appList[self.curr_app]
         current_app.graphicsEffect().setEnabled(True)
@@ -940,7 +940,7 @@ class Window(QWidget):
         current_app = self.appList[self.curr_app]
         current_app.graphicsEffect().setEnabled(False)
         if self.curr_app == 4:
-            coProcessor.setLedWhiteFadeOut()
+            # coProcessor.setLedWhiteFadeOut()
         self.curr_app = (self.curr_app + 1) % 5
         current_app = self.appList[self.curr_app]
         current_app.graphicsEffect().setEnabled(True)

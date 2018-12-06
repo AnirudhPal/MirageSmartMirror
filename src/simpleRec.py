@@ -8,7 +8,7 @@ import os
 import subprocess
 import json
 import threading
-import coProcessor
+# import coProcessor
 import time
 import picamera
 import numpy as np
@@ -16,7 +16,7 @@ import numpy as np
 
 
 # for LED
-import setLed
+# import setLed
 
 calibrationCancel = False
 
@@ -134,7 +134,7 @@ def detectFace():
 		sema.release()
 
 	# Set Green LED on
-	coProcessor.setLedGreenFadeIn()
+	# coProcessor.setLedGreenFadeIn()
 	vs = VideoStream(usePiCamera=True)
 	vs.start()
 	time.sleep(1)
@@ -183,7 +183,7 @@ def detectFace():
 	boxes = [(y, x + w, y + h, x) for (x, y, w, h) in rects]
 	vs.stop()
 	# Set green LED off
-	coProcessor.setLedGreenFadeOut()
+	# coProcessor.setLedGreenFadeOut()
 
 	jsonData = {
 		'username':None,
@@ -330,7 +330,7 @@ def faceCalibration(name):
 
 	#Turn on LED
 	#setLed.ledON()
-	coProcessor.setLedGreenFadeIn()
+	# coProcessor.setLedGreenFadeIn()
 	with open('faceDetectStatus.json') as json_file:
 		jsonData = json.load(json_file)
 		jsonData['error'] = "Face calibration"
@@ -347,7 +347,7 @@ def faceCalibration(name):
 				time.sleep(2)
 				# camera.capture('/home/pi/MirageSmartMirror/src/Faces/%s/image%s.jpg' % (name , i))
 				camera.capture(frame, 'rgb')
-				coProcessor.setLedGreenFadeIn()
+				# coProcessor.setLedGreenFadeIn()
 				frame = cv2.rotate(frame, rotateCode=cv2.ROTATE_180) # Tried to rotate image - Amjad
 				pathImage = '/home/pi/MirageSmartMirror/src/Users/%s/image%s.jpg' % (name , i)
 				cv2.imwrite( pathImage,frame );
@@ -356,7 +356,7 @@ def faceCalibration(name):
 				break
 		# Turn off LED
 		#setLed.ledOFF()
-		coProcessor.setLedGreenFadeOut()
+		# coProcessor.setLedGreenFadeOut()
 		jsonData['cameraOn'] = False
 		jsonData['error'] = None
 		with open('faceDetectStatus.json', 'w') as outfile:
