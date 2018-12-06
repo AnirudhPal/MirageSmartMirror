@@ -1004,8 +1004,20 @@ def parseApiText(str):
     else:
         return str
 
+def get_wifi_status() :
+        # Check WiFi connectivity
+        f = os.popen('iwgetid')
+        now = f.read()
+        if not now == '':
+            #print("INTERNET IN API")
+            return 1
+        else:
+            #print("NO INTERNET IN API")
+            return 0
 
 if __name__ == "__main__":
+    while get_wifi_status is 0:
+        nothing = 0
     window_app = QApplication(sys.argv)
     Display = Window()
 
