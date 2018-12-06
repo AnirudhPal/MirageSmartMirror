@@ -73,7 +73,7 @@ def update_user():
 
 #	f = open(filename, "w")
 #	f.write("\"" + str(request.json['user_info']).replace('\'','\\"') + '\"')
-	pullApi("user" + str(request.json['user_info']['id']))
+	APIs.pullApi("user" + str(request.json['user_info']['id']))
 	return "User successfully updated"
 
 #	with open(filename, 'w') as outfile:
