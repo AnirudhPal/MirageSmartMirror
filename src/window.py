@@ -762,7 +762,7 @@ class Window(QWidget):
             sema.acquire(blocking=True)
             with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json', 'w') as jsonFile:
                 json.dump(detectionStatusDictionary, jsonFile)
-                sema.release()
+            sema.release()
             self.set_lockscreen_layout()
 
         # User steps away (proximity >= 80)
@@ -778,7 +778,7 @@ class Window(QWidget):
                     sema.acquire(blocking=True)
                     with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json', 'w') as jsonFile:
                         json.dump(detectionStatusDictionary, jsonFile)
-                        sema.release()
+                    sema.release()
                     self.set_lockscreen_layout()
                 elif self.walkAwayTimeout < 0:
                     self.walkAwayTimeout = 10
