@@ -729,7 +729,14 @@ class Window(QWidget):
         if data['faceCalibration'] is True:
             if self.curr_screen != 0:
                 self.set_lockscreen_layout()
-            self.changePrompt("Face calibration in progress!")
+            try:
+                num_of_users = len(os.listdir('/home/pi/MirageSmartMirror/src/Users'))
+                user_path = '/home/pi/MirageSmartMirror/src/Users/user%d' %num_of_users-1
+                num_of_pictures = len(os.listdir(user_path))
+                prompt = "Face calibration in progress! %d of 5" %num_of_pictures
+                self.changePrompt(prompt)
+            except:
+                self.changePrompt("Face calibration in progress!")
             return
         # Check prompt message timeout
         self.promptController()
