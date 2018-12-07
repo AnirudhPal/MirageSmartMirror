@@ -720,6 +720,9 @@ class Window(QWidget):
         with open("/home/pi/MirageSmartMirror/src/faceCalibrationStatus.json") as cf:
             data = json.load(cf)
         if data['faceCalibration'] is True:
+            if self.curr_screen != 0:
+                self.set_lockscreen_layout()
+            self.changePrompt("Face calibration in progress!")
             return
         # Check prompt message timeout
         self.promptController()
