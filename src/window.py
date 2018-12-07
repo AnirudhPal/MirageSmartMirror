@@ -82,7 +82,7 @@ class Window(QWidget):
         super().__init__()
         self.qt = QWidget()
         self.init_ui()
-        print(str(threading.get_ident()))
+        # print(str(threading.get_ident()))
         # self.currentWidget = None
 
     def init_ui(self):
@@ -465,7 +465,7 @@ class Window(QWidget):
         self.prompt.setFixedHeight(50)
         self.prompt.setAlignment(Qt.AlignCenter)
         # self.prompt.setGraphicsEffect(effect2)
-        self.prompt.setText("<font color='white'>" + "Blank" + "</font>")
+        self.prompt.setText("<font color='black'>" + "Blank" + "</font>")
         prompt_box.addWidget(self.prompt)
 
 
@@ -503,7 +503,7 @@ class Window(QWidget):
         if get_wifi_status() is 0:
             self.feed.title.setFont(font)
             self.feed.title.setText("<font color='white'>" + "No internet connection" + "</font>")
-            print("NO INTERNET IN NEWS")
+            # print("NO INTERNET IN NEWS")
             return
         self.feed.title.setFont(font)
         if self.news_data is None:
@@ -742,9 +742,9 @@ class Window(QWidget):
 
         if self.errorMessage == "Face calibration":
             #TODO: Display calibration prompt, control LED?
+            print("\"Face calibration is running now\" will be displayed")
             self.set_lockscreen_layout()
             self.changePrompt("Face calibration in progress!")
-            print("\"Face calibration is running now\" will be displayed")
             return
 
 
@@ -828,8 +828,8 @@ class Window(QWidget):
                 #Display main screen
                 if self.curr_screen != 1:
                     print("Going to main screen")
-                    print(self.isDetectingFace)
-                    print(self.loggedIn)
+                    # print(self.isDetectingFace)
+                    # print(self.loggedIn)
                     self.msd()
                 return
 
@@ -1015,7 +1015,7 @@ class keyboardListner(QThread):
     def run(self):
         self.trigger1.connect(self.disp.signalHandler1)
         self.trigger2.connect(self.disp.signalHandler2)
-        print("connected")
+        # print("connected")
         with Listener(
                 on_press=self.on_press,
                 on_release=self.on_release) as listener:

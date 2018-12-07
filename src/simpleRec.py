@@ -175,7 +175,7 @@ def detectFace():
 	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 	rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 	# detect faces in the grayscale frame
-	print("Detecting faces in greyscale frame: " + str(time.asctime(time.localtime(time.time()))))
+	# print("Detecting faces in greyscale frame: " + str(time.asctime(time.localtime(time.time()))))
 
 	rects = detector.detectMultiScale(gray, scaleFactor=1.1,
 		minNeighbors=5, minSize=(30, 30),
@@ -206,7 +206,7 @@ def detectFace():
 		sema.acquire(blocking=True)
 		with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json', 'w') as outfile:
 			json.dump(jsonData, outfile)
-			print(jsonData)
+			# print(jsonData)
 			sema.release()
 			return
 	elif (len(rects) > 1):
@@ -219,11 +219,11 @@ def detectFace():
 		sema.acquire(blocking=True)
 		with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json', 'w') as outfile:
 			json.dump(jsonData, outfile)
-			print(jsonData)
+			# print(jsonData)
 			sema.release()
 			return
 
-	print("faceDetected")
+	# print("faceDetected")
 	print("Face detected at: " + str(time.asctime(time.localtime(time.time()))))
 
 	data = pickle.loads(open("/home/pi/MirageSmartMirror/src/faceRecognitionEncodings/encodings", "rb").read())
@@ -241,18 +241,18 @@ def detectFace():
 	process_this_frame = True
 
 	# Find all the faces and face encodings in the current frame of video
-	print("Getting face_locations: " + str(time.asctime(time.localtime(time.time()))))
+	# print("Getting face_locations: " + str(time.asctime(time.localtime(time.time()))))
 	#face_locations = face_recognition.face_locations(rgb)
 #	print("Face Locations: " + str(face_locations))
-	print("Getting face encodings: " + str(time.asctime(time.localtime(time.time()))))
+	# print("Getting face encodings: " + str(time.asctime(time.localtime(time.time()))))
 
 	face_encodings = face_recognition.face_encodings(rgb, boxes)
 
 	face_names = []
 #	print("Number of Face Encodings: " + str(len(face_encodings)))
-	print("Going into face recognition loop: " + str(time.asctime(time.localtime(time.time()))))
+	# print("Going into face recognition loop: " + str(time.asctime(time.localtime(time.time()))))
 	for face_encoding in face_encodings:
-		print("Found an encoding")
+		# print("Found an encoding")
 		# See if the face is a match for the known face(s)
 		matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
 		name = None
@@ -285,7 +285,7 @@ def detectFace():
 			sema.acquire(blocking=True)
 			with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json', 'w') as outfile:
 				json.dump(jsonData, outfile)
-				print(jsonData)
+				# print(jsonData)
 				sema.release()
 				return
 
@@ -298,8 +298,7 @@ def detectFace():
 		sema.acquire(blocking=True)
 		with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json', 'w') as outfile:
 			json.dump(jsonData, outfile)
-			print("User Found: " + str(jsonData) + " at time " + time.asctime(time.localtime(time.time())))
-			print(str(threading.get_ident()))
+			# print("User Found: " + str(jsonData) + " at time " + time.asctime(time.localtime(time.time())))
 			sema.release()
 			return
 	jsonData = {
