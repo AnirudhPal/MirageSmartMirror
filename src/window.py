@@ -693,7 +693,19 @@ class Window(QWidget):
             self.promptTimeout = self.promptTimeout - 1
         return
 
+    def checkInternet(self):
+        if get_wifi_status() is 0:
+            self.changePrompt("No Internet connection! Use Mirage App to connect.")
+            return 0
+        else:
+            return 1
+
+
     def controller(self):
+
+        # Check internet connection
+        if self.checkInternet() == 0:
+            return
 
         # Check prompt message timeout
         self.promptController()
@@ -1036,8 +1048,8 @@ def get_wifi_status() :
             return 0
 
 if __name__ == "__main__":
-    while get_wifi_status() is 0:
-        nothing = 0
+    #while get_wifi_status() is 0:
+        #nothing = 0
     window_app = QApplication(sys.argv)
     Display = Window()
 
