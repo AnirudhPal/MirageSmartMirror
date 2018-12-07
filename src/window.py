@@ -733,13 +733,13 @@ class Window(QWidget):
                 num_of_users = len(os.listdir('/home/pi/MirageSmartMirror/src/Users'))
                 user_path = '/home/pi/MirageSmartMirror/src/Users/user%d' %num_of_users-1
                 num_of_pictures = len(os.listdir(user_path))
-                prompt = "Face calibration in progress! %d of 5" %num_of_pictures
+                prompt = "Face calibration in progress! %d of 5" %num_of_pictures+1
                 self.changePrompt(prompt)
             except:
                 try:
                     user_path = '/home/pi/MirageSmartMirror/src/Users/user0'
                     num_of_pictures = len(os.listdir(user_path))
-                    prompt = "Face calibration in progress! %d of 5" %num_of_pictures
+                    prompt = "Face calibration in progress! %d of 5" %num_of_pictures+1
                     self.changePrompt(prompt)
                 except:
                     self.changePrompt("Face calibration in progress!")
