@@ -402,13 +402,7 @@ class Window(QWidget):
     def load_user_info(self, user_name):
         # os.system('nohup python3 APIs.py &')
         # user_destinations = ["305 Swindon Way, West Lafayette, Indiana", "222 West Wood St, West Lafayette, Indiana", "West Madison Street, Chicago, Illinois"]
-        file_path = "/home/pi/MirageSmartMirror/src/Users/%s/%s.json" %(user_name, user_name)
-        try:
-            with open(file_path) as f:
-                user_dict = json.load(f)
-        except:
-            self.set_lockscreen_layout()
-            return 0
+
 
 
         file_path = "/home/pi/MirageSmartMirror/src/Users/%s/%sAPI.json" %(user_name, user_name)
@@ -859,7 +853,16 @@ class Window(QWidget):
                     print("Going to main screen")
                     # print(self.isDetectingFace)
                     # print(self.loggedIn)
-                    self.msd()
+                    file_path = "/home/pi/MirageSmartMirror/src/Users/%s/%s.json" %(self.userName, self.userName)
+                    try:
+                        with open(file_path) as f:
+                            user_dict = json.load(f)
+                        self.msd()
+                    except:
+                        nothing = 0
+                        # self.set_lockscreen_layout()
+                        # return 0
+                    # self.msd()
                 return
 
             # Camera is in use
