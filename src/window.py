@@ -740,6 +740,13 @@ class Window(QWidget):
 
         self.detectCalled = detectionStatusDictionary['detectCalled']
 
+        if self.errorMessage == "Face calibration":
+            #TODO: Display calibration prompt, control LED?
+            self.set_lockscreen_layout()
+            self.changePrompt("Face calibration in progress!")
+            print("\"Face calibration is running now\" will be displayed")
+            return
+
 
         # Step 3: Check proximity value
 
@@ -827,15 +834,8 @@ class Window(QWidget):
                 return
 
             # Camera is in use
-            elif self.isDetectingFace is True:
+            # elif self.isDetectingFace is True:
                 #TODO: Increment timer (give camera time to try again)
-                if self.errorMessage == "Face calibration":
-                    #TODO: Display calibration prompt, control LED?
-                    self.set_lockscreen_layout()
-                    self.changePrompt("Face calibration in progress!")
-                    print("\"Face calibration is running now\" will be displayed")
-                    nothing = 0
-                return
 
 
 
