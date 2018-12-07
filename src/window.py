@@ -221,7 +221,7 @@ class Window(QWidget):
         self.news = QLabel()
         news_effect = QGraphicsDropShadowEffect()
         news_effect.setOffset(1, 1)
-        news_effect.setBlurRadius(30)
+        news_effect.setBlurRadius(50)
         news_effect.setColor(QColor(255,255,255))
         news_icon = icons['news']
         news_image = cv2.imread(news_icon)
@@ -241,7 +241,7 @@ class Window(QWidget):
         self.calendar = QLabel()
         calendar_effect = QGraphicsDropShadowEffect()
         calendar_effect.setOffset(1, 1)
-        calendar_effect.setBlurRadius(30)
+        calendar_effect.setBlurRadius(50)
         calendar_effect.setColor(QColor(255,255,255))
         calendar_icon = icons['calendar']
         calendar_image = cv2.imread(calendar_icon)
@@ -261,7 +261,7 @@ class Window(QWidget):
         self.maps = QLabel()
         maps_effect = QGraphicsDropShadowEffect()
         maps_effect.setOffset(1, 1)
-        maps_effect.setBlurRadius(30)
+        maps_effect.setBlurRadius(50)
         maps_effect.setColor(QColor(255,255,255))
         maps_icon = icons['maps']
         maps_image = cv2.imread(maps_icon)
@@ -281,7 +281,7 @@ class Window(QWidget):
         self.groom = QLabel()
         groom_effect = QGraphicsDropShadowEffect()
         groom_effect.setOffset(1, 1)
-        groom_effect.setBlurRadius(30)
+        groom_effect.setBlurRadius(50)
         groom_effect.setColor(QColor(255,255,255))
         groom_icon = icons['groom']
         groom_image = cv2.imread(groom_icon)
@@ -301,7 +301,7 @@ class Window(QWidget):
         self.main = QLabel()
         main_effect = QGraphicsDropShadowEffect()
         main_effect.setOffset(1, 1)
-        main_effect.setBlurRadius(30)
+        main_effect.setBlurRadius(50)
         main_effect.setColor(QColor(255,255,255))
         main_icon = icons['main']
         main_image = cv2.imread(main_icon)
