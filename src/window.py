@@ -119,6 +119,7 @@ class Window(QWidget):
         self.promptTimeout = 0
         self.walkAwayTimeout = -1
         self.curr_user_name = "John Doe"
+        self.lightsOn = False
 
 # Creating new blank face detection status JSON file..
         statDict = {'username': None, 'error': None, 'cameraOn': False, 'detectCalled':False}
@@ -323,7 +324,7 @@ class Window(QWidget):
         self.appList.append(self.calendar)
         self.appList.append(self.maps)
         self.appList.append(self.news)
-        self.appList.append(self.groom)
+        # self.appList.append(self.groom)
         # self.appList.append(self.qt.gmb)
 
 
@@ -356,7 +357,8 @@ class Window(QWidget):
 
     def gmd(self):
         # self.curr_screen = 2
-        self.curr_app = 4
+        # self.curr_app = 4
+        self.lightsOn = True
         # self.timer.stop()
         # self.clearLayout(self.qt.v_box)
         self.feed.title.setText("<font color='black'>" + "Blank" + "</font>")
@@ -966,9 +968,9 @@ class Window(QWidget):
         # self.welcomeLabel.setText("<font color='white'>" + "Welcome, leftie!" + "</font>")
         current_app = self.appList[self.curr_app]
         current_app.graphicsEffect().setEnabled(False)
-        if self.curr_app == 4:
-            coProcessor.setLedWhiteFadeOut()
-        self.curr_app = (self.curr_app - 1) % 5
+        # if self.curr_app == 4:
+        #     coProcessor.setLedWhiteFadeOut()
+        self.curr_app = (self.curr_app - 1) % 4
         current_app = self.appList[self.curr_app]
         current_app.graphicsEffect().setEnabled(True)
         if self.curr_app == 0:
@@ -979,8 +981,8 @@ class Window(QWidget):
             self.routes_info()
         elif self.curr_app == 3:
             self.news_headlines()
-        elif self.curr_app == 4:
-            self.gmd()
+        # elif self.curr_app == 4:
+        #     self.gmd()
         print('Go left!')
 
     def signalHandler2(self):
@@ -988,9 +990,9 @@ class Window(QWidget):
         # self.welcomeLabel.setText("<font color='white'>" + "Welcome, rightie!" + "</font>")
         current_app = self.appList[self.curr_app]
         current_app.graphicsEffect().setEnabled(False)
-        if self.curr_app == 4:
-            coProcessor.setLedWhiteFadeOut()
-        self.curr_app = (self.curr_app + 1) % 5
+        # if self.curr_app == 4:
+        #     coProcessor.setLedWhiteFadeOut()
+        self.curr_app = (self.curr_app + 1) % 4
         current_app = self.appList[self.curr_app]
         current_app.graphicsEffect().setEnabled(True)
         if self.curr_app == 0:
@@ -1001,18 +1003,29 @@ class Window(QWidget):
             self.routes_info()
         elif self.curr_app == 3:
             self.news_headlines()
-        elif self.curr_app == 4:
-            self.gmd()
+        # elif self.curr_app == 4:
+        #     self.gmd()
         print('Go right!')
+
+    def signalHandler3(self):
+        if self.lightsOn is False:
+            coProcessor.setLedWhiteFadeIn()
+            self.lightsOn = True
+        elif self.lightsOn is True:
+            coProcessor.setLedWhiteFadeOut()
+            self.lightsOn = False
 
 class keyboardListner(QThread):
     trigger1 = pyqtSignal()
     trigger2 = pyqtSignal()
+    trigger3 = pyqtSignal()
     def on_press(self,key):
         if key == Key.left:
             self.trigger1.emit()
         if key == Key.right:
             self.trigger2.emit()
+        if key == Key.up:
+            self.trigger3.emit()
         # print('{0} pressed'.format(
             # key))
 
@@ -1032,6 +1045,7 @@ class keyboardListner(QThread):
     def run(self):
         self.trigger1.connect(self.disp.signalHandler1)
         self.trigger2.connect(self.disp.signalHandler2)
+        self.trigger3.connect(self.disp.signalHandler3)
         # print("connected")
         with Listener(
                 on_press=self.on_press,
