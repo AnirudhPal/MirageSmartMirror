@@ -314,7 +314,7 @@ def detectFace():
 
 def faceCalibration(name):
 
-
+	print("FACE CALIBRATIONNNNN!!!!!\n\n\n\n")
 	# coProcessor.initProximity() # If not running thru window.py
 	# camera.start_preview()
 	#path = "./Users/%s/" % name
@@ -331,12 +331,16 @@ def faceCalibration(name):
 	#Turn on LED
 	#setLed.ledON()
 	coProcessor.setLedGreenFadeIn()
-	with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json') as json_file:
-		jsonData = json.load(json_file)
-		jsonData['error'] = "Face calibration"
-		jsonData['cameraOn'] = True
-	with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json', 'w') as outfile:
-		json.dump(jsonData, outfile)
+	print("LED on\n\n")
+
+	jsonData['username'] = None
+	jsonData['error'] = "Face calibration"
+	jsonData['cameraOn'] = True
+	jsonData['detectCalled'] = False
+	with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json', 'w') as jsonFile:
+		json.dump(jsonData, jsonFile)
+
+	print("WROTE FILE \n\n")
 	with picamera.PiCamera() as camera:
 		camera.resolution = (320, 240)
 		camera.framerate = 24
