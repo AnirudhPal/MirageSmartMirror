@@ -125,7 +125,7 @@ class Window(QWidget):
         with open("/home/pi/MirageSmartMirror/src/faceDetectStatus.json", 'w') as statFile:
             json.dump(statDict, statFile)
 
-        calibrationDict = {'faceCalibration': False} 
+        calibrationDict = {'faceCalibration': False}
         with open("/home/pi/MirageSmartMirror/src/faceCalibrationStatus.json", 'w') as calibrationFile:
             json.dump(calibrationDict, calibrationFile)
 
@@ -144,7 +144,8 @@ class Window(QWidget):
         self.curr_screen = 1
         self.curr_app = 0
         self.clearLayout(self.qt.v_box)
-        self.load_user_info(self.userName)
+        if self.load_user_info(self.userName) == 0:
+            return
         # self.timer.stop()
 
         # user_destinations = ["305 Swindon Way, West Lafayette, Indiana", "222 West Wood St, West Lafayette, Indiana", "West Madison Street, Chicago, Illinois"]
@@ -400,8 +401,12 @@ class Window(QWidget):
         # os.system('nohup python3 APIs.py &')
         # user_destinations = ["305 Swindon Way, West Lafayette, Indiana", "222 West Wood St, West Lafayette, Indiana", "West Madison Street, Chicago, Illinois"]
         file_path = "/home/pi/MirageSmartMirror/src/Users/%s/%sAPI.json" %(user_name, user_name)
-        with open(file_path) as f:
-            user_dict = json.load(f)
+        try:
+            with open(file_path) as f:
+                user_dict = json.load(f)
+        except:
+            self.set_lockscreen_layout()
+            return 0
 
         self.rt = user_dict['map']
         self.calendarEvents = user_dict['events']
@@ -410,6 +415,7 @@ class Window(QWidget):
         self.feed = feeds.Feeds()
         self.news_data = user_dict['news']
         self.curr_user_name = user_dict['name']
+        return 1
 
     def changePrompt(self, message):
         font = QFont('Helvetica', 28)
