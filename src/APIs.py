@@ -270,8 +270,11 @@ def pullApi(userName):
     if get_wifi_status() is 0:
         return
     file_path = '/home/pi/MirageSmartMirror/src/Users/%s/%s.json' % (userName, userName)
-    with open(file_path) as f:
-        data = json.load(f)
+    try:
+        with open(file_path) as f:
+            data = json.load(f)
+    except:
+        return
 
     user_dict = json.loads(data)
     #print(user_dict['address'])
