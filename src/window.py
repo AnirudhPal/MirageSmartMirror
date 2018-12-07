@@ -736,11 +736,13 @@ class Window(QWidget):
                 prompt = "Face calibration in progress! %d of 5" %num_of_pictures
                 self.changePrompt(prompt)
             except:
-                user_path = '/home/pi/MirageSmartMirror/src/Users/user0'
-                num_of_pictures = len(os.listdir(user_path))
-                prompt = "Face calibration in progress! %d of 5" %num_of_pictures
-                self.changePrompt(prompt)
-                # self.changePrompt("Face calibration in progress!")
+                try:
+                    user_path = '/home/pi/MirageSmartMirror/src/Users/user0'
+                    num_of_pictures = len(os.listdir(user_path))
+                    prompt = "Face calibration in progress! %d of 5" %num_of_pictures
+                    self.changePrompt(prompt)
+                except:
+                    self.changePrompt("Face calibration in progress!")
             return
         # Check prompt message timeout
         self.promptController()
