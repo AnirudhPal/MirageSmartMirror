@@ -208,7 +208,7 @@ def detectFace():
 			json.dump(jsonData, outfile)
 			# print(jsonData)
 		sema.release()
-			return
+		return
 	elif (len(rects) > 1):
 		jsonData = {
 			'username':None,
@@ -221,7 +221,7 @@ def detectFace():
 			json.dump(jsonData, outfile)
 			# print(jsonData)
 		sema.release()
-			return
+		return
 
 	# print("faceDetected")
 	print("Face detected at: " + str(time.asctime(time.localtime(time.time()))))
@@ -287,7 +287,7 @@ def detectFace():
 				json.dump(jsonData, outfile)
 				# print(jsonData)
 			sema.release()
-				return
+			return
 
 		jsonData = {
 			'username':name,
@@ -300,7 +300,7 @@ def detectFace():
 			json.dump(jsonData, outfile)
 			# print("User Found: " + str(jsonData) + " at time " + time.asctime(time.localtime(time.time())))
 		sema.release()
-			return
+		return
 	jsonData = {
 		'username':None,
 		'error':None,
