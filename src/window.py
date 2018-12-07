@@ -685,7 +685,7 @@ class Window(QWidget):
 
         if self.check_google_code() == "True":
             with open('/home/pi/MirageSmartMirror/src/device_authorization.json') as f:
-                dict = json.loads(f)
+                dict = json.load(f)
             #     data = json.load(f)
             # dict = json.loads(data)
             self.google_code = dict['userCode']
