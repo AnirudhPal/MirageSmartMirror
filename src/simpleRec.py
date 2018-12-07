@@ -348,10 +348,10 @@ def faceCalibration(name):
 
 	# print("WROTE FILE \n\n")
 	with picamera.PiCamera() as camera:
-		camera.resolution = (480, 360)
+		camera.resolution = (320, 240)
 		camera.framerate = 24
 		time.sleep(2)
-		frame = np.empty((360, 480, 3), dtype=np.uint8)
+		frame = np.empty((240, 320, 3), dtype=np.uint8)
 		for i in range(5):
 			if not (calibrationCancel):
 				time.sleep(2)
