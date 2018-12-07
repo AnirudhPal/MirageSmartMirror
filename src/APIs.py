@@ -63,9 +63,10 @@ def get_map(address, user_destinations):
     maps_origin = 'origin=%f,%f' % (origin.latitude, origin.longitude)
 
     for dest in user_destinations:
-        destination_i = geolocator.geocode(dest['address'], timeout=3)
-        maps_destination = '&destination=%f,%f' \
-            % (destination_i.latitude, destination_i.longitude)
+        # destination_i = geolocator.geocode(dest['address'], timeout=3)
+        # maps_destination = '&destination=%f,%f' \
+            # % (destination_i.latitude, destination_i.longitude)
+        maps_destination = '&destination=%f,%f' %(dest['latitude'], dest['longitude'])
         maps_request = maps_url + maps_origin + maps_destination \
             + maps_key
         maps_get = requests.get(maps_request)
