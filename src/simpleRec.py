@@ -313,9 +313,13 @@ def detectFace():
 	sema.release()
 
 def faceCalibration(name):
+	global sema
 
+	with open('/home/pi/MirageSmartMirror/src/faceCalibrationStatus.json', 'w') as cf:
+		dict = {'faceCalibration': True}
+		json.dump(dict, cf)
 	print("FACE CALIBRATIONNNNN!!!!!\n\n\n\n")
-	# coProcessor.initProximity() # If not running thru window.py
+	coProcessor.initProximity() # If not running thru window.py
 	# camera.start_preview()
 	#path = "./Users/%s/" % name
 	# camera = PiCamera()
@@ -333,6 +337,7 @@ def faceCalibration(name):
 	coProcessor.setLedGreenFadeIn()
 	print("LED on\n\n")
 
+	jsonData = {}
 	jsonData['username'] = None
 	jsonData['error'] = "Face calibration"
 	jsonData['cameraOn'] = True
@@ -368,6 +373,10 @@ def faceCalibration(name):
 			json.dump(jsonData, outfile)
 		sema.release()
 
+		with open('/home/pi/MirageSmartMirror/src/faceCalibrationStatus.json', 'w') as cf:
+			dict = {'faceCalibration': False}
+			json.dump(dict, cf)
+
 
 	#subprocess.call("python3 /home/pi/MirageSmartMirror/src/faceEncoding.py &", shell=True)
 	return
@@ -386,8 +395,8 @@ if __name__ == "__main__":
 	#while(True):
 	#	detectFace()
 	#	time.sleep(3)
-	# coProcessor.initProximity()
-	# faceCalibration("user0")
+	#coProcessor.initProximity()
+	faceCalibration("user2")
 
 	nothing = 0
 	#detectFace()

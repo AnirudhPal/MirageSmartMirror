@@ -125,6 +125,10 @@ class Window(QWidget):
         with open("/home/pi/MirageSmartMirror/src/faceDetectStatus.json", 'w') as statFile:
             json.dump(statDict, statFile)
 
+        calibrationDict = {'faceCalibration': False} 
+        with open("/home/pi/MirageSmartMirror/src/faceCalibrationStatus.json", 'w') as calibrationFile:
+            json.dump(calibrationDict, calibrationFile)
+
         coProcessor.initProximity()
         self.set_lockscreen_layout()
         self.init_timer()
@@ -706,7 +710,11 @@ class Window(QWidget):
         # Check internet connection
         if self.checkInternet() == 0:
             return
-
+        # Check if face calibration is running
+        with open("/home/pi/MirageSmartMirror/src/faceCalibrationStatus.json") as cf:
+            data = json.load(cf)
+        if data['faceCalibration'] is True:
+            return
         # Check prompt message timeout
         self.promptController()
         # Step 1: Check google code controller. Displays lock screen if done!
@@ -811,7 +819,7 @@ class Window(QWidget):
                 # with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json') as f:
                 #     data = json.load(f)
                 #     if data['detectCalled'] is False:
-                if not self.detectCalled and not self.loggedIn:
+                if not self.detectCalled and not self.loggedIn and self.errorMessage != "Face calibration":
                     t = threading.Thread(target=detectFace)
                     t.start()
                     print("Detecting face now")
