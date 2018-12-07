@@ -689,6 +689,7 @@ class Window(QWidget):
             #     data = json.load(f)
             # dict = json.loads(data)
             self.google_code = dict['userCode']
+            print(self.google_code)
             self.show_auth_code()
             self.googleCodeTimeout = 10
             return False
