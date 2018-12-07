@@ -43,7 +43,7 @@ def get_wifi_status() :
             #print("NO INTERNET IN API")
             return 0
 
-def get_map(address, user_destinations):
+def get_map(address, lat, long, user_destinations):
     if get_wifi_status() is 0:
         return None
     # user_destinations = ["305 Swindon Way, West Lafayette, Indiana", "222 West Wood St, West Lafayette, Indiana", "West Madison Street, Chicago, Illinois"]
@@ -58,9 +58,10 @@ def get_map(address, user_destinations):
     maps_key = '&key=AIzaSyDKTb75-vuAvnWxO2Wfm_1DWlyr4BadgJc'
     maps_url = 'https://maps.googleapis.com/maps/api/directions/json?'
     routes = []
-    print(address)
-    origin = geolocator.geocode(address, timeout=3)
-    maps_origin = 'origin=%f,%f' % (origin.latitude, origin.longitude)
+    # print(address)
+    # origin = geolocator.geocode(address, timeout=3)
+    # maps_origin = 'origin=%f,%f' % (origin.latitude, origin.longitude)
+    maps_origin = 'origin=%f,%f' % (lat, long)
 
     for dest in user_destinations:
         # destination_i = geolocator.geocode(dest['address'], timeout=3)
@@ -82,19 +83,20 @@ def get_map(address, user_destinations):
     return routes
 
 
-def get_weather(address):
+def get_weather(address, lat, long):
     if get_wifi_status() is 0:
         return
     geolocator = Nominatim(user_agent='MirageSmartMirror')
-    origin = geolocator.geocode(address, timeout=3)
+    # origin = geolocator.geocode(address, timeout=3)
 
     weather_key = '50f9b96898249aa1a036886103f78788'
     weather_url = 'https://api.darksky.net/forecast/' + weather_key
 
     # 0123456789abcdef9876543210fedcba/42.3601,-71.0589
 
-    weather_request = weather_url + '/%f,%f' % (origin.latitude,
-            origin.longitude)
+    # weather_request = weather_url + '/%f,%f' % (origin.latitude,
+    #         origin.longitude)
+    weather_request = weather_url + '/%f,%f' % (lat, long)
     weather_get = requests.get(weather_request)
     weather_json = weather_get.json()
 
@@ -280,9 +282,9 @@ def pullApi(userName):
         calendar_path = '/home/pi/MirageSmartMirror/src/Users/%s/%s_auth.json' % (userName, userName)
 
     dict = {'name': user_dict['name'],
-            'map': get_map(user_dict['address'],
+            'map': get_map(user_dict['address'], user_dict['latitude'], user_dict['longitude'],
             user_dict['freqDests']),
-            'weather': get_weather(user_dict['address']),
+            'weather': get_weather(user_dict['address'], user_dict['latitude'], user_dict['longitude']),
             'news': get_news(user_dict['newsCategories']),
             'events': get_events_list(calendar_path)}
     file_path = '/home/pi/MirageSmartMirror/src/Users/%s/%sAPI.json' % (userName, userName)
