@@ -402,6 +402,15 @@ class Window(QWidget):
     def load_user_info(self, user_name):
         # os.system('nohup python3 APIs.py &')
         # user_destinations = ["305 Swindon Way, West Lafayette, Indiana", "222 West Wood St, West Lafayette, Indiana", "West Madison Street, Chicago, Illinois"]
+        file_path = "/home/pi/MirageSmartMirror/src/Users/%s/%s.json" %(user_name, user_name)
+        try:
+            with open(file_path) as f:
+                user_dict = json.load(f)
+        except:
+            self.set_lockscreen_layout()
+            return 0
+
+
         file_path = "/home/pi/MirageSmartMirror/src/Users/%s/%sAPI.json" %(user_name, user_name)
         try:
             with open(file_path) as f:
