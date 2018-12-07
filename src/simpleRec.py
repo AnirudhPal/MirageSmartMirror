@@ -118,7 +118,7 @@ def detectFace():
 
 	with open('/home/pi/MirageSmartMirror/src/faceDetectStatus.json', 'r') as testData:
 		jsonData = json.load(testData)
-		if jsonData['username'] is not None:
+		if jsonData['username'] is not None or jsonData['error'] == "Face calibration":
 			return
 
 	#vs =  VideoStream(usePiCamera=True).start()
