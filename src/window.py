@@ -394,7 +394,7 @@ class Window(QWidget):
     def show_auth_code(self):
         font = QFont('Helvetica', 28)
         font.setWeight(1)
-        self.prompt.setText("<font color='white'>" + message + "</font>")
+        self.prompt.setText("<font color='white'>" + self.google_code + "</font>")
         self.prompt.setFont(font)
         self.googleCodeTimeout = 10
         return
