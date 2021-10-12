@@ -42,7 +42,7 @@ newsapi-python==0.2.3
 numpy==1.12.1
 oauth2client==4.1.3
 oauthlib==2.1.0
-opencv-contrib-python==3.4.3.18
+opencv-contrib-python==3.4.7.28
 opencv-python==3.4.3.18
 pantilthat==0.0.6
 pgzero==1.2
